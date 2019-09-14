@@ -1,9 +1,7 @@
 package main
 
-import (
-	"fmt"
-)
+import "github.com/mgeri/volley-scoreboard-plus/cmd"
 
 func main() {
-	fmt.Println("Hello!")
+	cmd.Execute()
 }
