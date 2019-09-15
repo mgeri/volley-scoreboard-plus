@@ -60,10 +60,9 @@ info:
     ```json
     {
         "error": {
-            "type": "Exception", 
-            "message": "Message describing the error", 
             "code": 190,
             "subcode": 460,
+            "message": "Message describing the error", 
             "internal" {
               "exception": "message",
               "stackTrace: "..."
@@ -72,10 +71,9 @@ info:
     }
     ```
 
-    * _type_: error type
-    * _message_: error message
     * _code_: error code
     * _subcode_: error subcode
+    * _message_: error message
     * _internal_: available only on debug environment
 
     ### Paging
@@ -170,29 +168,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-    delete:
-      operationId: sessionDelete
-      tags:
-        - Session
-      summary: Logout the current session.
-      responses:
-        '204':
-          description: Session was successfully terminated.
-        '401':
-          description: Invalid session.
           
-  /session/refresh:
-    get:
-      operationId: sessionRefreshGet
-      tags:
-        - Session
-      summary: Check if current session is still valid and refresh session timeout.
-      responses:
-        '204':
-          description: Session is valid and session timeout is refreshed.
-        '401':
-          description: Invalid session.
-
   /ping:
     get:
       operationId: pingGet
@@ -319,19 +295,18 @@ components:
     Error:
       type: object
       properties:
-        type:
-          type: string
-        message:
-          type: string
         code:
           type: integer
         subcode:
           type: integer
+        message:
+          type: string
+        internal:
+          type: string
       required:
-        - type
-        - message
         - code
         - subcode
+        - message
 
     Credentials:
       type: object
