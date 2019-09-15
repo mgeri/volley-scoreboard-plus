@@ -12,6 +12,32 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+type application struct {
+}
+
+func noContentEchoErrorHandler(err error, ctx echo.Context) {
+	he, ok := err.(*echo.HTTPError)
+	if ok {
+		if he.Internal != nil {
+			if herr, ok := he.Internal.(*echo.HTTPError); ok {
+				he = herr
+			}
+		}
+	} else {
+		he = &echo.HTTPError{
+			Code: http.StatusInternalServerError,
+		}
+	}
+
+	// Send response
+	if !ctx.Response().Committed {
+		err = ctx.NoContent(he.Code)
+		if err != nil {
+			ctx.Logger().Error(err)
+		}
+	}
+}
+
 // ListenAndServe run Volley Scoreboard server
 func ListenAndServe() {
 
@@ -37,6 +63,13 @@ func ListenAndServe() {
 		e.Logger.SetLevel(log.DEBUG)
 	}
 
+	// check for debug mode
+	e.Debug = viper.GetBool("server.debug")
+	if !e.Debug {
+		// custom error handler to avoid default echo JSON message response
+		e.HTTPErrorHandler = noContentEchoErrorHandler
+	}
+
 	// log file
 	if viper.GetString("logger.file") != "" {
 		logWriter := &lumberjack.Logger{
@@ -53,10 +86,11 @@ func ListenAndServe() {
 		Addr: viper.GetString("server.address"),
 	}
 
-	// register handler
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	// Initialize a new instance of application containing the dependencies.
+	app := &application{}
+
+	// Register handlers
+	app.registerHandlersAPI(e.Group("/api/v1"))
 
 	// start
 	e.Logger.Fatal(e.StartServer(s))
