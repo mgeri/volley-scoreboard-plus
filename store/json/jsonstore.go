@@ -43,6 +43,8 @@ func NewJSONScoreboardStatusStore(storeDir string, logger echo.Logger) store.Sco
 		}
 	}
 
+	logger.Infof("JSON Scoreboard Status init: %s", filename)
+
 	return &jsonScoreboardStatusStore{ks, filename, logger}
 }
 
@@ -97,6 +99,8 @@ func NewJSONScoreboardPrefsStore(storeDir string, logger echo.Logger) store.Scor
 			logger.Errorf("Error setting JSON Scoreboard Prefs: %s", err)
 		}
 	}
+
+	logger.Infof("JSON Scoreboard Prefs init: %s", filename)
 
 	return &jsonScoreboardPrefsStore{ks, filename, logger}
 }
