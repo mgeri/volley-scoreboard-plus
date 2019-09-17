@@ -64,13 +64,13 @@ func (app *application) PingGet(ctx echo.Context) error {
 	return ctx.NoContent(http.StatusNoContent)
 }
 
-// Return the scoreboard preferences (colors, team names).// (GET /scoreboard/preferences)
-func (app *application) ScoreboardPreferencesGet(ctx echo.Context) error {
+// Return the scoreboard Prefs (colors, team names).// (GET /scoreboard/Prefs)
+func (app *application) ScoreboardPrefsGet(ctx echo.Context) error {
 	panic("not implemented")
 }
 
-// Update scoreboard preferences.// (PUT /scoreboard/preferences)
-func (app *application) ScoreboardPreferencesPut(ctx echo.Context) error {
+// Update scoreboard Prefs.// (PUT /scoreboard/Prefs)
+func (app *application) ScoreboardPrefsPut(ctx echo.Context) error {
 	panic("not implemented")
 }
 

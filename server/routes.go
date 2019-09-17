@@ -28,8 +28,8 @@ func (app *application) registerHandlersAPI(router runtime.EchoRouter) {
 
 	router.POST("/session", wrapper.SessionPost)
 	router.GET("/ping", wrapper.PingGet)
-	router.GET("/scoreboard/preferences", wrapper.ScoreboardPreferencesGet)
-	router.PUT("/scoreboard/preferences", wrapper.ScoreboardPreferencesPut, jwtMiddleware)
+	router.GET("/scoreboard/prefs", wrapper.ScoreboardPrefsGet)
+	router.PUT("/scoreboard/prefs", wrapper.ScoreboardPrefsPut, jwtMiddleware)
 	router.GET("/scoreboard/status", wrapper.ScoreboardStatusGet)
 	router.PUT("/scoreboard/status", wrapper.ScoreboardStatusPut, jwtMiddleware)
 
