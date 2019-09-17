@@ -36,11 +36,11 @@ type ClientInterface interface {
 	// PingGet request
 	PingGet(ctx context.Context) (*http.Response, error)
 
-	// ScoreboardPreferencesGet request
-	ScoreboardPreferencesGet(ctx context.Context) (*http.Response, error)
+	// ScoreboardPrefsGet request
+	ScoreboardPrefsGet(ctx context.Context) (*http.Response, error)
 
-	// ScoreboardPreferencesPut request
-	ScoreboardPreferencesPut(ctx context.Context) (*http.Response, error)
+	// ScoreboardPrefsPut request
+	ScoreboardPrefsPut(ctx context.Context) (*http.Response, error)
 
 	// ScoreboardStatusGet request
 	ScoreboardStatusGet(ctx context.Context) (*http.Response, error)
@@ -69,8 +69,8 @@ func (c *Client) PingGet(ctx context.Context) (*http.Response, error) {
 	return c.Client.Do(req)
 }
 
-func (c *Client) ScoreboardPreferencesGet(ctx context.Context) (*http.Response, error) {
-	req, err := NewScoreboardPreferencesGetRequest(c.Server)
+func (c *Client) ScoreboardPrefsGet(ctx context.Context) (*http.Response, error) {
+	req, err := NewScoreboardPrefsGetRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -84,8 +84,8 @@ func (c *Client) ScoreboardPreferencesGet(ctx context.Context) (*http.Response, 
 	return c.Client.Do(req)
 }
 
-func (c *Client) ScoreboardPreferencesPut(ctx context.Context) (*http.Response, error) {
-	req, err := NewScoreboardPreferencesPutRequest(c.Server)
+func (c *Client) ScoreboardPrefsPut(ctx context.Context) (*http.Response, error) {
+	req, err := NewScoreboardPrefsPutRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -173,11 +173,11 @@ func NewPingGetRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
-// NewScoreboardPreferencesGetRequest generates requests for ScoreboardPreferencesGet
-func NewScoreboardPreferencesGetRequest(server string) (*http.Request, error) {
+// NewScoreboardPrefsGetRequest generates requests for ScoreboardPrefsGet
+func NewScoreboardPrefsGetRequest(server string) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/scoreboard/preferences", server)
+	queryUrl := fmt.Sprintf("%s/scoreboard/prefs", server)
 
 	req, err := http.NewRequest("GET", queryUrl, nil)
 	if err != nil {
@@ -187,11 +187,11 @@ func NewScoreboardPreferencesGetRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
-// NewScoreboardPreferencesPutRequest generates requests for ScoreboardPreferencesPut
-func NewScoreboardPreferencesPutRequest(server string) (*http.Request, error) {
+// NewScoreboardPrefsPutRequest generates requests for ScoreboardPrefsPut
+func NewScoreboardPrefsPutRequest(server string) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/scoreboard/preferences", server)
+	queryUrl := fmt.Sprintf("%s/scoreboard/prefs", server)
 
 	req, err := http.NewRequest("PUT", queryUrl, nil)
 	if err != nil {
@@ -302,14 +302,14 @@ func (r pingGetResponse) StatusCode() int {
 	return 0
 }
 
-type scoreboardPreferencesGetResponse struct {
+type scoreboardPrefsGetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *ScoreboardPreferences
+	JSON200      *ScoreboardPrefs
 }
 
 // Status returns HTTPResponse.Status
-func (r scoreboardPreferencesGetResponse) Status() string {
+func (r scoreboardPrefsGetResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -317,21 +317,21 @@ func (r scoreboardPreferencesGetResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r scoreboardPreferencesGetResponse) StatusCode() int {
+func (r scoreboardPrefsGetResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
 	return 0
 }
 
-type scoreboardPreferencesPutResponse struct {
+type scoreboardPrefsPutResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *ScoreboardPreferences
+	JSON200      *ScoreboardPrefs
 }
 
 // Status returns HTTPResponse.Status
-func (r scoreboardPreferencesPutResponse) Status() string {
+func (r scoreboardPrefsPutResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -339,7 +339,7 @@ func (r scoreboardPreferencesPutResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r scoreboardPreferencesPutResponse) StatusCode() int {
+func (r scoreboardPrefsPutResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -422,22 +422,22 @@ func (c *ClientWithResponses) PingGetWithResponse(ctx context.Context) (*pingGet
 	return ParsepingGetResponse(rsp)
 }
 
-// ScoreboardPreferencesGetWithResponse request returning *ScoreboardPreferencesGetResponse
-func (c *ClientWithResponses) ScoreboardPreferencesGetWithResponse(ctx context.Context) (*scoreboardPreferencesGetResponse, error) {
-	rsp, err := c.ScoreboardPreferencesGet(ctx)
+// ScoreboardPrefsGetWithResponse request returning *ScoreboardPrefsGetResponse
+func (c *ClientWithResponses) ScoreboardPrefsGetWithResponse(ctx context.Context) (*scoreboardPrefsGetResponse, error) {
+	rsp, err := c.ScoreboardPrefsGet(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return ParsescoreboardPreferencesGetResponse(rsp)
+	return ParsescoreboardPrefsGetResponse(rsp)
 }
 
-// ScoreboardPreferencesPutWithResponse request returning *ScoreboardPreferencesPutResponse
-func (c *ClientWithResponses) ScoreboardPreferencesPutWithResponse(ctx context.Context) (*scoreboardPreferencesPutResponse, error) {
-	rsp, err := c.ScoreboardPreferencesPut(ctx)
+// ScoreboardPrefsPutWithResponse request returning *ScoreboardPrefsPutResponse
+func (c *ClientWithResponses) ScoreboardPrefsPutWithResponse(ctx context.Context) (*scoreboardPrefsPutResponse, error) {
+	rsp, err := c.ScoreboardPrefsPut(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return ParsescoreboardPreferencesPutResponse(rsp)
+	return ParsescoreboardPrefsPutResponse(rsp)
 }
 
 // ScoreboardStatusGetWithResponse request returning *ScoreboardStatusGetResponse
@@ -496,22 +496,22 @@ func ParsepingGetResponse(rsp *http.Response) (*pingGetResponse, error) {
 	return response, nil
 }
 
-// ParsescoreboardPreferencesGetResponse parses an HTTP response from a ScoreboardPreferencesGetWithResponse call
-func ParsescoreboardPreferencesGetResponse(rsp *http.Response) (*scoreboardPreferencesGetResponse, error) {
+// ParsescoreboardPrefsGetResponse parses an HTTP response from a ScoreboardPrefsGetWithResponse call
+func ParsescoreboardPrefsGetResponse(rsp *http.Response) (*scoreboardPrefsGetResponse, error) {
 	bodyBytes, err := ioutil.ReadAll(rsp.Body)
 	defer rsp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &scoreboardPreferencesGetResponse{
+	response := &scoreboardPrefsGetResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		response.JSON200 = &ScoreboardPreferences{}
+		response.JSON200 = &ScoreboardPrefs{}
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
@@ -520,22 +520,22 @@ func ParsescoreboardPreferencesGetResponse(rsp *http.Response) (*scoreboardPrefe
 	return response, nil
 }
 
-// ParsescoreboardPreferencesPutResponse parses an HTTP response from a ScoreboardPreferencesPutWithResponse call
-func ParsescoreboardPreferencesPutResponse(rsp *http.Response) (*scoreboardPreferencesPutResponse, error) {
+// ParsescoreboardPrefsPutResponse parses an HTTP response from a ScoreboardPrefsPutWithResponse call
+func ParsescoreboardPrefsPutResponse(rsp *http.Response) (*scoreboardPrefsPutResponse, error) {
 	bodyBytes, err := ioutil.ReadAll(rsp.Body)
 	defer rsp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &scoreboardPreferencesPutResponse{
+	response := &scoreboardPrefsPutResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		response.JSON200 = &ScoreboardPreferences{}
+		response.JSON200 = &ScoreboardPrefs{}
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}

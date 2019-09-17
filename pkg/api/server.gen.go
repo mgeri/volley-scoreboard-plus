@@ -12,10 +12,10 @@ import (
 type ServerInterface interface {
 	// Server heartbeat operation// (GET /ping)
 	PingGet(ctx echo.Context) error
-	// Return the scoreboard preferences (colors, team names).// (GET /scoreboard/preferences)
-	ScoreboardPreferencesGet(ctx echo.Context) error
-	// Update scoreboard preferences.// (PUT /scoreboard/preferences)
-	ScoreboardPreferencesPut(ctx echo.Context) error
+	// Return the scoreboard preferences (colors, team names).// (GET /scoreboard/prefs)
+	ScoreboardPrefsGet(ctx echo.Context) error
+	// Update scoreboard Prefs.// (PUT /scoreboard/prefs)
+	ScoreboardPrefsPut(ctx echo.Context) error
 	// Return the scoreboard status (points, set, timeouts).// (GET /scoreboard/status)
 	ScoreboardStatusGet(ctx echo.Context) error
 	// Update scoreboard status (points, set, timeouts).// (PUT /scoreboard/status)
@@ -38,21 +38,21 @@ func (w *ServerInterfaceWrapper) PingGet(ctx echo.Context) error {
 	return err
 }
 
-// ScoreboardPreferencesGet converts echo context to params.
-func (w *ServerInterfaceWrapper) ScoreboardPreferencesGet(ctx echo.Context) error {
+// ScoreboardPrefsGet converts echo context to params.
+func (w *ServerInterfaceWrapper) ScoreboardPrefsGet(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.ScoreboardPreferencesGet(ctx)
+	err = w.Handler.ScoreboardPrefsGet(ctx)
 	return err
 }
 
-// ScoreboardPreferencesPut converts echo context to params.
-func (w *ServerInterfaceWrapper) ScoreboardPreferencesPut(ctx echo.Context) error {
+// ScoreboardPrefsPut converts echo context to params.
+func (w *ServerInterfaceWrapper) ScoreboardPrefsPut(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.ScoreboardPreferencesPut(ctx)
+	err = w.Handler.ScoreboardPrefsPut(ctx)
 	return err
 }
 
@@ -91,8 +91,8 @@ func RegisterHandlers(router runtime.EchoRouter, si ServerInterface) {
 	}
 
 	router.GET("/ping", wrapper.PingGet)
-	router.GET("/scoreboard/preferences", wrapper.ScoreboardPreferencesGet)
-	router.PUT("/scoreboard/preferences", wrapper.ScoreboardPreferencesPut)
+	router.GET("/scoreboard/prefs", wrapper.ScoreboardPrefsGet)
+	router.PUT("/scoreboard/prefs", wrapper.ScoreboardPrefsPut)
 	router.GET("/scoreboard/status", wrapper.ScoreboardStatusGet)
 	router.PUT("/scoreboard/status", wrapper.ScoreboardStatusPut)
 	router.POST("/session", wrapper.SessionPost)

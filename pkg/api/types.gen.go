@@ -22,33 +22,37 @@ type ErrorResponse struct {
 	Error Error `json:"error"`
 }
 
-// ScoreboardPreferences defines model for ScoreboardPreferences.
-type ScoreboardPreferences struct {
-	AwayBg        *string `json:"awayBg,omitempty"`
-	AwayFg        *string `json:"awayFg,omitempty"`
-	AwayName      *string `json:"awayName,omitempty"`
-	Bg            *string `json:"bg,omitempty"`
-	Fg            *string `json:"fg,omitempty"`
-	HomeBg        *string `json:"homeBg,omitempty"`
-	HomeFg        *string `json:"homeFg,omitempty"`
-	HomeName      *string `json:"homeName,omitempty"`
-	PointsBg      *string `json:"pointsBg,omitempty"`
-	PointsFg      *string `json:"pointsFg,omitempty"`
-	SetBg         *string `json:"setBg,omitempty"`
-	SetFg         *string `json:"setFg,omitempty"`
-	SetLabel      *string `json:"setLabel,omitempty"`
-	TimeoutsBg    *string `json:"timeoutsBg,omitempty"`
-	TimeoutsLabel *string `json:"timeoutsLabel,omitempty"`
+// ScoreboardPrefs defines model for ScoreboardPrefs.
+type ScoreboardPrefs struct {
+	AwayBg      string `json:"awayBg"`
+	AwayFg      string `json:"awayFg"`
+	AwayName    string `json:"awayName"`
+	Bg          string `json:"bg"`
+	Fg          string `json:"fg"`
+	HomeBg      string `json:"homeBg"`
+	HomeFg      string `json:"homeFg"`
+	HomeName    string `json:"homeName"`
+	PointBg     string `json:"pointBg"`
+	PointFg     string `json:"pointFg"`
+	SetBg       string `json:"setBg"`
+	SetFg       string `json:"setFg"`
+	SetName     string `json:"setName"`
+	TimeoutBg   string `json:"timeoutBg"`
+	TimeoutName string `json:"timeoutName"`
 }
 
 // ScoreboardStatus defines model for ScoreboardStatus.
 type ScoreboardStatus struct {
-	AwayPoints   *int `json:"awayPoints,omitempty"`
-	AwaySets     *int `json:"awaySets,omitempty"`
-	AwayTimeouts *int `json:"awayTimeouts,omitempty"`
-	HomePoints   *int `json:"homePoints,omitempty"`
-	HomeSets     *int `json:"homeSets,omitempty"`
-	HomeTimeouts *int `json:"homeTimeouts,omitempty"`
+	Away ScoreboardTeamStatus `json:"away"`
+	Home ScoreboardTeamStatus `json:"home"`
+}
+
+// ScoreboardTeamStatus defines model for ScoreboardTeamStatus.
+type ScoreboardTeamStatus struct {
+	Points      int `json:"points"`
+	Sets        int `json:"sets"`
+	Timeouts    int `json:"timeouts"`
+	VideoChecks int `json:"videoChecks"`
 }
 
 // Session defines model for Session.
