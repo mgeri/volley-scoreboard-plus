@@ -216,9 +216,9 @@ paths:
                 awaySets: 2
                 awayTimeouts: 0
 
-  /scoreboard/preferences:
+  /scoreboard/prefs:
     get:
-      operationId: scoreboardPreferencesGet
+      operationId: scoreboardPrefsGet
       summary: Return the scoreboard preferences (colors, team names). 
       security: []
       responses:
@@ -227,7 +227,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScoreboardPreferences'
+                $ref: '#/components/schemas/ScoreboardPrefs'
               example:   # Sample object
                 bg: "#00FF00"
                 fg: "#000000"
@@ -246,15 +246,15 @@ paths:
                 awayFg: "#FF0000"
 
     put:
-      operationId: scoreboardPreferencesPut
-      summary: Update scoreboard preferences. 
+      operationId: scoreboardPrefsPut
+      summary: Update scoreboard Prefs. 
       responses:
         '200':
           description: The new scoreboard preferences.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ScoreboardPreferences'
+                $ref: '#/components/schemas/ScoreboardPrefs'
               example:   # Sample object
                 bg: "#00FF00"
                 fg: "#000000"
@@ -336,87 +336,134 @@ components:
         - username
         - token
 
-    ScoreboardStatus:
+    ScoreboardTeamStatus:
       type: object
       properties:
-        homePoints:
+        points:
           type: integer
-          description: Home team points.
-        homeSets:
+          description: Points.
+          default: 0
+        sets:
           type: integer
-          description: Home team won sets.
-        homeTimeouts:
+          description: Won sets.
+          default: 0
+        timeouts:
           type: integer
-          description: Home team timeouts.
-        awayPoints:
+          description: Timeouts.
+          default: 0
+        videoChecks:
           type: integer
-          description: Home team points.
-        awaySets:
-          type: integer
-          description: Home team won sets.
-        awayTimeouts:
-          type: integer
-          description: Home team timeouts.
+          description: Video checks.
+          default: 0
+      required:
+        - points
+        - sets
+        - timeouts
+        - videoChecks
 
-    ScoreboardPreferences:
+    ScoreboardStatus:
+      type: object
+      description: Scoreboard team points, sents, timeouts video check.
+      properties:
+        home:
+          $ref: '#/components/schemas/ScoreboardTeamStatus'
+        away:
+          $ref: '#/components/schemas/ScoreboardTeamStatus'
+      required:
+        - home
+        - away
+
+    ScoreboardPrefs:
       type: object
       properties:
         bg:
           type: string
           format: color
           description: Background scoreboard color.
+          default: "#102030"
         fg:
           type: string
           format: color
           description: Foreground scoreboard color.
-        setLabel:
+          default: "#FFFFFF"
+        setName:
           type: string
           description: Set label text.
+          default: "Set"
         setBg:
           type: string
           format: color
           description: Set label background color.
+          default: "#0B3060"
         setFg:
           type: string
           format: color
           description: Set label foreground color.
-        timeoutsLabel:
+          default: "#FFFFFF"
+        timeoutName:
           type: string
           description: Timeouts label text.
-        timeoutsBg:
+          default: "Timeout"
+        timeoutBg:
           type: string
           format: color
           description: Timeouts background color.
-        pointsBg:
+          default: "#FF0000"
+        pointBg:
           type: string
           format: color
-          description: Set points background color.
-        pointsFg:
+          description: Points background color.
+          default: "#0B3060"
+        pointFg:
           type: string
           format: color
-          description: Set points foreground color.
+          description: Points foreground color.
+          default: "#FFFFFF"
         homeName:
           type: string
           description: Home team name.
+          default: "HOME"
         homeBg:
           type: string
           format: color
           description: Home team background color.
+          default: "#10B090"
         homeFg:
           type: string
           format: color
           description: Home team foreground color.
+          default: "#FFFFFF"
         awayName:
           type: string
           description: Away team name.
+          default: "AWAY"
         awayBg:
           type: string
           format: color
           description: Away team background color.
+          default: "#20C0F0"
         awayFg:
           type: string
           format: color
           description: Away team foreground color.
+          default: "#EEFF88"
+      required:
+        - bg
+        - fg
+        - setName
+        - setBg
+        - setFg
+        - timeoutName
+        - timeoutBg
+        - pointBg
+        - pointFg
+        - homeName
+        - homeBg
+        - homeFg
+        - awayName
+        - awayFg
+        - awayBg
+
 
 # Apply the security globally to all operations       
 security: 
