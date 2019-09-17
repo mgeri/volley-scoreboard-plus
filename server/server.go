@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/mgeri/volley-scoreboard-plus/store"
+	jsonstore "github.com/mgeri/volley-scoreboard-plus/store/json"
 
 	"github.com/labstack/gommon/log"
 	"github.com/spf13/viper"
@@ -85,13 +86,16 @@ func ListenAndServe() {
 		e.Logger.SetOutput(logWriter)
 	}
 
+	// Initialize a new instance of application containing the dependencies.
+	app := &application{
+		statusStore: jsonstore.NewJSONScoreboardStatusStore(viper.GetString("server.storeDir"), e.Logger),
+		prefsStore:  jsonstore.NewJSONScoreboardPrefsStore(viper.GetString("server.storeDir"), e.Logger),
+	}
+
 	// server address
 	s := &http.Server{
 		Addr: viper.GetString("server.address"),
 	}
-
-	// Initialize a new instance of application containing the dependencies.
-	app := &application{}
 
 	// Register handlers
 	app.registerHandlersAPI(e.Group("/api/v1"))

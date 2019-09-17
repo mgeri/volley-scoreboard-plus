@@ -18,8 +18,9 @@ var (
 
 		// Server Configuration
 		viper.SetDefault("server.address", ":4000")
-		viper.SetDefault("server.webAppDir", "./web/bin")
 		viper.SetDefault("server.jwtSigningKey", randstr.String(1024))
+		viper.SetDefault("server.webAppDir", "./web/bin")
+		viper.SetDefault("server.storeDir", "./tmp")
 		viper.SetDefault("server.debug", false)
 
 		return struct{}{}

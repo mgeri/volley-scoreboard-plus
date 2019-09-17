@@ -1,44 +1,57 @@
 package jsonstore
 
 import (
-	"log"
+	"path/filepath"
 
 	"github.com/mgeri/volley-scoreboard-plus/pkg/api"
 	"github.com/mgeri/volley-scoreboard-plus/store"
 
+	"github.com/labstack/echo"
 	"github.com/schollz/jsonstore"
 )
+
+const statusKey = "status"
+const prefsKey = "prefs"
 
 type jsonScoreboardStatusStore struct {
 	ks       *jsonstore.JSONStore
 	filename string
+	logger   echo.Logger
 }
 
 // NewJsonScoreboardStatusStore will create an object that represent the store.ScoreboardStatusStore interface
-func NewJSONScoreboardStatusStore(filename string) store.ScoreboardStatusStore {
+func NewJSONScoreboardStatusStore(storeDir string, logger echo.Logger) store.ScoreboardStatusStore {
+	var filename string
 	var ks *jsonstore.JSONStore
-	if filename != "" {
+
+	if storeDir != "" {
 		var err error
+
+		filename = filepath.Join(storeDir, "status.json")
 		ks, err = jsonstore.Open(filename)
 		if err != nil {
-			log.Printf("Error opening JSON Scoreboard Status: %s", err)
+			logger.Errorf("Error opening JSON Scoreboard Status: %s", err)
 		}
 	}
 	if ks == nil {
 		ks = new(jsonstore.JSONStore)
 		// create default
-		//ks.Set("status", status)
+		status := store.NewScoreboardStatus()
+		err := ks.Set(statusKey, status)
+		if err != nil {
+			logger.Errorf("Error setting JSON Scoreboard Status: %s", err)
+		}
 	}
 
-	return &jsonScoreboardStatusStore{ks, filename}
+	return &jsonScoreboardStatusStore{ks, filename, logger}
 }
 
 func (m *jsonScoreboardStatusStore) Get(status *api.ScoreboardStatus) error {
-	return m.ks.Get("status", status)
+	return m.ks.Get(statusKey, status)
 }
 
 func (m *jsonScoreboardStatusStore) Update(status *api.ScoreboardStatus) error {
-	err := m.ks.Set("status", status)
+	err := m.ks.Set(statusKey, status)
 	if err != nil {
 		return err
 	}
@@ -55,34 +68,45 @@ func (m *jsonScoreboardStatusStore) save() error {
 type jsonScoreboardPrefsStore struct {
 	ks       *jsonstore.JSONStore
 	filename string
+	logger   echo.Logger
 }
 
 // NewJsonScoreboardPrefsStore will create an object that represent the store.ScoreboardPrefsStore interface
-func NewJSONScoreboardPrefsStore(filename string) store.ScoreboardPrefsStore {
+func NewJSONScoreboardPrefsStore(storeDir string, logger echo.Logger) store.ScoreboardPrefsStore {
+	var filename string
 	var ks *jsonstore.JSONStore
-	if filename != "" {
+
+	if storeDir != "" {
 		var err error
+
+		filename = filepath.Join(storeDir, "prefs.json")
+
 		ks, err = jsonstore.Open(filename)
 		if err != nil {
-			log.Printf("Error opening JSON Scoreboard Prefs: %s", err)
+			logger.Errorf("Error opening JSON Scoreboard Prefs: %s", err)
 		}
 
 	}
 	if ks == nil {
 		ks = new(jsonstore.JSONStore)
+
 		// create default
-		//ks.Set("status", status)
+		prefs := store.NewScoreboardPrefs()
+		err := ks.Set(prefsKey, prefs)
+		if err != nil {
+			logger.Errorf("Error setting JSON Scoreboard Prefs: %s", err)
+		}
 	}
 
-	return &jsonScoreboardPrefsStore{ks, filename}
+	return &jsonScoreboardPrefsStore{ks, filename, logger}
 }
 
 func (m *jsonScoreboardPrefsStore) Get(prefs *api.ScoreboardPrefs) error {
-	return m.ks.Get("prefs", prefs)
+	return m.ks.Get(prefsKey, prefs)
 }
 
 func (m *jsonScoreboardPrefsStore) Update(prefs *api.ScoreboardPrefs) error {
-	err := m.ks.Set("prefs", prefs)
+	err := m.ks.Set(prefsKey, prefs)
 	if err != nil {
 		return err
 	}
