@@ -18,6 +18,8 @@ var (
 
 		// Server Configuration
 		viper.SetDefault("server.address", ":4000")
+		viper.SetDefault("server.username", "admin")
+		viper.SetDefault("server.password", "*")
 		viper.SetDefault("server.jwtSigningKey", randstr.String(1024))
 		viper.SetDefault("server.webAppDir", "./web/bin")
 		viper.SetDefault("server.storeDir", "./tmp")
