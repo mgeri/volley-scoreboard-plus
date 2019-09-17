@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/mgeri/volley-scoreboard-plus/store"
+
 	"github.com/labstack/gommon/log"
 	"github.com/spf13/viper"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -13,6 +15,8 @@ import (
 )
 
 type application struct {
+	statusStore store.ScoreboardStatusStore
+	prefsStore  store.ScoreboardPrefsStore
 }
 
 func noContentEchoErrorHandler(err error, ctx echo.Context) {
