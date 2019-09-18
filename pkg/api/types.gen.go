@@ -22,6 +22,12 @@ type ErrorResponse struct {
 	Error Error `json:"error"`
 }
 
+// ScoreboardMessage defines model for ScoreboardMessage.
+type ScoreboardMessage struct {
+	Prefs  *ScoreboardPrefs  `json:"prefs,omitempty"`
+	Status *ScoreboardStatus `json:"status,omitempty"`
+}
+
 // ScoreboardPrefs defines model for ScoreboardPrefs.
 type ScoreboardPrefs struct {
 	AwayBg      string `json:"awayBg"`

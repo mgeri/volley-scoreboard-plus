@@ -97,6 +97,9 @@ func (app *application) ScoreboardStatusPut(ctx echo.Context) error {
 			Message: err.Error()}})
 	}
 
+	// websocket broadcast
+	app.BroadcastStatusUpdate()
+
 	return ctx.JSON(http.StatusOK, status)
 
 }
@@ -131,6 +134,9 @@ func (app *application) ScoreboardPrefsPut(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardPrefsErrorCode, Subcode: 1,
 			Message: err.Error()}})
 	}
+
+	// websocket broadcast
+	app.BroadcastPrefsUpdate()
 
 	return ctx.JSON(http.StatusOK, prefs)
 

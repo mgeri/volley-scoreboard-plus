@@ -16,6 +16,7 @@ import (
 )
 
 type application struct {
+	logger      echo.Logger
 	statusStore store.ScoreboardStatusStore
 	prefsStore  store.ScoreboardPrefsStore
 }
@@ -88,6 +89,7 @@ func ListenAndServe() {
 
 	// Initialize a new instance of application containing the dependencies.
 	app := &application{
+		logger:      e.Logger,
 		statusStore: jsonstore.NewJSONScoreboardStatusStore(viper.GetString("server.storeDir"), e.Logger),
 		prefsStore:  jsonstore.NewJSONScoreboardPrefsStore(viper.GetString("server.storeDir"), e.Logger),
 	}
@@ -99,6 +101,7 @@ func ListenAndServe() {
 
 	// Register handlers
 	app.registerHandlersAPI(e.Group("/api/v1"))
+	app.registerHandlersWS(e.Group("/ws/v1"))
 
 	// start
 	e.Logger.Fatal(e.StartServer(s))

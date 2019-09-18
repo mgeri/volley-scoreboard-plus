@@ -32,5 +32,4 @@ func (app *application) registerHandlersAPI(router runtime.EchoRouter) {
 	router.PUT("/scoreboard/prefs", wrapper.ScoreboardPrefsPut, jwtMiddleware)
 	router.GET("/scoreboard/status", wrapper.ScoreboardStatusGet)
 	router.PUT("/scoreboard/status", wrapper.ScoreboardStatusPut, jwtMiddleware)
-
 }
