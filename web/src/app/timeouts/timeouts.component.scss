@@ -1,0 +1,12 @@
+.timeout-container {
+  font-size: 5vh;
+  font-variant: small-caps;
+  .timeout-flag {
+    border-width: medium;
+    border-style: solid;
+    border-radius: 50%;
+    &.off {
+      visibility: hidden;
+    }
+  }
+}

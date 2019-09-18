@@ -1,0 +1,43 @@
+.points-zone {
+  position: relative;
+  .set-container {
+    border-radius: 10px;
+    z-index: 2;
+    .set-name {
+      font-size: 10vh;
+      font-variant: small-caps;
+    }
+    .set-value {
+      font-size: 15vh;
+    }
+  }
+
+  .ball-container {
+    position: absolute;
+    background-color: white;
+    width: 30%;
+    height: 70%;
+    top: 15%;
+    left: 35%;
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  .ball-status {
+    position: absolute;
+    width: 10%;
+    height: 10%;
+    top: 30%;
+    left: 35%;
+    font-size: 10vh;
+    z-index: 3;
+
+    &.ball-home {
+      left: 35%;
+    }
+    &.ball-away {
+      right: 35%;
+    }
+  }
+
+}

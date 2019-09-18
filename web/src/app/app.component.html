@@ -1,0 +1,100 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="w-100 h-100 text-center"
+     [style.background-color]="bg"
+     [style.color]="fg">
+
+  <div class="h-30">
+    <img height="100%" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+  </div>
+
+  <div class="w-100 h-50">
+    <div class="names-zone d-flex w-100 h-25">
+      <div class="w-50 p-1">
+        <app-name [name]="homeName"
+                  [bg]="homeBg"
+                  [fg]="homeFg">
+        </app-name>
+      </div>
+      <div class="w-50 p-1">
+        <app-name [name]="awayName"
+                  [bg]="awayBg"
+                  [fg]="awayFg">
+        </app-name>
+      </div>
+    </div>
+
+    <div class="points-zone d-flex w-100 h-75">
+      <div class="d-flex w-100 m-1">
+        <div class="w-40">
+          <app-points [points]="homePoints"
+                      [bg]="pointsBg"
+                      [fg]="pointsFg">
+          </app-points>
+        </div>
+        <div class="set-container w-20 mx-2"
+             [style.background-color]="pointsFg"
+             [style.color]="pointsBg">
+          <div class="set-name h-30">
+            {{setName}}
+          </div>
+          <div class="set-value h-70">
+            {{homeSets + awaySets < 5 ? homeSets + awaySets + 1 : '-'}}
+          </div>
+        </div>
+        <div class="w-40">
+          <app-points [points]="awayPoints"
+                      [bg]="pointsBg"
+                      [fg]="pointsFg">
+          </app-points>
+        </div>
+      </div>
+
+      <div class="ball-container"></div>
+      <div *ngIf="ballOwner == 1"
+           class="ball-status ball-home"
+           [style.color]="pointsBg">
+        <i class="fa fa-chevron-circle-left"></i>
+      </div>
+      <div *ngIf="ballOwner == 2"
+           class="ball-status ball-away"
+           [style.color]="pointsBg">
+        <i class="fa fa-chevron-circle-right"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-100 h-20">
+    <div class="sets-zone d-flex w-100 h-100">
+      <div class="d-flex w-100 m-1">
+        <div class="d-flex w-50">
+          <div class="w-50">
+            <app-sets [sets]="homeSets"
+                      [bg]="setsBg"
+                      [fg]="setsFg">
+            </app-sets>
+          </div>
+          <div class="w-50">
+            <app-timeouts [timeouts]="homeTimeouts"
+                          [name]="timeoutName"
+                          [bg]="timeoutsBg">
+            </app-timeouts>
+          </div>
+        </div>
+        <div class="d-flex w-50">
+          <div class="w-50">
+            <app-timeouts [timeouts]="awayTimeouts"
+                          [name]="timeoutName"
+                          [bg]="timeoutsBg">
+            </app-timeouts>
+          </div>
+          <div class="w-50">
+            <app-sets [sets]="awaySets"
+                      [bg]="setsBg"
+                      [fg]="setsFg">
+            </app-sets>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
