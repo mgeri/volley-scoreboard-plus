@@ -19,7 +19,6 @@ type ScoreboardPrefsStore interface {
 func NewScoreboardStatus() *api.ScoreboardStatus {
 	// default init to 0
 	return &api.ScoreboardStatus{}
-
 }
 
 func NewScoreboardPrefs() *api.ScoreboardPrefs {

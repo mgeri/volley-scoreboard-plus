@@ -328,6 +328,7 @@ type scoreboardPrefsPutResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *ScoreboardPrefs
+	JSON400      *ErrorResponse
 }
 
 // Status returns HTTPResponse.Status
@@ -372,6 +373,7 @@ type scoreboardStatusPutResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *ScoreboardStatus
+	JSON400      *ErrorResponse
 }
 
 // Status returns HTTPResponse.Status
@@ -539,6 +541,13 @@ func ParsescoreboardPrefsPutResponse(rsp *http.Response) (*scoreboardPrefsPutRes
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		response.JSON400 = &ErrorResponse{}
+		if err := json.Unmarshal(bodyBytes, response.JSON400); err != nil {
+			return nil, err
+		}
+	case rsp.StatusCode == 401:
+		break // No content-type
 	}
 
 	return response, nil
@@ -587,6 +596,13 @@ func ParsescoreboardStatusPutResponse(rsp *http.Response) (*scoreboardStatusPutR
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		response.JSON400 = &ErrorResponse{}
+		if err := json.Unmarshal(bodyBytes, response.JSON400); err != nil {
+			return nil, err
+		}
+	case rsp.StatusCode == 401:
+		break // No content-type
 	}
 
 	return response, nil

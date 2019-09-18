@@ -12,6 +12,8 @@ import (
 )
 
 const SessionErrorCode = 10
+const ScoreboardStatusErrorCode = 20
+const ScoreboardPrefsErrorCode = 30
 
 // jwtCustomClaims are custom claims extending default ones.
 type jwtCustomClaims struct {
@@ -24,7 +26,7 @@ func (app *application) SessionPost(ctx echo.Context) error {
 
 	c := new(api.Credentials)
 	if err := ctx.Bind(c); err != nil {
-		ctx.Logger().Warn("Error binding Creadentials")
+		ctx.Logger().Warnf("Error binding Creadentials: %v", err)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: SessionErrorCode, Subcode: 1,
 			Message: "Invalid username or password"}})
 	}
@@ -49,7 +51,7 @@ func (app *application) SessionPost(ctx echo.Context) error {
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte(viper.GetString("server.jwtSigningKey")))
 	if err != nil {
-		ctx.Logger().Errorf("JWT code generation error: %f", err)
+		ctx.Logger().Errorf("JWT code generation error: %v", err)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: SessionErrorCode, Subcode: 2,
 			Message: "Server error"}})
 	}
@@ -76,7 +78,27 @@ func (app *application) ScoreboardStatusGet(ctx echo.Context) error {
 
 // Update scoreboard status (points, set, timeouts).// (PUT /scoreboard/status)
 func (app *application) ScoreboardStatusPut(ctx echo.Context) error {
-	panic("not implemented")
+	status := new(api.ScoreboardStatus)
+	if err := ctx.Bind(status); err != nil {
+		ctx.Logger().Warnf("Error binding ScoreboardStatus: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardStatusErrorCode, Subcode: 1,
+			Message: "Invalid status"}})
+	}
+
+	if err := ValidateScoreboardStatus(status); err != nil {
+		ctx.Logger().Warn("Error validating ScoreboardStatus: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardStatusErrorCode, Subcode: 1,
+			Message: err.Error()}})
+	}
+
+	if err := app.statusStore.Update(status); err != nil {
+		ctx.Logger().Warn("Error Updating ScoreboardStatus: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardStatusErrorCode, Subcode: 1,
+			Message: err.Error()}})
+	}
+
+	return ctx.JSON(http.StatusOK, status)
+
 }
 
 // Return the scoreboard Prefs (colors, team names).// (GET /scoreboard/Prefs)
@@ -91,5 +113,25 @@ func (app *application) ScoreboardPrefsGet(ctx echo.Context) error {
 
 // Update scoreboard Prefs.// (PUT /scoreboard/Prefs)
 func (app *application) ScoreboardPrefsPut(ctx echo.Context) error {
-	panic("not implemented")
+	prefs := new(api.ScoreboardPrefs)
+	if err := ctx.Bind(prefs); err != nil {
+		ctx.Logger().Warnf("Error binding ScoreboardPrefs: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardPrefsErrorCode, Subcode: 1,
+			Message: "Invalid status"}})
+	}
+
+	if err := ValidateScoreboardPrefs(prefs); err != nil {
+		ctx.Logger().Warn("Error validating ScoreboardPrefs: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardPrefsErrorCode, Subcode: 1,
+			Message: err.Error()}})
+	}
+
+	if err := app.prefsStore.Update(prefs); err != nil {
+		ctx.Logger().Warn("Error Updating ScoreboardPrefs: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardPrefsErrorCode, Subcode: 1,
+			Message: err.Error()}})
+	}
+
+	return ctx.JSON(http.StatusOK, prefs)
+
 }

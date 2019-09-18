@@ -3,8 +3,10 @@ module github.com/mgeri/volley-scoreboard-plus
 go 1.13
 
 require (
+	github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a // indirect
 	github.com/deepmap/oapi-codegen v1.3.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.1.10
 	github.com/labstack/gommon v0.3.0

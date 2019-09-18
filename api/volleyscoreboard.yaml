@@ -215,6 +215,17 @@ paths:
                 awayPoints: 15
                 awaySets: 2
                 awayTimeouts: 0
+        '400':
+          description: |
+            Invalid request.
+            Error code is 20. Sub codes are:
+            * 1 - Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid session
 
   /scoreboard/prefs:
     get:
@@ -271,6 +282,17 @@ paths:
                 awayName: "Away Team Name"
                 awayBg: "#FFFFFF"
                 awayFg: "#FF0000"
+        '400':
+          description: |
+            Invalid request.
+            Error code is 30. Sub codes are:
+            * 1 - Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid session
 
 components:
   # Security Scheme
