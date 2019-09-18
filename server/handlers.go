@@ -86,13 +86,13 @@ func (app *application) ScoreboardStatusPut(ctx echo.Context) error {
 	}
 
 	if err := ValidateScoreboardStatus(status); err != nil {
-		ctx.Logger().Warn("Error validating ScoreboardStatus: %v", err)
+		ctx.Logger().Warnf("Error validating ScoreboardStatus: %v", err)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardStatusErrorCode, Subcode: 1,
 			Message: err.Error()}})
 	}
 
 	if err := app.statusStore.Update(status); err != nil {
-		ctx.Logger().Warn("Error Updating ScoreboardStatus: %v", err)
+		ctx.Logger().Warnf("Error Updating ScoreboardStatus: %v", err)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardStatusErrorCode, Subcode: 1,
 			Message: err.Error()}})
 	}
@@ -121,13 +121,13 @@ func (app *application) ScoreboardPrefsPut(ctx echo.Context) error {
 	}
 
 	if err := ValidateScoreboardPrefs(prefs); err != nil {
-		ctx.Logger().Warn("Error validating ScoreboardPrefs: %v", err)
+		ctx.Logger().Warnf("Error validating ScoreboardPrefs: %v", err)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardPrefsErrorCode, Subcode: 1,
 			Message: err.Error()}})
 	}
 
 	if err := app.prefsStore.Update(prefs); err != nil {
-		ctx.Logger().Warn("Error Updating ScoreboardPrefs: %v", err)
+		ctx.Logger().Warnf("Error Updating ScoreboardPrefs: %v", err)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardPrefsErrorCode, Subcode: 1,
 			Message: err.Error()}})
 	}

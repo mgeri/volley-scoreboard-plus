@@ -7,17 +7,23 @@ import (
 	"github.com/go-ozzo/ozzo-validation/is"
 )
 
-func ValidateScoreboardStatus(m *api.ScoreboardStatus) error {
+func ValidateScoreboardTeamStatus(m *api.ScoreboardTeamStatus) error {
 	return validation.ValidateStruct(m,
-		validation.Field(&m.Home.Points, validation.Min(0), validation.Max(99)),
-		validation.Field(&m.Home.Sets, validation.Min(0), validation.Max(9)),
-		validation.Field(&m.Home.Timeouts, validation.Min(0), validation.Max(2)),
-		validation.Field(&m.Home.VideoChecks, validation.Min(0), validation.Max(2)),
-		validation.Field(&m.Away.Points, validation.Min(0), validation.Max(99)),
-		validation.Field(&m.Away.Sets, validation.Min(0), validation.Max(9)),
-		validation.Field(&m.Away.Timeouts, validation.Min(0), validation.Max(2)),
-		validation.Field(&m.Away.VideoChecks, validation.Min(0), validation.Max(2)),
+		validation.Field(&m.Points, validation.Min(0), validation.Max(99)),
+		validation.Field(&m.Sets, validation.Min(0), validation.Max(9)),
+		validation.Field(&m.Timeouts, validation.Min(0), validation.Max(2)),
+		validation.Field(&m.VideoChecks, validation.Min(0), validation.Max(2)),
 	)
+}
+
+func ValidateScoreboardStatus(m *api.ScoreboardStatus) error {
+	if err := ValidateScoreboardTeamStatus(&m.Home); err != nil {
+		return err
+	}
+	if err := ValidateScoreboardTeamStatus(&m.Away); err != nil {
+		return err
+	}
+	return nil
 }
 
 func ValidateScoreboardPrefs(m *api.ScoreboardPrefs) error {
