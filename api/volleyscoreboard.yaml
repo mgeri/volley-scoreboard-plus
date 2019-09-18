@@ -191,12 +191,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ScoreboardStatus'
               example:   # Sample object
-                homePoints: 10
-                homeSets: 1
-                homeTimeouts: 1
-                awayPoints: 15
-                awaySets: 2
-                awayTimeouts: 0
+                home:
+                  points: 10
+                  sets: 1
+                  timeouts: 1
+                  videoCheks: 0
+                away:
+                  points: 15
+                  sets: 2
+                  timeouts: 0
+                  videoCheks: 0
                 
     put:
       operationId: scoreboardStatusPut
@@ -209,12 +213,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/ScoreboardStatus'
               example:   # Sample object
-                homePoints: 10
-                homeSets: 1
-                homeTimeouts: 1
-                awayPoints: 15
-                awaySets: 2
-                awayTimeouts: 0
+                home:
+                  points: 10
+                  sets: 1
+                  timeouts: 1
+                  videoCheks: 0
+                away:
+                  points: 15
+                  sets: 2
+                  timeouts: 0
+                  videoCheks: 0
         '400':
           description: |
             Invalid request.
@@ -245,10 +253,10 @@ paths:
                 setLabel: "Sets"
                 setBg: "#00FF00"
                 setFg: "#000000"
-                timeoutsLabel: "Timeouts"
-                timeoutsBg: "#FF0000"
-                pointsBg: "#FFFFFF"
-                pointsFg: "#FF0000"
+                timeoutLabel: "Timeouts"
+                timeoutBg: "#FF0000"
+                pointBg: "#FFFFFF"
+                pointFg: "#FF0000"
                 homeName: "Home Team Name"
                 homeBg: "#FFFFFF"
                 homeFg: "#FF0000"
@@ -272,10 +280,10 @@ paths:
                 setLabel: "Sets"
                 setBg: "#00FF00"
                 setFg: "#000000"
-                timeoutsLabel: "Timeouts"
-                timeoutsBg: "#FF0000"
-                pointsBg: "#FFFFFF"
-                pointsFg: "#FF0000"
+                timeoutLabel: "Timeouts"
+                timeoutBg: "#FF0000"
+                pointBg: "#FFFFFF"
+                pointFg: "#FF0000"
                 homeName: "Home Team Name"
                 homeBg: "#FFFFFF"
                 homeFg: "#FF0000"
@@ -485,6 +493,15 @@ components:
         - awayName
         - awayFg
         - awayBg
+
+    ScoreboardMessage:
+      type: object
+      description: Scoreboard websocket message
+      properties:
+        status:
+          $ref: '#/components/schemas/ScoreboardStatus'
+        prefs:
+          $ref: '#/components/schemas/ScoreboardPrefs'
 
 
 # Apply the security globally to all operations       
