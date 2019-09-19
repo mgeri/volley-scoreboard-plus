@@ -49,16 +49,17 @@ type ScoreboardPrefs struct {
 
 // ScoreboardStatus defines model for ScoreboardStatus.
 type ScoreboardStatus struct {
-	Away ScoreboardTeamStatus `json:"away"`
-	Home ScoreboardTeamStatus `json:"home"`
+	Away      ScoreboardTeamStatus `json:"away"`
+	BallOwner TeamBallOwner        `json:"ballOwner"`
+	Home      ScoreboardTeamStatus `json:"home"`
 }
 
 // ScoreboardTeamStatus defines model for ScoreboardTeamStatus.
 type ScoreboardTeamStatus struct {
-	Points      int `json:"points"`
-	Sets        int `json:"sets"`
-	Timeouts    int `json:"timeouts"`
-	VideoChecks int `json:"videoChecks"`
+	Points      int  `json:"points"`
+	Sets        int  `json:"sets"`
+	Timeouts    int  `json:"timeouts"`
+	VideoChecks *int `json:"videoChecks,omitempty"`
 }
 
 // Session defines model for Session.
@@ -67,6 +68,9 @@ type Session struct {
 	Token     string `json:"token"`
 	Username  string `json:"username"`
 }
+
+// TeamBallOwner defines model for TeamBallOwner.
+type TeamBallOwner string
 
 // sessionPostJSONBody defines parameters for SessionPost.
 type sessionPostJSONBody Credentials

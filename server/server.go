@@ -99,6 +99,9 @@ func ListenAndServe() {
 		Addr: viper.GetString("server.address"),
 	}
 
+	// static web ui
+	e.Static("/", viper.GetString("server.webAppDir"))
+
 	// Register handlers
 	app.registerHandlersAPI(e.Group("/api/v1"))
 	app.registerHandlersWS(e.Group("/ws/v1"))

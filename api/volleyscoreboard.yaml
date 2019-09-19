@@ -389,7 +389,15 @@ components:
         - points
         - sets
         - timeouts
-        - videoChecks
+        - videoCheck
+    
+    TeamBallOwner:
+      type: string
+      description: Team ball owner
+      enum:
+        - none
+        - home
+        - away
 
     ScoreboardStatus:
       type: object
@@ -399,9 +407,12 @@ components:
           $ref: '#/components/schemas/ScoreboardTeamStatus'
         away:
           $ref: '#/components/schemas/ScoreboardTeamStatus'
+        ballOwner:
+          $ref: '#/components/schemas/TeamBallOwner'
       required:
         - home
         - away
+        - ballOwner
 
     ScoreboardPrefs:
       type: object
