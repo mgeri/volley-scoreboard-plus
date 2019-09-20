@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "oapi-generator": "openapi-generator generate -i ../api/volleyscoreboard.yaml -g typescript-angular -o ./src/ --additional-properties=ngVersion=8.0.0"
+    "oapi-generator": "openapi-generator generate -i ../api/volleyscoreboard.yaml -g typescript-angular -o ./src/backend --additional-properties=ngVersion=8.0.0"
   },
   "private": true,
   "dependencies": {

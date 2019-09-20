@@ -1,5 +1,10 @@
+import { ScoreboardStatus } from './../backend/model/scoreboardStatus';
+import { ScoreboardPrefs } from './../backend/model/scoreboardPrefs';
+import { DefaultService } from './../backend/api/default.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+
+import { Observable, interval } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,54 +14,69 @@ import { Component, OnInit } from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'volley-gui';
 
-  setName = 'Set';
-  timeoutName = 'Timeout';
-  homeName = 'HOME';
-  awayName = 'AWAY';
+  loading = true;
 
-  bg = '#102030';
-  fg = '#FFFFFF';
+  status: ScoreboardStatus = {
+    home: { points: 0, sets: 0, timeouts: 0, videoChecks: 0},
+    away: { points: 0, sets: 0, timeouts: 0, videoChecks: 0},
+    ballOwner: 'none',
+  };
 
-  homeBg = '#10B090';
-  homeFg = '#FFFFFF';
+  prefs: ScoreboardPrefs;
 
-  awayBg = '#20C0F0';
-  awayFg = '#EEFF88';
+  // setName = 'Set';
+  // timeoutName = 'Timeout';
+  // homeName = 'HOME';
+  // awayName = 'AWAY';
 
-  pointsBg = '#0B3060';
-  pointsFg = '#FFFFFF';
+  // bg = '#102030';
+  // fg = '#FFFFFF';
 
-  setsBg = '#0B3060';
-  setsFg = '#FFFFFF';
+  // homeBg = '#10B090';
+  // homeFg = '#FFFFFF';
 
-  timeoutsBg = '#FF0000';
+  // awayBg = '#20C0F0';
+  // awayFg = '#EEFF88';
 
-  homePoints = 13;
-  awayPoints = 8;
+  // pointsBg = '#0B3060';
+  // pointsFg = '#FFFFFF';
 
-  homeSets = 1;
-  awaySets = 0;
+  // setsBg = '#0B3060';
+  // setsFg = '#FFFFFF';
 
-  homeTimeouts = 1;
-  awayTimeouts = 0;
+  // timeoutsBg = '#FF0000';
 
-  ballOwner = 1;
+  // homePoints = 13;
+  // awayPoints = 8;
 
-  interval: any;
+  // homeSets = 1;
+  // awaySets = 0;
 
-  constructor(private httpClient: HttpClient) {
+  // homeTimeouts = 1;
+  // awayTimeouts = 0;
+
+  // ballOwner = 1;
+
+  constructor(private httpClient: HttpClient,
+              private defaultService: DefaultService) {
   }
 
   ngOnInit(): void {
-/*
-    this.interval = setInterval(() => {
-      this.httpClient.get('http://localhost/status').subscribe((data: any) => {
-        console.log('Ok');
-      }, (error: any) => {
-        console.log('Error');
+
+//    const prefsReq = interval(1000).subscribe((_) => {
+      this.defaultService.scoreboardPrefsGet().subscribe((prefs: ScoreboardPrefs) => {
+        this.prefs = prefs;
+        this.loading = false;
+//        prefsReq.unsubscribe();
       });
-    },5000)
-*/
+ //   });
+
+      const statusReq = interval(5000).subscribe((_) => {
+        this.defaultService.scoreboardStatusGet().subscribe((status: ScoreboardStatus) => {
+          this.status = status;
+//          statusReq.unsubscribe();
+        });
+      });
   }
 
 }
