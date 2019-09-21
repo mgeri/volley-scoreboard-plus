@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"net/http"
 
 	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/gorilla/websocket"
@@ -14,7 +15,13 @@ const BroadcastStatus = "status"
 const BroadcastPrefs = "prefs"
 
 var (
-	upgrader  = websocket.Upgrader{}
+	upgrader = websocket.Upgrader{
+		//		ReadBufferSize:  1024,
+		//		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
 	clients   = make(map[*websocket.Conn]bool)
 	broadcast = make(chan string)
 	unicast   = make(chan *websocket.Conn)
@@ -115,6 +122,6 @@ func (app *application) wsService() {
 }
 
 func (app *application) registerHandlersWS(router runtime.EchoRouter) {
-	router.GET("/ws", app.wsHandler)
+	router.GET("", app.wsHandler)
 	go app.wsService()
 }
