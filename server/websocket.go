@@ -17,6 +17,7 @@ var (
 	upgrader  = websocket.Upgrader{}
 	clients   = make(map[*websocket.Conn]bool)
 	broadcast = make(chan string)
+	unicast   = make(chan *websocket.Conn)
 )
 
 func (app *application) BroadcastStatusUpdate() {
@@ -35,46 +36,79 @@ func (app *application) wsHandler(ctx echo.Context) error {
 		return err
 	}
 
-	// register client
-	clients[ws] = true
+	ctx.Logger().Infof("New websocket from %v", ctx.Request().RemoteAddr)
+
+	unicast <- ws
 
 	return nil
 }
 
-func (app *application) wsBroadcast() {
+func (app *application) wsService() {
 	for {
-		m := <-broadcast
 
-		scoreboardMessage := new(api.ScoreboardMessage)
+		select {
+		case m := <-broadcast:
+			// broadcast to connectec scoreboard
+			scoreboardMessage := new(api.ScoreboardMessage)
 
-		switch m {
-		case BroadcastStatus:
+			switch m {
+			case BroadcastStatus:
+				scoreboardMessage.Status = new(api.ScoreboardStatus)
+				if err := app.statusStore.Get(scoreboardMessage.Status); err != nil {
+					app.logger.Warnf("Websocket JSON get status from store error: %v", err)
+					continue
+				}
+			case BroadcastPrefs:
+				scoreboardMessage.Prefs = new(api.ScoreboardPrefs)
+				if err := app.prefsStore.Get(scoreboardMessage.Prefs); err != nil {
+					app.logger.Warnf("Websocket JSON get prefs from store error: %v", err)
+					continue
+				}
+			}
+
+			b, err := json.Marshal(scoreboardMessage)
+			if err != nil {
+				app.logger.Warnf("Websocket JSON marshal error: %v", err)
+				continue
+			}
+
+			// send to every client that is currently connected
+			for c := range clients {
+				err := c.WriteMessage(websocket.TextMessage, b)
+				if err != nil {
+					app.logger.Warnf("Websocket error (closing): %v", err)
+					c.Close()
+					delete(clients, c)
+				}
+			}
+		case c := <-unicast:
+			// send status and prefs to new conntected scoreboard
+			clients[c] = true
+
+			scoreboardMessage := new(api.ScoreboardMessage)
+
 			scoreboardMessage.Status = new(api.ScoreboardStatus)
 			if err := app.statusStore.Get(scoreboardMessage.Status); err != nil {
-				app.logger.Warnf("Websocket JSON get status from store error: %v", err)
+				app.logger.Warnf("Unicast Websocket JSON get status from store error: %v", err)
 				continue
 			}
-		case BroadcastPrefs:
 			scoreboardMessage.Prefs = new(api.ScoreboardPrefs)
 			if err := app.prefsStore.Get(scoreboardMessage.Prefs); err != nil {
-				app.logger.Warnf("Websocket JSON get prefs from store error: %v", err)
+				app.logger.Warnf("Unicast Websocket JSON get prefs from store error: %v", err)
 				continue
 			}
-		}
 
-		b, err := json.Marshal(scoreboardMessage)
-		if err != nil {
-			app.logger.Warnf("Websocket JSON marshal error: %v", err)
-			continue
-		}
-
-		// send to every client that is currently connected
-		for client := range clients {
-			err := client.WriteMessage(websocket.TextMessage, b)
+			b, err := json.Marshal(scoreboardMessage)
 			if err != nil {
-				app.logger.Warnf("Websocket error (closing): %v", err)
-				client.Close()
-				delete(clients, client)
+				app.logger.Warnf("Unicast Websocket JSON marshal error: %v", err)
+				continue
+			}
+
+			err = c.WriteMessage(websocket.TextMessage, b)
+			if err != nil {
+				app.logger.Warnf("Unicast Websocket error (closing): %v", err)
+				c.Close()
+				delete(clients, c)
 			}
 		}
 	}
@@ -82,5 +116,5 @@ func (app *application) wsBroadcast() {
 
 func (app *application) registerHandlersWS(router runtime.EchoRouter) {
 	router.GET("/ws", app.wsHandler)
-	go app.wsBroadcast()
+	go app.wsService()
 }
