@@ -2,11 +2,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+// components
 import { AppComponent } from './app.component';
-import { NameComponent } from './name/name.component';
-import { PointsComponent } from './points/points.component';
-import { SetsComponent } from './sets/sets.component';
-import { TimeoutsComponent } from './timeouts/timeouts.component';
+import { NameComponent } from './components/name/name.component';
+import { PointsComponent } from './components/points/points.component';
+import { SetsComponent } from './components/sets/sets.component';
+import { TimeoutsComponent } from './components/timeouts/timeouts.component';
+
+// services
+import { WebSocketService } from './services/WebSocketService';
+
 
 import { ApiModule, BASE_PATH } from '../backend';
 
@@ -25,7 +30,9 @@ import { environment } from '../environments/environment';
     ApiModule,
     HttpClientModule
   ],
-  providers: [{ provide: BASE_PATH, useValue: environment.API_BASE_PATH }],
+  providers: [
+    { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
+    WebSocketService],
   bootstrap: [AppComponent]
 })
 

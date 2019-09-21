@@ -1,10 +1,13 @@
 import { ScoreboardStatus } from './../backend/model/scoreboardStatus';
 import { ScoreboardPrefs } from './../backend/model/scoreboardPrefs';
 import { DefaultService } from './../backend/api/default.service';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
-import { Observable, interval } from 'rxjs';
+import { Subject, interval } from 'rxjs';
+import { WebSocketService } from './services/WebSocketService';
+
+import { takeUntil } from 'rxjs/operators';
+import { ScoreboardMessage } from 'src/backend';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +15,9 @@ import { Observable, interval } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+
+  destroyed$ = new Subject();
+
   title = 'volley-gui';
 
   loading = true;
@@ -57,26 +63,48 @@ export class AppComponent implements OnInit {
 
   // ballOwner = 1;
 
-  constructor(private httpClient: HttpClient,
+  constructor(private webSocketService: WebSocketService,
               private defaultService: DefaultService) {
   }
 
   ngOnInit(): void {
 
-//    const prefsReq = interval(1000).subscribe((_) => {
-      this.defaultService.scoreboardPrefsGet().subscribe((prefs: ScoreboardPrefs) => {
-        this.prefs = prefs;
-        this.loading = false;
-//        prefsReq.unsubscribe();
-      });
- //   });
+    this.webSocketService.connect().pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe({
+      next: (message: ScoreboardMessage) => {
+        if (message.status) {
+          this.status = message.status;
+        }
+        if (message.prefs) {
+          this.prefs = message.prefs;
+          if (this.loading) {
+            this.loading = false;
+          }
+        }
+      },
+      error: (err: any) => {
+        console.log('WebSocketService error:' +  err);
+      },
+      complete: () => {
+        console.log('WebSocketService complete');
+      }
+    });
 
-      const statusReq = interval(5000).subscribe((_) => {
-        this.defaultService.scoreboardStatusGet().subscribe((status: ScoreboardStatus) => {
-          this.status = status;
-//          statusReq.unsubscribe();
-        });
-      });
+// //    const prefsReq = interval(1000).subscribe((_) => {
+//     this.defaultService.scoreboardPrefsGet().subscribe((prefs: ScoreboardPrefs) => {
+//         this.prefs = prefs;
+//         this.loading = false;
+// //        prefsReq.unsubscribe();
+//       });
+//  //   });
+
+//       const statusReq = interval(5000).subscribe((_) => {
+//         this.defaultService.scoreboardStatusGet().subscribe((status: ScoreboardStatus) => {
+//           this.status = status;
+// //          statusReq.unsubscribe();
+//         });
+//       });
   }
 
 }
