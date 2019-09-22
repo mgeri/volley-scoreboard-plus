@@ -47,4 +47,29 @@ export class AdminComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  addAwayPoint(): void {
+    this.scoreboardService.addAwayPoints(1).subscribe(
+      _ => { },
+      error => {
+          const errorResponse: ErrorResponse = error.error;
+          console.log('oops', error);
+          // console.log('oops1', errorResponse.error.message);
+          Swal.fire('Oops...', error, 'error');
+      }
+    );
+  }
+
+  newMatch(): void {
+    this.scoreboardService.newMatch().subscribe(
+      _ => { },
+      error => {
+          const errorResponse: ErrorResponse = error.error;
+          console.log('oops', error);
+          // console.log('oops1', errorResponse.error.message);
+          Swal.fire('Oops...', error, 'error');
+      }
+    );
+  }
+
 }

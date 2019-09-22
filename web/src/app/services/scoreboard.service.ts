@@ -8,6 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { SessionService, ScoreboardStatus, ScoreboardMessage } from 'src/backend';
 import { WebSocketService } from './websocket.service';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 type NewType = ScoreboardStatus;
 
@@ -44,6 +45,16 @@ export class ScoreboardService {
   constructor(private webSocketService: WebSocketService,
               private defaultService: DefaultService,
               private sessionService: SessionService) {
+
+    let basePath = environment.API_BASE_PATH;
+    if (!basePath) {
+      basePath = window.location.protocol + '//' + window.location.host + '/api/v1';
+      this.sessionService.configuration.basePath = basePath;
+      this.defaultService.configuration.basePath = basePath;
+    }
+    this.webSocketService.url = basePath.replace('/api/', '/ws/');
+
+
     this.webSocketService.connect().subscribe({
       next: (message: ScoreboardMessage) => {
         if (message.status) {
