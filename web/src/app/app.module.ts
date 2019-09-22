@@ -10,7 +10,7 @@ import { SetsComponent } from './components/sets/sets.component';
 import { TimeoutsComponent } from './components/timeouts/timeouts.component';
 
 // services
-import { WebSocketService } from './services/WebSocketService';
+import { WebSocketService } from './services/websocket.service';
 
 
 import { ApiModule, BASE_PATH } from '../backend';

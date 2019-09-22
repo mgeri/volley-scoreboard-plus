@@ -205,6 +205,12 @@ paths:
     put:
       operationId: scoreboardStatusPut
       summary: Update scoreboard status (points, set, timeouts).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreboardStatus'
+        required: true
       responses:
         '200':
           description: The new scoreboard status.
@@ -266,7 +272,13 @@ paths:
 
     put:
       operationId: scoreboardPrefsPut
-      summary: Update scoreboard Prefs. 
+      summary: Update scoreboard Prefs.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreboardPrefs'
+        required: true
       responses:
         '200':
           description: The new scoreboard preferences.

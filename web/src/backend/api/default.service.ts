@@ -115,13 +115,17 @@ export class DefaultService {
 
     /**
      * Update scoreboard Prefs.
+     * @param scoreboardPrefs 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public scoreboardPrefsPut(observe?: 'body', reportProgress?: boolean): Observable<ScoreboardPrefs>;
-    public scoreboardPrefsPut(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ScoreboardPrefs>>;
-    public scoreboardPrefsPut(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ScoreboardPrefs>>;
-    public scoreboardPrefsPut(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public scoreboardPrefsPut(scoreboardPrefs: ScoreboardPrefs, observe?: 'body', reportProgress?: boolean): Observable<ScoreboardPrefs>;
+    public scoreboardPrefsPut(scoreboardPrefs: ScoreboardPrefs, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ScoreboardPrefs>>;
+    public scoreboardPrefsPut(scoreboardPrefs: ScoreboardPrefs, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ScoreboardPrefs>>;
+    public scoreboardPrefsPut(scoreboardPrefs: ScoreboardPrefs, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (scoreboardPrefs === null || scoreboardPrefs === undefined) {
+            throw new Error('Required parameter scoreboardPrefs was null or undefined when calling scoreboardPrefsPut.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -142,8 +146,17 @@ export class DefaultService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
         return this.httpClient.put<ScoreboardPrefs>(`${this.configuration.basePath}/scoreboard/prefs`,
-            null,
+            scoreboardPrefs,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -187,13 +200,17 @@ export class DefaultService {
 
     /**
      * Update scoreboard status (points, set, timeouts).
+     * @param scoreboardStatus 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public scoreboardStatusPut(observe?: 'body', reportProgress?: boolean): Observable<ScoreboardStatus>;
-    public scoreboardStatusPut(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ScoreboardStatus>>;
-    public scoreboardStatusPut(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ScoreboardStatus>>;
-    public scoreboardStatusPut(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public scoreboardStatusPut(scoreboardStatus: ScoreboardStatus, observe?: 'body', reportProgress?: boolean): Observable<ScoreboardStatus>;
+    public scoreboardStatusPut(scoreboardStatus: ScoreboardStatus, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ScoreboardStatus>>;
+    public scoreboardStatusPut(scoreboardStatus: ScoreboardStatus, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ScoreboardStatus>>;
+    public scoreboardStatusPut(scoreboardStatus: ScoreboardStatus, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (scoreboardStatus === null || scoreboardStatus === undefined) {
+            throw new Error('Required parameter scoreboardStatus was null or undefined when calling scoreboardStatusPut.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -214,8 +231,17 @@ export class DefaultService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
         return this.httpClient.put<ScoreboardStatus>(`${this.configuration.basePath}/scoreboard/status`,
-            null,
+            scoreboardStatus,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

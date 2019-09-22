@@ -39,14 +39,18 @@ type ClientInterface interface {
 	// ScoreboardPrefsGet request
 	ScoreboardPrefsGet(ctx context.Context) (*http.Response, error)
 
-	// ScoreboardPrefsPut request
-	ScoreboardPrefsPut(ctx context.Context) (*http.Response, error)
+	// ScoreboardPrefsPut request  with any body
+	ScoreboardPrefsPutWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error)
+
+	ScoreboardPrefsPut(ctx context.Context, body ScoreboardPrefsPutJSONRequestBody) (*http.Response, error)
 
 	// ScoreboardStatusGet request
 	ScoreboardStatusGet(ctx context.Context) (*http.Response, error)
 
-	// ScoreboardStatusPut request
-	ScoreboardStatusPut(ctx context.Context) (*http.Response, error)
+	// ScoreboardStatusPut request  with any body
+	ScoreboardStatusPutWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error)
+
+	ScoreboardStatusPut(ctx context.Context, body ScoreboardStatusPutJSONRequestBody) (*http.Response, error)
 
 	// SessionPost request  with any body
 	SessionPostWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error)
@@ -84,8 +88,23 @@ func (c *Client) ScoreboardPrefsGet(ctx context.Context) (*http.Response, error)
 	return c.Client.Do(req)
 }
 
-func (c *Client) ScoreboardPrefsPut(ctx context.Context) (*http.Response, error) {
-	req, err := NewScoreboardPrefsPutRequest(c.Server)
+func (c *Client) ScoreboardPrefsPutWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error) {
+	req, err := NewScoreboardPrefsPutRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ScoreboardPrefsPut(ctx context.Context, body ScoreboardPrefsPutJSONRequestBody) (*http.Response, error) {
+	req, err := NewScoreboardPrefsPutRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -114,8 +133,23 @@ func (c *Client) ScoreboardStatusGet(ctx context.Context) (*http.Response, error
 	return c.Client.Do(req)
 }
 
-func (c *Client) ScoreboardStatusPut(ctx context.Context) (*http.Response, error) {
-	req, err := NewScoreboardStatusPutRequest(c.Server)
+func (c *Client) ScoreboardStatusPutWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error) {
+	req, err := NewScoreboardStatusPutRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ScoreboardStatusPut(ctx context.Context, body ScoreboardStatusPutJSONRequestBody) (*http.Response, error) {
+	req, err := NewScoreboardStatusPutRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -187,17 +221,29 @@ func NewScoreboardPrefsGetRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
-// NewScoreboardPrefsPutRequest generates requests for ScoreboardPrefsPut
-func NewScoreboardPrefsPutRequest(server string) (*http.Request, error) {
+// NewScoreboardPrefsPutRequest calls the generic ScoreboardPrefsPut builder with application/json body
+func NewScoreboardPrefsPutRequest(server string, body ScoreboardPrefsPutJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewScoreboardPrefsPutRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewScoreboardPrefsPutRequestWithBody generates requests for ScoreboardPrefsPut with any type of body
+func NewScoreboardPrefsPutRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	queryUrl := fmt.Sprintf("%s/scoreboard/prefs", server)
 
-	req, err := http.NewRequest("PUT", queryUrl, nil)
+	req, err := http.NewRequest("PUT", queryUrl, body)
 	if err != nil {
 		return nil, err
 	}
 
+	req.Header.Add("Content-Type", contentType)
 	return req, nil
 }
 
@@ -215,17 +261,29 @@ func NewScoreboardStatusGetRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
-// NewScoreboardStatusPutRequest generates requests for ScoreboardStatusPut
-func NewScoreboardStatusPutRequest(server string) (*http.Request, error) {
+// NewScoreboardStatusPutRequest calls the generic ScoreboardStatusPut builder with application/json body
+func NewScoreboardStatusPutRequest(server string, body ScoreboardStatusPutJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewScoreboardStatusPutRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewScoreboardStatusPutRequestWithBody generates requests for ScoreboardStatusPut with any type of body
+func NewScoreboardStatusPutRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	queryUrl := fmt.Sprintf("%s/scoreboard/status", server)
 
-	req, err := http.NewRequest("PUT", queryUrl, nil)
+	req, err := http.NewRequest("PUT", queryUrl, body)
 	if err != nil {
 		return nil, err
 	}
 
+	req.Header.Add("Content-Type", contentType)
 	return req, nil
 }
 
@@ -433,9 +491,17 @@ func (c *ClientWithResponses) ScoreboardPrefsGetWithResponse(ctx context.Context
 	return ParsescoreboardPrefsGetResponse(rsp)
 }
 
-// ScoreboardPrefsPutWithResponse request returning *ScoreboardPrefsPutResponse
-func (c *ClientWithResponses) ScoreboardPrefsPutWithResponse(ctx context.Context) (*scoreboardPrefsPutResponse, error) {
-	rsp, err := c.ScoreboardPrefsPut(ctx)
+// ScoreboardPrefsPutWithBodyWithResponse request with arbitrary body returning *ScoreboardPrefsPutResponse
+func (c *ClientWithResponses) ScoreboardPrefsPutWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader) (*scoreboardPrefsPutResponse, error) {
+	rsp, err := c.ScoreboardPrefsPutWithBody(ctx, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	return ParsescoreboardPrefsPutResponse(rsp)
+}
+
+func (c *ClientWithResponses) ScoreboardPrefsPutWithResponse(ctx context.Context, body ScoreboardPrefsPutJSONRequestBody) (*scoreboardPrefsPutResponse, error) {
+	rsp, err := c.ScoreboardPrefsPut(ctx, body)
 	if err != nil {
 		return nil, err
 	}
@@ -451,9 +517,17 @@ func (c *ClientWithResponses) ScoreboardStatusGetWithResponse(ctx context.Contex
 	return ParsescoreboardStatusGetResponse(rsp)
 }
 
-// ScoreboardStatusPutWithResponse request returning *ScoreboardStatusPutResponse
-func (c *ClientWithResponses) ScoreboardStatusPutWithResponse(ctx context.Context) (*scoreboardStatusPutResponse, error) {
-	rsp, err := c.ScoreboardStatusPut(ctx)
+// ScoreboardStatusPutWithBodyWithResponse request with arbitrary body returning *ScoreboardStatusPutResponse
+func (c *ClientWithResponses) ScoreboardStatusPutWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader) (*scoreboardStatusPutResponse, error) {
+	rsp, err := c.ScoreboardStatusPutWithBody(ctx, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	return ParsescoreboardStatusPutResponse(rsp)
+}
+
+func (c *ClientWithResponses) ScoreboardStatusPutWithResponse(ctx context.Context, body ScoreboardStatusPutJSONRequestBody) (*scoreboardStatusPutResponse, error) {
+	rsp, err := c.ScoreboardStatusPut(ctx, body)
 	if err != nil {
 		return nil, err
 	}

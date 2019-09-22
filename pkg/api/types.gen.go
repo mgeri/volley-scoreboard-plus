@@ -72,8 +72,20 @@ type Session struct {
 // TeamBallOwner defines model for TeamBallOwner.
 type TeamBallOwner string
 
+// scoreboardPrefsPutJSONBody defines parameters for ScoreboardPrefsPut.
+type scoreboardPrefsPutJSONBody ScoreboardPrefs
+
+// scoreboardStatusPutJSONBody defines parameters for ScoreboardStatusPut.
+type scoreboardStatusPutJSONBody ScoreboardStatus
+
 // sessionPostJSONBody defines parameters for SessionPost.
 type sessionPostJSONBody Credentials
+
+// ScoreboardPrefsPutRequestBody defines body for ScoreboardPrefsPut for application/json ContentType.
+type ScoreboardPrefsPutJSONRequestBody scoreboardPrefsPutJSONBody
+
+// ScoreboardStatusPutRequestBody defines body for ScoreboardStatusPut for application/json ContentType.
+type ScoreboardStatusPutJSONRequestBody scoreboardStatusPutJSONBody
 
 // SessionPostRequestBody defines body for SessionPost for application/json ContentType.
 type SessionPostJSONRequestBody sessionPostJSONBody
