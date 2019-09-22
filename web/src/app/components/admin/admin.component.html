@@ -1,0 +1,20 @@
+<div *ngIf="!loading" class="w-100 h-100 text-center"
+    [style.background-color]="prefs.bg"
+    [style.color]="prefs.fg">
+
+    <div class="h-20">
+        <div class="names-zone d-flex w-100">
+            <div class="w-50 p-1">
+                <button type="button" class="btn btn-primary" (click)="addHomePoint()">Add Point</button>
+            </div>
+            <div class="w-50 p-1">
+            AWAY BUTTONS
+            </div>
+        </div>
+    </div>
+    <div class="h-80">
+      <app-scoreboard [showHeader]="false"></app-scoreboard>
+    </div>
+</div>
+
+

@@ -21,7 +21,7 @@ var (
 		viper.SetDefault("server.username", "admin")
 		viper.SetDefault("server.password", "*")
 		viper.SetDefault("server.jwtSigningKey", randstr.String(1024))
-		viper.SetDefault("server.webAppDir", "./web/dist")
+		viper.SetDefault("server.webAppDir", "./web/dist/volley-gui")
 		viper.SetDefault("server.storeDir", "./tmp")
 		viper.SetDefault("server.debug", false)
 

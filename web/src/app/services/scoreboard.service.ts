@@ -4,7 +4,7 @@ import { Credentials } from './../../backend/model/credentials';
 import { ScoreboardPrefs } from './../../backend/model/scoreboardPrefs';
 import { DefaultService } from './../../backend/api/default.service';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SessionService, ScoreboardStatus, ScoreboardMessage } from 'src/backend';
 import { WebSocketService } from './websocket.service';
 import { map } from 'rxjs/operators';
@@ -30,15 +30,15 @@ export class ScoreboardService {
   readonly session$ = this.session.asObservable();
 
   getStatus(): ScoreboardStatus {
-    return this.status.getValue();
+    return JSON.parse(JSON.stringify(this.status.getValue()));
   }
 
   getPrefs(): ScoreboardPrefs {
-    return this.prefs.getValue();
+    return JSON.parse(JSON.stringify(this.prefs.getValue()));
   }
 
   getSession(): Session {
-    return this.session.getValue();
+    return JSON.parse(JSON.stringify(this.session.getValue()));
   }
 
   constructor(private webSocketService: WebSocketService,
@@ -62,11 +62,18 @@ export class ScoreboardService {
     });
   }
 
+  isAuthenticated(): boolean {
+    const session = this.session.getValue();
+    return (session != null && session.token != null && session.token.length > 0);
+  }
+
+
   login(credential: Credentials) {
     return this.sessionService.sessionPost(credential).pipe(map(session => {
       // login successful if there's a jwt token in the response
       if (session && session.token) {
-          this.session.next(session);
+        this.defaultService.configuration.accessToken = session.token;
+        this.session.next(session);
       }
 
       return session;
@@ -77,7 +84,7 @@ export class ScoreboardService {
     this.session.next(null);
   }
 
-  newMatch() {
+  newMatch(): Observable<ScoreboardStatus> {
     return this.defaultService.scoreboardStatusPut({
       home: { points: 0, sets: 0, timeouts: 0, videoChecks: 0 },
       away: { points: 0, sets: 0, timeouts: 0, videoChecks: 0 },
@@ -85,7 +92,7 @@ export class ScoreboardService {
     });
   }
 
-  newSet() {
+  newSet(): Observable<ScoreboardStatus> {
     const status = this.getStatus();
 
     if (status.home.points > status.away.points) {
@@ -104,7 +111,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  addHomePoints(points = 1) {
+  addHomePoints(points = 1): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.home.points += points;
     if (status.home.points < 0) { status.home.points = 0; }
@@ -112,7 +119,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  addAwayPoints(points = 1) {
+  addAwayPoints(points = 1): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.away.points += points;
     if (status.away.points < 0) { status.away.points = 0; }
@@ -120,7 +127,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  addHomeSets(sets = 1) {
+  addHomeSets(sets = 1): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.home.sets += sets;
     if (status.home.sets < 0) { status.home.sets = 0; }
@@ -129,7 +136,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  addAwaySets(sets = 1) {
+  addAwaySets(sets = 1): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.away.sets += sets;
     if (status.away.sets < 0) { status.away.sets = 0; }
@@ -138,7 +145,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  addHomeTimeouts(timeouts = 1) {
+  addHomeTimeouts(timeouts = 1): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.home.timeouts += timeouts;
     if (status.home.timeouts < 0) { status.home.timeouts = 0; }
@@ -146,7 +153,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  addAwayTimeouts(timeouts = 1) {
+  addAwayTimeouts(timeouts = 1): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.away.timeouts += timeouts;
     if (status.away.timeouts < 0) { status.away.timeouts = 0; }
@@ -154,7 +161,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  addHomeVideoChecks(videoChecks = 1) {
+  addHomeVideoChecks(videoChecks = 1): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.home.videoChecks += videoChecks;
     if (status.home.videoChecks < 0) { status.home.videoChecks = 0; }
@@ -162,7 +169,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  addAwayVideoChecks(videoChecks = 1) {
+  addAwayVideoChecks(videoChecks = 1): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.away.videoChecks += videoChecks;
     if (status.away.videoChecks < 0) { status.away.videoChecks = 0; }
@@ -170,7 +177,7 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
-  setBallOwner(ballOwner = TeamBallOwner.None) {
+  setBallOwner(ballOwner = TeamBallOwner.None): Observable<ScoreboardStatus> {
     const status = this.getStatus();
     status.ballOwner = ballOwner;
     return this.defaultService.scoreboardStatusPut(status);

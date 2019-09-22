@@ -1,0 +1,23 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+    <mat-card >
+      <mat-card-header>
+        <mat-card-title>Login Page</mat-card-title>
+      </mat-card-header>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <mat-card-content fxLayout="column">
+            <mat-form-field>
+              <input matInput placeholder="Username" formControlName="username">
+            </mat-form-field>
+            <mat-form-field>
+              <input type="password" matInput placeholder="Password" formControlName="password">
+            </mat-form-field>
+            <p *ngIf="error" class="error">
+              {{ error }}
+            </p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button [disabled]="loading" mat-raised-button color="primary">Login</button>
+          </mat-card-actions>
+        </form>
+      </mat-card>
+</div>

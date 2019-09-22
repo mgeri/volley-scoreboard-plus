@@ -3,7 +3,7 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { Observable, of } from 'rxjs';
 import { filter, map, switchMap, retryWhen, delay } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class WebSocketService implements OnDestroy {
 
   connection$: WebSocketSubject<any>;
