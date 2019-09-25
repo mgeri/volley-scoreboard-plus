@@ -3,6 +3,9 @@
   border-style: solid;
   border-radius: 8px;
   div {
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
     font-size: 8.5vh;
   }
 }
