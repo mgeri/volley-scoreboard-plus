@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // components
 import { AppComponent } from './app.component';
@@ -51,6 +52,7 @@ import { AdminComponent } from './components/admin/admin.component';
     FormsModule,
     ReactiveFormsModule,
     SweetAlert2Module.forRoot(),
+    NgbModule,
     ApiModule,
     HttpClientModule,
     AppRoutingModule,
