@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 // components
@@ -51,7 +50,6 @@ import { AdminComponent } from './components/admin/admin.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule,
     SweetAlert2Module.forRoot(),
     ApiModule,
     HttpClientModule,

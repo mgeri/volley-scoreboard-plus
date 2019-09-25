@@ -1,10 +1,10 @@
-<div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+<div class="login-main">
     <mat-card >
       <mat-card-header>
         <mat-card-title>Login Page</mat-card-title>
       </mat-card-header>
         <form [formGroup]="form" (ngSubmit)="submit()">
-          <mat-card-content fxLayout="column">
+          <mat-card-content style="display: flex; flex-direction: column;">
             <mat-form-field>
               <input matInput placeholder="Username" formControlName="username">
             </mat-form-field>
