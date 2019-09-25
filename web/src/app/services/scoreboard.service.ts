@@ -10,8 +10,6 @@ import { WebSocketService } from './websocket.service';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
-type NewType = ScoreboardStatus;
-
 @Injectable({ providedIn: 'root' })
 export class ScoreboardService {
 
@@ -143,7 +141,6 @@ export class ScoreboardService {
     status.home.sets += sets;
     if (status.home.sets < 0) { status.home.sets = 0; }
     if (status.home.sets > 9) { status.home.sets = 9; }
-    status.ballOwner = TeamBallOwner.None;
     return this.defaultService.scoreboardStatusPut(status);
   }
 
@@ -152,7 +149,6 @@ export class ScoreboardService {
     status.away.sets += sets;
     if (status.away.sets < 0) { status.away.sets = 0; }
     if (status.away.sets > 9) { status.away.sets = 9; }
-    status.ballOwner = TeamBallOwner.None;
     return this.defaultService.scoreboardStatusPut(status);
   }
 
@@ -192,6 +188,10 @@ export class ScoreboardService {
     const status = this.getStatus();
     status.ballOwner = ballOwner;
     return this.defaultService.scoreboardStatusPut(status);
+  }
+
+  updatePrefs(prefs: ScoreboardPrefs): Observable<ScoreboardPrefs> {
+    return this.defaultService.scoreboardPrefsPut(prefs);
   }
 
 }

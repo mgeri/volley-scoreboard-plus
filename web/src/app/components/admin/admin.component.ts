@@ -1,3 +1,4 @@
+import { AlertService } from './../../services/alert.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ScoreboardPrefs, ErrorResponse } from 'src/backend';
@@ -18,7 +19,8 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   loading = true;
 
-  constructor(private scoreboardService: ScoreboardService) {
+  constructor(private scoreboardService: ScoreboardService,
+              private alertService: AlertService) {
 
   }
 
@@ -40,10 +42,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.scoreboardService.addHomePoints(1).subscribe(
       _ => { },
       error => {
-          const errorResponse: ErrorResponse = error.error;
-          console.log('oops', error);
-          // console.log('oops1', errorResponse.error.message);
-          Swal.fire('Oops...', error, 'error');
+        this.alertService.showError(error);
       }
     );
   }
@@ -52,10 +51,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.scoreboardService.addAwayPoints(1).subscribe(
       _ => { },
       error => {
-          const errorResponse: ErrorResponse = error.error;
-          console.log('oops', error);
-          // console.log('oops1', errorResponse.error.message);
-          Swal.fire('Oops...', error, 'error');
+        this.alertService.showError(error);
       }
     );
   }
@@ -64,10 +60,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.scoreboardService.newMatch().subscribe(
       _ => { },
       error => {
-          const errorResponse: ErrorResponse = error.error;
-          console.log('oops', error);
-          // console.log('oops1', errorResponse.error.message);
-          Swal.fire('Oops...', error, 'error');
+        this.alertService.showError(error);
       }
     );
   }

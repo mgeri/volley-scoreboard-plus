@@ -5,6 +5,7 @@ import { ScoreboardService } from './../../services/scoreboard.service';
 import { first } from 'rxjs/operators';
 import { ErrorResponse } from 'src/backend';
 import Swal from 'sweetalert2';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
   submitted = false;
 
   constructor( private router: Router,
-               private scoreboardService: ScoreboardService) {
+               private scoreboardService: ScoreboardService,
+               private alertService: AlertService) {
 
   }
 
@@ -36,17 +38,13 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(
         session => {
-            console.log('success', session),
-            this.router.navigate(['/admin']);
-            this.loading = false;
+          console.log('success', session),
+          this.router.navigate(['/admin']);
+          this.loading = false;
         },
         error => {
-            const errorResponse: ErrorResponse = error.error;
-            console.log('oops', error);
-            console.log('oops1', errorResponse.error.message);
-            this.error = errorResponse.error.message;
-            Swal.fire('Oops...', this.error, 'error');
-            this.loading = false;
+          this.alertService.showError(error);
+          this.loading = false;
         }
       );
     }
