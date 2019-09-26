@@ -1,0 +1,10 @@
+logger:
+  level: "DEBUG"
+  file: "volley-srv.log"
+
+server:
+  address: ":4000"
+  user: "admin"
+  password: "*"
+  webAppDir: "./web/dist/volley-gui"
+  storeDir: "./tmp"
