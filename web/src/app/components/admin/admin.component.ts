@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ScoreboardPrefs, ErrorResponse } from 'src/backend';
 import { ScoreboardService } from 'src/app/services/scoreboard.service';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,10 +18,10 @@ export class AdminComponent implements OnInit, OnDestroy {
   prefs: ScoreboardPrefs;
 
   loading = true;
+  disabled = false;
 
   constructor(private scoreboardService: ScoreboardService,
               private alertService: AlertService) {
-
   }
 
   ngOnInit() {
@@ -39,28 +39,43 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   addHomePoint(): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
     this.scoreboardService.addHomePoints(1).subscribe(
-      _ => { },
+      _ => {
+        this.disabled = false;
+      },
       error => {
         this.alertService.showError(error);
+        this.disabled = false;
       }
     );
   }
 
   addAwayPoint(): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
     this.scoreboardService.addAwayPoints(1).subscribe(
-      _ => { },
+      _ => {
+        this.disabled = false;
+      },
       error => {
         this.alertService.showError(error);
+        this.disabled = false;
       }
     );
   }
 
   newMatch(): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
     this.scoreboardService.newMatch().subscribe(
-      _ => { },
+      _ => {
+        this.disabled = false;
+      },
       error => {
         this.alertService.showError(error);
+        this.disabled = false;
       }
     );
   }
