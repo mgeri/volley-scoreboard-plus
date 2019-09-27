@@ -12,8 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 
 export class ScoreboardComponent implements OnInit, OnDestroy {
 
-  @Input()
-  showHeader = true;
+  @Input() showHeader = true;
 
   destroyed$ = new Subject();
 

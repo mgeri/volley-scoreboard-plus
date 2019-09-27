@@ -37,6 +37,10 @@ export interface ScoreboardPrefs {
      */
     timeoutName: string;
     /**
+     * Video checks label text.
+     */
+    videoCheckName: string;
+    /**
      * Timeouts background color.
      */
     timeoutBg: string;

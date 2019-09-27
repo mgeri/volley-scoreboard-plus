@@ -34,6 +34,7 @@ import { environment } from '../environments/environment';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AdminComponent } from './components/admin/admin.component';
+import { VideoChecksComponent } from './components/video-checks/video-checks.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AdminComponent } from './components/admin/admin.component';
     TimeoutsComponent,
     LoginComponent,
     ScoreboardComponent,
-    AdminComponent
+    AdminComponent,
+    VideoChecksComponent
   ],
   imports: [
     BrowserModule,

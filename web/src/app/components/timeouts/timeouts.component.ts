@@ -7,7 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class TimeoutsComponent implements OnInit {
 
-  @Input() timeouts = 0;
+  @Input() home = 0;
+  @Input() away = 0;
   @Input() name = 'Timeouts';
   @Input() bg = '#FF0000';
 
