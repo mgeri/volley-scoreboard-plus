@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/mgeri/volley-scoreboard-plus/store"
@@ -91,11 +92,21 @@ func ListenAndServe() {
 		e.Logger.SetOutput(logWriter)
 	}
 
+	storeDir := viper.GetString("server.storeDir")
+
+	// create store dir if not exist
+	if _, err := os.Stat(storeDir); os.IsNotExist(err) {
+		err = os.MkdirAll(storeDir, os.ModePerm)
+		if err != nil {
+			e.Logger.Fatalf("Error creating store dir %s: %s", storeDir, err)
+		}
+	}
+
 	// Initialize a new instance of application containing the dependencies.
 	app := &application{
 		logger:      e.Logger,
-		statusStore: jsonstore.NewJSONScoreboardStatusStore(viper.GetString("server.storeDir"), e.Logger),
-		prefsStore:  jsonstore.NewJSONScoreboardPrefsStore(viper.GetString("server.storeDir"), e.Logger),
+		statusStore: jsonstore.NewJSONScoreboardStatusStore(storeDir, e.Logger),
+		prefsStore:  jsonstore.NewJSONScoreboardPrefsStore(storeDir, e.Logger),
 	}
 
 	// server address
