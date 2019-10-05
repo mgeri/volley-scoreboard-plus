@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { ScoreboardPrefs, ScoreboardStatus } from 'src/backend';
 import { Subject } from 'rxjs';
-import { ScoreboardService } from 'src/app/services/scoreboard.service';
 import { takeUntil } from 'rxjs/operators';
+
+import { ScoreboardPrefs, ScoreboardStatus, TeamBallOwner } from '../../../backend';
+import { ScoreboardService } from '../../services/scoreboard.service';
 
 @Component({
   selector: 'app-scoreboard',
@@ -11,6 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 
 export class ScoreboardComponent implements OnInit, OnDestroy {
+  readonly TeamBallOwner = TeamBallOwner;
 
   @Input() showHeader = true;
 
@@ -43,4 +45,8 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  getTeamBallOwner(): TeamBallOwner {
+    if (this.status == null) { return TeamBallOwner.None; }
+    return this.status.ballOwner;
+  }
 }

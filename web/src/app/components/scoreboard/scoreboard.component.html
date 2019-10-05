@@ -10,98 +10,95 @@
   <div *ngIf="showHeader" class="h-20">
     <img height="100%" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
   </div>
-  <div [class.h-100]="!showHeader"
+  <div class="w-100 d-flex flex-column"
+       [class.h-100]="!showHeader"
        [class.h-80]="showHeader">
 
-    <div class="w-100 h-70">
-      <div class="names-zone d-flex w-100 h-25">
-        <div class="w-50 p-1">
-          <app-name [name]="prefs.homeName"
-                    [bg]="prefs.homeBg"
-                    [fg]="prefs.homeFg">
-          </app-name>
-        </div>
-        <div class="w-50 p-1">
-          <app-name [name]="prefs.awayName"
-                    [bg]="prefs.awayBg"
-                    [fg]="prefs.awayFg">
-          </app-name>
-        </div>
+    <div class="names-zone d-flex w-100 h-20">
+      <div class="w-50 p-1">
+        <app-name [name]="prefs.homeName"
+                  [bg]="prefs.homeBg"
+                  [fg]="prefs.homeFg">
+        </app-name>
       </div>
-
-      <div class="points-zone d-flex w-100 h-75">
-        <div class="d-flex w-100 m-1">
-          <div class="w-40">
-            <app-points [points]="status.home.points"
-                        [bg]="prefs.pointBg"
-                        [fg]="prefs.pointFg">
-            </app-points>
-          </div>
-          <div class="set-container w-20 mx-2"
-              [style.background-color]="prefs.pointFg"
-              [style.color]="prefs.pointBg">
-            <div class="set-name h-30">
-              {{prefs.setName}}
-            </div>
-            <div class="set-value h-70">
-              {{status.home.sets + status.away.sets < 5 ? status.home.sets + status.away.sets + 1 : '-'}}
-            </div>
-          </div>
-          <div class="w-40">
-            <app-points [points]="status.away.points"
-                        [bg]="prefs.pointBg"
-                        [fg]="prefs.pointFg">
-            </app-points>
-          </div>
-        </div>
-
-        <div class="ball-container"></div>
-        <div *ngIf="status.ballOwner == 'home'"
-            class="ball-status ball-home"
-            [style.color]="prefs.pointBg">
-          <i class="fa fa-chevron-circle-left"></i>
-        </div>
-        <div *ngIf="status.ballOwner == 'away'"
-            class="ball-status ball-away"
-            [style.color]="prefs.pointBg">
-          <i class="fa fa-chevron-circle-right"></i>
-        </div>
+      <div class="w-50 p-1">
+        <app-name [name]="prefs.awayName"
+                  [bg]="prefs.awayBg"
+                  [fg]="prefs.awayFg">
+        </app-name>
       </div>
     </div>
 
-    <div class="w-100 h-30">
-      <div class="sets-zone d-flex w-100 h-100">
-        <div class="d-flex w-100 m-1">
-          <div class="d-flex w-20">
-            <app-sets class="w-100 h-100"
-                      [sets]="status.home.sets"
-                      [bg]="prefs.setBg"
-                      [fg]="prefs.setFg">
-            </app-sets>
+    <div class="points-zone d-flex w-100 h-50">
+      <div class="d-flex w-100 m-1">
+        <div class="w-40">
+          <app-points [points]="status.home.points"
+                      [bg]="prefs.pointBg"
+                      [fg]="prefs.pointFg">
+          </app-points>
+        </div>
+        <div class="set-container w-20 mx-2"
+            [style.background-color]="prefs.pointFg"
+            [style.color]="prefs.pointBg">
+          <div class="set-name h-30">
+            {{prefs.setName}}
           </div>
-          <div class="d-flex flex-column w-60">
-            <div class="h-50">
-              <app-timeouts [home]="status.home.timeouts"
-                            [away]="status.away.timeouts"
-                            [name]="prefs.timeoutName"
-                            [bg]="prefs.timeoutBg">
-              </app-timeouts>
-            </div>
-            <div class="h-50">
-              <app-video-checks [home]="status.home.timeouts"
-                                [away]="status.away.timeouts"
-                                [name]="prefs.videoCheckName"
-                                [bg]="prefs.timeoutBg">
-              </app-video-checks>
-            </div>
+          <div class="set-value h-70">
+            {{status.home.sets + status.away.sets + 1}}
           </div>
-          <div class="d-flex w-20">
-            <app-sets class="w-100 h-100"
-                      [sets]="status.away.sets"
-                      [bg]="prefs.setBg"
-                      [fg]="prefs.setFg">
-            </app-sets>
+        </div>
+        <div class="w-40">
+          <app-points [points]="status.away.points"
+                      [bg]="prefs.pointBg"
+                      [fg]="prefs.pointFg">
+          </app-points>
+        </div>
+      </div>
+
+      <div class="ball-container"></div>
+      <div *ngIf="status.ballOwner === TeamBallOwner.Home"
+           class="ball-status ball-home"
+           [style.color]="prefs.pointBg">
+        <i class="fa fa-chevron-circle-left"></i>
+      </div>
+      <div *ngIf="status.ballOwner === TeamBallOwner.Away"
+           class="ball-status ball-away"
+           [style.color]="prefs.pointBg">
+        <i class="fa fa-chevron-circle-right"></i>
+      </div>
+    </div>
+
+    <div class="sets-zone d-flex w-100 h-30">
+      <div class="d-flex w-100 m-1">
+        <div class="d-flex w-20">
+          <app-sets class="w-100 h-100"
+                    [sets]="status.home.sets"
+                    [bg]="prefs.setBg"
+                    [fg]="prefs.setFg">
+          </app-sets>
+        </div>
+        <div class="d-flex flex-column w-60">
+          <div class="h-50">
+            <app-timeouts [home]="status.home.timeouts"
+                          [away]="status.away.timeouts"
+                          [name]="prefs.timeoutName"
+                          [bg]="prefs.timeoutBg">
+            </app-timeouts>
           </div>
+          <div class="h-50">
+            <app-video-checks [home]="status.home.videoChecks"
+                              [away]="status.away.videoChecks"
+                              [name]="prefs.videoCheckName"
+                              [bg]="prefs.timeoutBg">
+            </app-video-checks>
+          </div>
+        </div>
+        <div class="d-flex w-20">
+          <app-sets class="w-100 h-100"
+                    [sets]="status.away.sets"
+                    [bg]="prefs.setBg"
+                    [fg]="prefs.setFg">
+          </app-sets>
         </div>
       </div>
     </div>

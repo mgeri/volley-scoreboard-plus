@@ -17,11 +17,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // angular material
 import {
-  MatFormFieldModule,
-  MatInputModule,
-  MatCardModule,
   MatButtonModule,
+  MatCardModule,
+  MatFormFieldModule,
   MatGridListModule,
+  MatInputModule,
+  MatToolbarModule, MatTooltipModule,
 } from '@angular/material';
 
 // services
@@ -35,6 +36,7 @@ import { ScoreboardComponent } from './components/scoreboard/scoreboard.componen
 import { AppRoutingModule } from './app-routing.module';
 import { AdminComponent } from './components/admin/admin.component';
 import { VideoChecksComponent } from './components/video-checks/video-checks.component';
+import { UpDownComponent } from './components/up-down/up-down.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import { VideoChecksComponent } from './components/video-checks/video-checks.com
     LoginComponent,
     ScoreboardComponent,
     AdminComponent,
-    VideoChecksComponent
+    VideoChecksComponent,
+    UpDownComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +66,8 @@ import { VideoChecksComponent } from './components/video-checks/video-checks.com
     MatCardModule,
     MatButtonModule,
     MatGridListModule,
+    MatToolbarModule,
+    MatTooltipModule,
   ],
   providers: [
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },

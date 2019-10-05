@@ -1,11 +1,10 @@
-import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { ScoreboardService } from './../../services/scoreboard.service';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
-import { ErrorResponse } from 'src/backend';
-import Swal from 'sweetalert2';
-import { AlertService } from 'src/app/services/alert.service';
+
+import { AlertService } from '../../services/alert.service';
+import { ScoreboardService } from '../../services/scoreboard.service';
 
 @Component({
   selector: 'app-login',
@@ -16,12 +15,11 @@ export class LoginComponent implements OnInit {
 
   @Input() error: string | null;
 
-  form = new FormGroup({
+  form: FormGroup = new FormGroup({
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
   });
   loading = false;
-  submitted = false;
 
   constructor( private router: Router,
                private scoreboardService: ScoreboardService,

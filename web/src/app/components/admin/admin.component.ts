@@ -1,10 +1,10 @@
 import { AlertService } from './../../services/alert.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { ScoreboardPrefs, ErrorResponse } from 'src/backend';
+import { ScoreboardPrefs, ErrorResponse, TeamBallOwner } from 'src/backend';
 import { ScoreboardService } from 'src/app/services/scoreboard.service';
 import { takeUntil, debounceTime } from 'rxjs/operators';
-import Swal from 'sweetalert2';
+import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
 
 @Component({
   selector: 'app-admin',
@@ -12,6 +12,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit, OnDestroy {
+
+  @ViewChild('scoreboard', {static: false}) scoreboard: ScoreboardComponent;
 
   destroyed$ = new Subject();
 
@@ -38,10 +40,10 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  addHomePoint(): void {
+  addHomePoint(points: number): void {
     if (this.disabled) { return; }
     this.disabled = true;
-    this.scoreboardService.addHomePoints(1).subscribe(
+    this.scoreboardService.addHomePoints(points).subscribe(
       _ => {
         this.disabled = false;
       },
@@ -52,10 +54,10 @@ export class AdminComponent implements OnInit, OnDestroy {
     );
   }
 
-  addAwayPoint(): void {
+  addAwayPoint(points: number): void {
     if (this.disabled) { return; }
     this.disabled = true;
-    this.scoreboardService.addAwayPoints(1).subscribe(
+    this.scoreboardService.addAwayPoints(points).subscribe(
       _ => {
         this.disabled = false;
       },
@@ -64,6 +66,110 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.disabled = false;
       }
     );
+  }
+
+  addHomeSet(points: number): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.addHomeSets(points).subscribe(
+      _ => {
+        this.disabled = false;
+      },
+      error => {
+        this.alertService.showError(error);
+        this.disabled = false;
+      }
+    );
+  }
+
+  addAwaySet(points: number): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.addAwaySets(points).subscribe(
+      _ => {
+        this.disabled = false;
+      },
+      error => {
+        this.alertService.showError(error);
+        this.disabled = false;
+      }
+    );
+  }
+
+  addHomeTimeout() {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.addHomeTimeouts(1).subscribe(
+      _ => {
+        this.disabled = false;
+      },
+      error => {
+        this.alertService.showError(error);
+        this.disabled = false;
+      }
+    );
+  }
+
+  addAwayTimeout() {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.addAwayTimeouts(1).subscribe(
+      _ => {
+        this.disabled = false;
+      },
+      error => {
+        this.alertService.showError(error);
+        this.disabled = false;
+      }
+    )
+  }
+
+  addHomeVideoCheck() {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.addHomeVideoChecks(1).subscribe(
+      _ => {
+        this.disabled = false;
+      },
+      error => {
+        this.alertService.showError(error);
+        this.disabled = false;
+      }
+    );
+  }
+
+  addAwayVideoCheck() {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.addAwayVideoChecks(1).subscribe(
+      _ => {
+        this.disabled = false;
+      },
+      error => {
+        this.alertService.showError(error);
+        this.disabled = false;
+      }
+    )
+  }
+
+  private setBallOwner(teamBallOwner: TeamBallOwner): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.setBallOwner(teamBallOwner).subscribe(
+      _ => {
+        this.disabled = false;
+      },
+      error => {
+        this.alertService.showError(error);
+        this.disabled = false;
+      }
+    );
+  }
+
+  switchBallOwner(): void {
+    if (this.scoreboard == null) { return; }
+    const teamBallOwner: TeamBallOwner = this.scoreboard.getTeamBallOwner();
+    this.setBallOwner(teamBallOwner === TeamBallOwner.Home ? TeamBallOwner.Away : TeamBallOwner.Home);
   }
 
   newMatch(): void {
