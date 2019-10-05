@@ -1,9 +1,12 @@
-import { AlertService } from './../../services/alert.service';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { ScoreboardPrefs, ErrorResponse, TeamBallOwner } from 'src/backend';
-import { ScoreboardService } from 'src/app/services/scoreboard.service';
-import { takeUntil, debounceTime } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
+
+import { ScoreboardPrefs, TeamBallOwner } from '../../../backend';
+import { AlertService } from '../../services/alert.service';
+import { ScoreboardService } from '../../services/scoreboard.service';
+import { PreferencesComponent } from '../preferences/preferences.component';
 import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
 
 @Component({
@@ -23,7 +26,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   disabled = false;
 
   constructor(private scoreboardService: ScoreboardService,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -184,6 +188,16 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.disabled = false;
       }
     );
+  }
+
+  openSettings(): void {
+    const ngbModalRef = this.modalService.open(PreferencesComponent, {
+      backdrop : 'static',
+      centered: true,
+      keyboard : true,
+      size: 'lg'
+    });
+    ngbModalRef.componentInstance.formData = this.prefs;
   }
 
 }

@@ -22,7 +22,9 @@ import {
   MatFormFieldModule,
   MatGridListModule,
   MatInputModule,
-  MatToolbarModule, MatTooltipModule,
+  MatSelectModule,
+  MatToolbarModule,
+  MatTooltipModule,
 } from '@angular/material';
 
 // services
@@ -32,42 +34,48 @@ import { ApiModule, BASE_PATH } from '../backend';
 
 // environment
 import { environment } from '../environments/environment';
-import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AdminComponent } from './components/admin/admin.component';
-import { VideoChecksComponent } from './components/video-checks/video-checks.component';
+import { PreferencesComponent } from './components/preferences/preferences.component';
+import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { UpDownComponent } from './components/up-down/up-down.component';
+import { VideoChecksComponent } from './components/video-checks/video-checks.component';
 
 @NgModule({
   declarations: [
+    AdminComponent,
     AppComponent,
+    LoginComponent,
     NameComponent,
     PointsComponent,
+    PreferencesComponent,
+    ScoreboardComponent,
     SetsComponent,
     TimeoutsComponent,
-    LoginComponent,
-    ScoreboardComponent,
-    AdminComponent,
-    VideoChecksComponent,
-    UpDownComponent
+    UpDownComponent,
+    VideoChecksComponent
   ],
   imports: [
+    ApiModule,
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    ReactiveFormsModule,
-    SweetAlert2Module.forRoot(),
-    NgbModule,
-    ApiModule,
     HttpClientModule,
-    AppRoutingModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCardModule,
     MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
     MatGridListModule,
+    MatInputModule,
     MatToolbarModule,
     MatTooltipModule,
+    NgbModule,
+    ReactiveFormsModule,
+    SweetAlert2Module.forRoot(),
+    MatSelectModule
+  ],
+  entryComponents: [
+    PreferencesComponent
   ],
   providers: [
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
