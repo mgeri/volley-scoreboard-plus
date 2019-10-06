@@ -6,12 +6,17 @@
   </button>
   <button type="button" mat-raised-button color="primary" class="m-1"
           [disabled]="disabled"
+          (click)="newSet()">
+    New Set
+  </button>
+  <button type="button" mat-raised-button color="primary" class="m-1"
+          [disabled]="disabled"
           (click)="openSettings()">
     <i class="fa fa-cog"></i>
     Settings
   </button>
-
 </mat-toolbar>
+
 <div *ngIf="!loading" class="d-flex flex-column w-100" style="height: calc(100% - 64px)">
   <div class="d-flex text-center w-100 h-100">
     <div class="d-flex flex-column w-10">

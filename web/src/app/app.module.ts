@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
+  MatDialogModule,
   MatFormFieldModule,
   MatGridListModule,
   MatInputModule,
@@ -64,15 +65,16 @@ import { VideoChecksComponent } from './components/video-checks/video-checks.com
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatGridListModule,
+    MatSelectModule,
     MatInputModule,
     MatToolbarModule,
     MatTooltipModule,
     NgbModule,
     ReactiveFormsModule,
-    SweetAlert2Module.forRoot(),
-    MatSelectModule
+    SweetAlert2Module.forRoot()
   ],
   entryComponents: [
     PreferencesComponent

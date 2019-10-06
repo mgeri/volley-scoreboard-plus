@@ -1,14 +1,13 @@
 <div class="modal-header">
   <h4 class="modal-title">Settings</h4>
 </div>
-<div class="modal-body">
+<div mat-dialog-content class="modal-body">
   <form name="preferences" [formGroup]="formGroup">
-    <div class="d-flex flex-column">
+    <mat-card-content style="display: flex; flex-direction: column;">
       <div class="d-flex">
         <div class="w-40 p-1">
           <mat-form-field>
-            <input matInput placeholder="Home name"
-                   [formControlName]="'homeName'">
+            <input matInput placeholder="Home name" formControlName="homeName">
           </mat-form-field>
         </div>
         <div class="w-30 p-1">
@@ -119,19 +118,7 @@
           </mat-form-field>
         </div>
       </div>
-
-
-
-      <!--mat-form-field>
-        <textarea matInput placeholder="Textarea"></textarea>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-select placeholder="Select">
-          <mat-option value="option">Option</mat-option>
-        </mat-select>
-      </mat-form-field-->
-    </div>
+    </mat-card-content>
   </form>
 </div>
 <div class="modal-footer">
@@ -140,7 +127,7 @@
           (click)="dismissModal()">
     Cancel
   </button>
-  <button type="button"
+  <button type="button" ngbAutofocus
           mat-raised-button color="primary"
           (click)="updatePrefs()">
     Save

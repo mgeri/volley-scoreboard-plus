@@ -14,6 +14,7 @@ import { AlertService } from '../../services/alert.service';
 export class PreferencesComponent implements AfterViewChecked, AfterViewInit, OnInit {
 
   @Input() formData: ScoreboardPrefs;
+  @Input() newMatch = false;
 
   formGroup: FormGroup;
 
@@ -96,17 +97,30 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
     this.disabled = true;
     this.scoreboardService.updatePrefs(this.formData).subscribe(
       _ => {
-        this.disabled = false;
-        this.activeModal.close();
+        if (this.newMatch) {
+          this.scoreboardService.newMatch().subscribe(
+            _ => {
+              this.disabled = false;
+              this.activeModal.close(0);
+            },
+            error => {
+              this.disabled = false;
+              this.alertService.showError(error);
+            }
+          );
+        } else {
+          this.disabled = false;
+          this.activeModal.close(0);
+        }
       },
       error => {
-        this.alertService.showError(error);
         this.disabled = false;
+        this.alertService.showError(error);
       }
     );
   }
 
   dismissModal(): void {
-    this.activeModal.dismiss();
+    this.activeModal.dismiss(1);
   }
 }

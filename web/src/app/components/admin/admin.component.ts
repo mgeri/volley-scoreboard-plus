@@ -48,7 +48,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.addHomePoints(points).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -62,7 +62,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.addAwayPoints(points).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -76,7 +76,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.addHomeSets(points).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -90,7 +90,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.addAwaySets(points).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -104,7 +104,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.addHomeTimeouts(1).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -118,7 +118,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.addAwayTimeouts(1).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -132,7 +132,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.addHomeVideoChecks(1).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -146,7 +146,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.addAwayVideoChecks(1).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -160,7 +160,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.disabled) { return; }
     this.disabled = true;
     this.scoreboardService.setBallOwner(teamBallOwner).subscribe(
-      _ => {
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -179,8 +179,26 @@ export class AdminComponent implements OnInit, OnDestroy {
   newMatch(): void {
     if (this.disabled) { return; }
     this.disabled = true;
-    this.scoreboardService.newMatch().subscribe(
-      _ => {
+    const ngbModalRef = this.modalService.open(PreferencesComponent, {
+      backdrop : 'static',
+      centered: true,
+      keyboard : true,
+      size: 'lg'
+    });
+    ngbModalRef.componentInstance.formData = JSON.parse(JSON.stringify(this.prefs));
+    ngbModalRef.componentInstance.newMatch = true;
+    ngbModalRef.result.then((ignored: any) => {
+      this.disabled = false;
+    }, (ignored: any) => {
+      this.disabled = false;
+    });
+  }
+
+  newSet(): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.scoreboardService.newSet().subscribe(
+      ignored => {
         this.disabled = false;
       },
       error => {
@@ -197,7 +215,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       keyboard : true,
       size: 'lg'
     });
-    ngbModalRef.componentInstance.formData = this.prefs;
+    ngbModalRef.componentInstance.formData = JSON.parse(JSON.stringify(this.prefs));
   }
 
 }
