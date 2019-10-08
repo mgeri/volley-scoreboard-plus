@@ -93,6 +93,10 @@ export class ScoreboardService {
     this.session.next(null);
   }
 
+  getLogoUrl(): string {
+    return `${this.defaultService.configuration.basePath}/logo`;
+  }
+
   newMatch(): Observable<ScoreboardStatus> {
     return this.defaultService.scoreboardStatusPut({
       home: { points: 0, sets: 0, timeouts: 0, videoChecks: 0 },

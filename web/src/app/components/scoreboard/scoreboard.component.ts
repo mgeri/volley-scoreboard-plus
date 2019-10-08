@@ -23,6 +23,7 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
 
   loading = true;
 
+
   constructor(private scoreboardService: ScoreboardService) { }
 
   ngOnInit(): void {
@@ -45,8 +46,17 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  getLogoUrl(): string {
+    return this.scoreboardService.getLogoUrl();
+  }
+
+  isHeaderVisible(): boolean {
+    return this.showHeader && this.prefs.showHeader;
+  }
+
   getTeamBallOwner(): TeamBallOwner {
     if (this.status == null) { return TeamBallOwner.None; }
     return this.status.ballOwner;
   }
+
 }

@@ -35,8 +35,9 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
       setBg: new FormControl(null, Validators.required),
       setFg: new FormControl(null, Validators.required),
       timeoutName: new FormControl(null, Validators.required),
-      videoCheckName: new FormControl(null, Validators.required),
       timeoutBg: new FormControl(null, Validators.required),
+      videoCheckName: new FormControl(null, Validators.required),
+      videoCheckBg: new FormControl(null, Validators.required),
       pointBg: new FormControl(null, Validators.required),
       pointFg: new FormControl(null, Validators.required),
       homeName: new FormControl(null, Validators.required),
@@ -54,8 +55,9 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
       this.formData.setBg = formValue.setBg;
       this.formData.setFg = formValue.setFg;
       this.formData.timeoutName = formValue.timeoutName;
-      this.formData.videoCheckName = formValue.videoCheckName;
       this.formData.timeoutBg = formValue.timeoutBg;
+      this.formData.videoCheckName = formValue.videoCheckName;
+      this.formData.videoCheckBg = formValue.videoCheckBg;
       this.formData.pointBg = formValue.pointBg;
       this.formData.pointFg = formValue.pointFg;
       this.formData.homeName = formValue.homeName;
@@ -75,8 +77,9 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
       setBg: this.formData.setBg,
       setFg: this.formData.setFg,
       timeoutName: this.formData.timeoutName,
-      videoCheckName: this.formData.videoCheckName,
       timeoutBg: this.formData.timeoutBg,
+      videoCheckName: this.formData.videoCheckName,
+      videoCheckBg: this.formData.videoCheckBg,
       pointBg: this.formData.pointBg,
       pointFg: this.formData.pointFg,
       homeName: this.formData.homeName,
