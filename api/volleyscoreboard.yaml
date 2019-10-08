@@ -178,6 +178,20 @@ paths:
         '204':
           description: Heartbeat response.
 
+  /logo:
+    get:
+      operationId: logoGet
+      summary: Get the main logo image
+      security: []
+      responses:
+        '200':
+          description: Logo image in PNG format
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+
   /scoreboard/status:
     get:
       operationId: scoreboardStatusGet
@@ -439,6 +453,10 @@ components:
           format: color
           description: Foreground scoreboard color.
           default: "#FFFFFF"
+        showHeader:
+          type: boolean
+          description: Show scoreboard header with logo.
+          default: true
         setName:
           type: string
           description: Set label text.
@@ -457,14 +475,19 @@ components:
           type: string
           description: Timeouts label text.
           default: "Timeout"
-        videoCheckName:
-          type: string
-          description: Video checks label text.
-          default: "Video check"
         timeoutBg:
           type: string
           format: color
           description: Timeouts background color.
+          default: "#FF0000"
+        videoCheckName:
+          type: string
+          description: Video checks label text.
+          default: "Video Check"
+        videoCheckBg:
+          type: string
+          format: color
+          description: Video checks background color.
           default: "#FF0000"
         pointBg:
           type: string
@@ -507,12 +530,14 @@ components:
       required:
         - bg
         - fg
+        - showHeader
         - setName
         - setBg
         - setFg
         - timeoutName
-        - videoCheckName
         - timeoutBg
+        - videoCheckName
+        - videoCheckBg
         - pointBg
         - pointFg
         - homeName
