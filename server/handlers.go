@@ -23,7 +23,6 @@ type jwtCustomClaims struct {
 
 // Login by username and password returning session with JWT token.// (POST /session)
 func (app *application) SessionPost(ctx echo.Context) error {
-
 	c := new(api.Credentials)
 	if err := ctx.Bind(c); err != nil {
 		ctx.Logger().Warnf("Error binding Creadentials: %v", err)
@@ -31,10 +30,11 @@ func (app *application) SessionPost(ctx echo.Context) error {
 			Message: "Invalid username or password"}})
 	}
 
-	if c.Username != viper.GetString("server.username") || c.Password != viper.GetString("server.password") {
+	if (viper.GetString("server.username") != "" && c.Username != viper.GetString("server.username")) ||
+		c.Password != viper.GetString("server.password") {
 		ctx.Logger().Warnf("Invalid username or password [%s][%s]", c.Username, c.Password)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: SessionErrorCode, Subcode: 1,
-			Message: "Invalid username or password"}})
+			Message: "Invalid credetials"}})
 	}
 
 	// Set custom claims
@@ -64,6 +64,10 @@ func (app *application) SessionPost(ctx echo.Context) error {
 // Server heartbeat operation// (GET /ping)
 func (app *application) PingGet(ctx echo.Context) error {
 	return ctx.NoContent(http.StatusNoContent)
+}
+
+func (app *application) LogoGet(ctx echo.Context) error {
+	return ctx.File(viper.GetString("server.logoFile"))
 }
 
 // Return the scoreboard status (points, set, timeouts).// (GET /scoreboard/status)

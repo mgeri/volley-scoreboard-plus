@@ -30,21 +30,24 @@ type ScoreboardMessage struct {
 
 // ScoreboardPrefs defines model for ScoreboardPrefs.
 type ScoreboardPrefs struct {
-	AwayBg      string `json:"awayBg"`
-	AwayFg      string `json:"awayFg"`
-	AwayName    string `json:"awayName"`
-	Bg          string `json:"bg"`
-	Fg          string `json:"fg"`
-	HomeBg      string `json:"homeBg"`
-	HomeFg      string `json:"homeFg"`
-	HomeName    string `json:"homeName"`
-	PointBg     string `json:"pointBg"`
-	PointFg     string `json:"pointFg"`
-	SetBg       string `json:"setBg"`
-	SetFg       string `json:"setFg"`
-	SetName     string `json:"setName"`
-	TimeoutBg   string `json:"timeoutBg"`
-	TimeoutName string `json:"timeoutName"`
+	AwayBg         string `json:"awayBg"`
+	AwayFg         string `json:"awayFg"`
+	AwayName       string `json:"awayName"`
+	Bg             string `json:"bg"`
+	Fg             string `json:"fg"`
+	HomeBg         string `json:"homeBg"`
+	HomeFg         string `json:"homeFg"`
+	HomeName       string `json:"homeName"`
+	PointBg        string `json:"pointBg"`
+	PointFg        string `json:"pointFg"`
+	SetBg          string `json:"setBg"`
+	SetFg          string `json:"setFg"`
+	SetName        string `json:"setName"`
+	ShowHeader     bool   `json:"showHeader"`
+	TimeoutBg      string `json:"timeoutBg"`
+	TimeoutName    string `json:"timeoutName"`
+	VideoCheckBg   string `json:"videoCheckBg"`
+	VideoCheckName string `json:"videoCheckName"`
 }
 
 // ScoreboardStatus defines model for ScoreboardStatus.

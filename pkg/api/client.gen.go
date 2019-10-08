@@ -33,6 +33,9 @@ type Client struct {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+	// LogoGet request
+	LogoGet(ctx context.Context) (*http.Response, error)
+
 	// PingGet request
 	PingGet(ctx context.Context) (*http.Response, error)
 
@@ -56,6 +59,21 @@ type ClientInterface interface {
 	SessionPostWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error)
 
 	SessionPost(ctx context.Context, body SessionPostJSONRequestBody) (*http.Response, error)
+}
+
+func (c *Client) LogoGet(ctx context.Context) (*http.Response, error) {
+	req, err := NewLogoGetRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
 }
 
 func (c *Client) PingGet(ctx context.Context) (*http.Response, error) {
@@ -191,6 +209,20 @@ func (c *Client) SessionPost(ctx context.Context, body SessionPostJSONRequestBod
 		}
 	}
 	return c.Client.Do(req)
+}
+
+// NewLogoGetRequest generates requests for LogoGet
+func NewLogoGetRequest(server string) (*http.Request, error) {
+	var err error
+
+	queryUrl := fmt.Sprintf("%s/logo", server)
+
+	req, err := http.NewRequest("GET", queryUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
 }
 
 // NewPingGetRequest generates requests for PingGet
@@ -339,6 +371,27 @@ func NewClientWithResponsesAndRequestEditorFunc(server string, reqEditorFn Reque
 	}
 }
 
+type logoGetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r logoGetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r logoGetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type pingGetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -473,6 +526,15 @@ func (r sessionPostResponse) StatusCode() int {
 	return 0
 }
 
+// LogoGetWithResponse request returning *LogoGetResponse
+func (c *ClientWithResponses) LogoGetWithResponse(ctx context.Context) (*logoGetResponse, error) {
+	rsp, err := c.LogoGet(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return ParselogoGetResponse(rsp)
+}
+
 // PingGetWithResponse request returning *PingGetResponse
 func (c *ClientWithResponses) PingGetWithResponse(ctx context.Context) (*pingGetResponse, error) {
 	rsp, err := c.PingGet(ctx)
@@ -549,6 +611,27 @@ func (c *ClientWithResponses) SessionPostWithResponse(ctx context.Context, body 
 		return nil, err
 	}
 	return ParsesessionPostResponse(rsp)
+}
+
+// ParselogoGetResponse parses an HTTP response from a LogoGetWithResponse call
+func ParselogoGetResponse(rsp *http.Response) (*logoGetResponse, error) {
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &logoGetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 200:
+		// Content-type (image/*) unsupported
+	}
+
+	return response, nil
 }
 
 // ParsepingGetResponse parses an HTTP response from a PingGetWithResponse call

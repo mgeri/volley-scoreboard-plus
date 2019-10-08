@@ -10,6 +10,8 @@ import (
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Get the main logo image// (GET /logo)
+	LogoGet(ctx echo.Context) error
 	// Server heartbeat operation// (GET /ping)
 	PingGet(ctx echo.Context) error
 	// Return the scoreboard preferences (colors, team names).// (GET /scoreboard/prefs)
@@ -27,6 +29,15 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// LogoGet converts echo context to params.
+func (w *ServerInterfaceWrapper) LogoGet(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.LogoGet(ctx)
+	return err
 }
 
 // PingGet converts echo context to params.
@@ -90,6 +101,7 @@ func RegisterHandlers(router runtime.EchoRouter, si ServerInterface) {
 		Handler: si,
 	}
 
+	router.GET("/logo", wrapper.LogoGet)
 	router.GET("/ping", wrapper.PingGet)
 	router.GET("/scoreboard/prefs", wrapper.ScoreboardPrefsGet)
 	router.PUT("/scoreboard/prefs", wrapper.ScoreboardPrefsPut)
