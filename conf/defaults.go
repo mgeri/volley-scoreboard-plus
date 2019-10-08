@@ -18,8 +18,8 @@ var (
 
 		// Server Configuration
 		viper.SetDefault("server.address", ":4000")
-		viper.SetDefault("server.username", "")
-		viper.SetDefault("server.password", "admin")
+		viper.SetDefault("server.username", "admin")
+		viper.SetDefault("server.password", "*")
 		viper.SetDefault("server.jwtSigningKey", randstr.String(1024))
 		viper.SetDefault("server.webAppDir", "./web/dist/volley-gui")
 		viper.SetDefault("server.storeDir", "./tmp")
