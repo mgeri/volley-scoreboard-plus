@@ -117,6 +117,15 @@ func (m *jsonScoreboardPrefsStore) Update(prefs *api.ScoreboardPrefs) error {
 	return m.save()
 }
 
+func (m *jsonScoreboardPrefsStore) Reset() error {
+	prefs := store.NewScoreboardPrefs()
+	err := m.ks.Set(prefsKey, prefs)
+	if err != nil {
+		return err
+	}
+	return m.save()
+}
+
 func (m *jsonScoreboardPrefsStore) save() error {
 	if m.filename != "" {
 		return jsonstore.Save(m.ks, m.filename)

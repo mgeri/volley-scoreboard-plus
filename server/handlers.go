@@ -105,7 +105,6 @@ func (app *application) ScoreboardStatusPut(ctx echo.Context) error {
 	app.BroadcastStatusUpdate()
 
 	return ctx.JSON(http.StatusOK, status)
-
 }
 
 // Return the scoreboard Prefs (colors, team names).// (GET /scoreboard/Prefs)
@@ -143,5 +142,18 @@ func (app *application) ScoreboardPrefsPut(ctx echo.Context) error {
 	app.BroadcastPrefsUpdate()
 
 	return ctx.JSON(http.StatusOK, prefs)
+}
 
+// Reset scoreboard Prefs.// (DELETE /scoreboard/Prefs)
+func (app *application) ScoreboardPrefsDelete(ctx echo.Context) error {
+	if err := app.prefsStore.Reset(); err != nil {
+		ctx.Logger().Warnf("Error Resetting ScoreboardPrefs: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardPrefsErrorCode, Subcode: 1,
+			Message: err.Error()}})
+	}
+
+	// websocket broadcast
+	app.BroadcastPrefsUpdate()
+
+	return app.ScoreboardPrefsGet(ctx)
 }

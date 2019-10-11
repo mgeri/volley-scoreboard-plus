@@ -39,6 +39,11 @@ type ClientInterface interface {
 	// PingGet request
 	PingGet(ctx context.Context) (*http.Response, error)
 
+	// ScoreboardPrefsDelete request  with any body
+	ScoreboardPrefsDeleteWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error)
+
+	ScoreboardPrefsDelete(ctx context.Context, body ScoreboardPrefsDeleteJSONRequestBody) (*http.Response, error)
+
 	// ScoreboardPrefsGet request
 	ScoreboardPrefsGet(ctx context.Context) (*http.Response, error)
 
@@ -78,6 +83,36 @@ func (c *Client) LogoGet(ctx context.Context) (*http.Response, error) {
 
 func (c *Client) PingGet(ctx context.Context) (*http.Response, error) {
 	req, err := NewPingGetRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ScoreboardPrefsDeleteWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error) {
+	req, err := NewScoreboardPrefsDeleteRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ScoreboardPrefsDelete(ctx context.Context, body ScoreboardPrefsDeleteJSONRequestBody) (*http.Response, error) {
+	req, err := NewScoreboardPrefsDeleteRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -236,6 +271,32 @@ func NewPingGetRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
+	return req, nil
+}
+
+// NewScoreboardPrefsDeleteRequest calls the generic ScoreboardPrefsDelete builder with application/json body
+func NewScoreboardPrefsDeleteRequest(server string, body ScoreboardPrefsDeleteJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewScoreboardPrefsDeleteRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewScoreboardPrefsDeleteRequestWithBody generates requests for ScoreboardPrefsDelete with any type of body
+func NewScoreboardPrefsDeleteRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	queryUrl := fmt.Sprintf("%s/scoreboard/prefs", server)
+
+	req, err := http.NewRequest("DELETE", queryUrl, body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 	return req, nil
 }
 
@@ -413,6 +474,28 @@ func (r pingGetResponse) StatusCode() int {
 	return 0
 }
 
+type scoreboardPrefsDeleteResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ScoreboardPrefs
+}
+
+// Status returns HTTPResponse.Status
+func (r scoreboardPrefsDeleteResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r scoreboardPrefsDeleteResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type scoreboardPrefsGetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -544,6 +627,23 @@ func (c *ClientWithResponses) PingGetWithResponse(ctx context.Context) (*pingGet
 	return ParsepingGetResponse(rsp)
 }
 
+// ScoreboardPrefsDeleteWithBodyWithResponse request with arbitrary body returning *ScoreboardPrefsDeleteResponse
+func (c *ClientWithResponses) ScoreboardPrefsDeleteWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader) (*scoreboardPrefsDeleteResponse, error) {
+	rsp, err := c.ScoreboardPrefsDeleteWithBody(ctx, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	return ParsescoreboardPrefsDeleteResponse(rsp)
+}
+
+func (c *ClientWithResponses) ScoreboardPrefsDeleteWithResponse(ctx context.Context, body ScoreboardPrefsDeleteJSONRequestBody) (*scoreboardPrefsDeleteResponse, error) {
+	rsp, err := c.ScoreboardPrefsDelete(ctx, body)
+	if err != nil {
+		return nil, err
+	}
+	return ParsescoreboardPrefsDeleteResponse(rsp)
+}
+
 // ScoreboardPrefsGetWithResponse request returning *ScoreboardPrefsGetResponse
 func (c *ClientWithResponses) ScoreboardPrefsGetWithResponse(ctx context.Context) (*scoreboardPrefsGetResponse, error) {
 	rsp, err := c.ScoreboardPrefsGet(ctx)
@@ -649,6 +749,32 @@ func ParsepingGetResponse(rsp *http.Response) (*pingGetResponse, error) {
 
 	switch {
 	case rsp.StatusCode == 204:
+		break // No content-type
+	}
+
+	return response, nil
+}
+
+// ParsescoreboardPrefsDeleteResponse parses an HTTP response from a ScoreboardPrefsDeleteWithResponse call
+func ParsescoreboardPrefsDeleteResponse(rsp *http.Response) (*scoreboardPrefsDeleteResponse, error) {
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &scoreboardPrefsDeleteResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		response.JSON200 = &ScoreboardPrefs{}
+		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
+			return nil, err
+		}
+	case rsp.StatusCode == 401:
 		break // No content-type
 	}
 
