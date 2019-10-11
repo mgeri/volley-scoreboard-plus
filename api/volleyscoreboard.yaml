@@ -330,12 +330,6 @@ paths:
     delete:
       operationId: scoreboardPrefsDelete
       summary: Reset scoreboard Prefs to defaults value.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ScoreboardPrefs'
-        required: true
       responses:
         '200':
           description: The default scoreboard preferences.
