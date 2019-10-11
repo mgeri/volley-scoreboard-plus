@@ -1,11 +1,35 @@
 .login-main {
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
   margin-top: 10%;
 }
 
-mat-card {
-  min-width: 40%;
+.colorize-pink {
+  filter: brightness(0.5) sepia(1) hue-rotate(-70deg) saturate(5);
+}
+
+.colorize-navy {
+  filter: brightness(0.2) sepia(1) hue-rotate(180deg) saturate(5);
+}
+
+.colorize-blue {
+  filter: brightness(0.5) sepia(1) hue-rotate(140deg) saturate(6);
+}
+
+.logo-panel {
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.login-form {
+  min-width: 25%;
+  padding: 24px;
+  background: #fbfbfb;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.login-form-button {
+  width: 100%;
 }

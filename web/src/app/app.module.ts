@@ -15,19 +15,6 @@ import { TimeoutsComponent } from './components/timeouts/timeouts.component';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// angular material
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatDialogModule,
-  MatFormFieldModule,
-  MatGridListModule,
-  MatInputModule,
-  MatSelectModule,
-  MatToolbarModule,
-  MatTooltipModule,
-} from '@angular/material';
-
 // services
 
 // api
@@ -41,6 +28,14 @@ import { PreferencesComponent } from './components/preferences/preferences.compo
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { UpDownComponent } from './components/up-down/up-down.component';
 import { VideoChecksComponent } from './components/video-checks/video-checks.component';
+
+import { ColorPickerModule } from 'ngx-color-picker';
+import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
+
+// config angular i18n
+import { registerLocaleData } from '@angular/common';
+import en from '@angular/common/locales/en';
+registerLocaleData(en);
 
 @NgModule({
   declarations: [
@@ -61,18 +56,11 @@ import { VideoChecksComponent } from './components/video-checks/video-checks.com
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
+    ColorPickerModule,
     FormsModule,
     HttpClientModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatSelectModule,
-    MatInputModule,
-    MatToolbarModule,
-    MatTooltipModule,
     NgbModule,
+    NgZorroAntdModule,
     ReactiveFormsModule,
     SweetAlert2Module.forRoot()
   ],
@@ -80,6 +68,7 @@ import { VideoChecksComponent } from './components/video-checks/video-checks.com
     PreferencesComponent
   ],
   providers: [
+    { provide: NZ_I18N, useValue: en_US },
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
   ],
   bootstrap: [AppComponent]

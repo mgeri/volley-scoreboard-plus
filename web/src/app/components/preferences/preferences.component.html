@@ -1,134 +1,236 @@
 <div class="modal-header">
   <h4 class="modal-title">Settings</h4>
 </div>
-<div mat-dialog-content class="modal-body">
-  <form name="preferences" [formGroup]="formGroup">
-    <mat-card-content style="display: flex; flex-direction: column;">
-      <div class="d-flex">
-        <div class="w-40 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Home name" formControlName="homeName">
-          </mat-form-field>
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Home BG"
-                   [formControlName]="'homeBg'">
-          </mat-form-field>
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Home FG"
-                   [formControlName]="'homeFg'">
-          </mat-form-field>
-        </div>
+<div class="preferences-form">
+  <form nz-form [formGroup]="formGroup" name="preferences">
+    <div nz-row [nzGutter]="12">
+
+      <!-- bg and fg -->
+      <div nz-col [nzOffset]="12" [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'background'" [nzSm]="12">Background</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker input-color"
+              [colorPicker]="formGroup.get('bg').value"
+              (colorPickerChange)="formGroup.get('bg').setValue($event)"
+              [style.background]="formGroup.get('bg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'foregroud'" [nzSm]="12">Foreground</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker input-color"
+              [colorPicker]="formGroup.get('fg').value"
+              (colorPickerChange)="formGroup.get('fg').setValue($event)"
+              [style.background]="formGroup.get('fg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
       </div>
 
-      <div class="d-flex">
-        <div class="w-40 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Away name"
-                   [formControlName]="'awayName'">
-          </mat-form-field>
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Away BG"
-                   [formControlName]="'awayBg'">
-          </mat-form-field>
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Away FG"
-                   [formControlName]="'awayFg'">
-          </mat-form-field>
-        </div>
+      <!-- Home -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'homeName'" [nzSm]="8">Home Name</nz-form-label>
+          <nz-form-control [nzSm]="16">
+            <input nz-input placeholder="Home" [formControlName]="'homeName'"
+            [style.background]="formGroup.get('homeBg').value"
+            [style.color]="formGroup.get('homeFg').value"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'homeBg'" [nzSm]="12">Home BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker"
+              [colorPicker]="formGroup.get('homeBg').value"
+              (colorPickerChange)="formGroup.get('homeBg').setValue($event)"
+              [style.background]="formGroup.get('homeBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'homeFg'" [nzSm]="12">Home FG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker"
+              [colorPicker]="formGroup.get('homeFg').value"
+              (colorPickerChange)="formGroup.get('homeFg').setValue($event)"
+              [style.background]="formGroup.get('homeFg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
       </div>
 
-      <div class="d-flex">
-        <div class="w-50 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Background"
-                   [formControlName]="'bg'">
-          </mat-form-field>
-        </div>
-        <div class="w-50 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Foreground"
-                   [formControlName]="'fg'">
-          </mat-form-field>
-        </div>
+      <!-- Away -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'awayName'" [nzSm]="8">Away Name</nz-form-label>
+          <nz-form-control [nzSm]="16">
+            <input nz-input placeholder="Away" [formControlName]="'awayName'"
+            [style.background]="formGroup.get('awayBg').value"
+            [style.color]="formGroup.get('awayFg').value"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'awayBg'" [nzSm]="12">Away BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker"
+              [colorPicker]="formGroup.get('awayBg').value"
+              (colorPickerChange)="formGroup.get('awayBg').setValue($event)"
+              [style.background]="formGroup.get('awayBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'awayFg'" [nzSm]="12">Away FG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker"
+              [colorPicker]="formGroup.get('awayFg').value"
+              (colorPickerChange)="formGroup.get('awayFg').setValue($event)"
+              [style.background]="formGroup.get('awayFg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
       </div>
 
-      <div class="d-flex">
-        <div class="w-40 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Set label"
-                   [formControlName]="'setName'">
-          </mat-form-field>
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Set BG"
-                   [formControlName]="'setBg'">
-          </mat-form-field>
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Set FG"
-                   [formControlName]="'setFg'">
-          </mat-form-field>
-        </div>
+      <!-- Set -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'setName'" [nzSm]="8">Set Label</nz-form-label>
+          <nz-form-control [nzSm]="16">
+            <input nz-input placeholder="Set" [formControlName]="'setName'"
+            [style.background]="formGroup.get('setBg').value"
+            [style.color]="formGroup.get('setFg').value"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'setBg'" [nzSm]="12">Set BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker"
+              [colorPicker]="formGroup.get('setBg').value"
+              (colorPickerChange)="formGroup.get('setBg').setValue($event)"
+              [style.background]="formGroup.get('setBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'setFg'" [nzSm]="12">Set FG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker"
+              [colorPicker]="formGroup.get('setFg').value"
+              (colorPickerChange)="formGroup.get('setFg').setValue($event)"
+              [style.background]="formGroup.get('setFg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
       </div>
 
-      <div class="d-flex">
-        <div class="w-40 p-1">
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Point BG"
-                   [formControlName]="'pointBg'">
-          </mat-form-field>
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Point FG"
-                   [formControlName]="'pointFg'">
-          </mat-form-field>
-        </div>
+      <!-- Point -->
+      <div nz-col [nzOffset]="12" [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'pointBg'" [nzSm]="12">Point BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker input-color"
+              [colorPicker]="formGroup.get('pointBg').value"
+              (colorPickerChange)="formGroup.get('pointBg').setValue($event)"
+              [style.background]="formGroup.get('pointBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'pointFg'" [nzSm]="12">Point FG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker input-color"
+              [colorPicker]="formGroup.get('pointFg').value"
+              (colorPickerChange)="formGroup.get('pointFg').setValue($event)"
+              [style.background]="formGroup.get('pointFg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
       </div>
 
-      <div class="d-flex">
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Timeout label"
-                   [formControlName]="'timeoutName'">
-          </mat-form-field>
-        </div>
-        <div class="w-40 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Timeout and Video check BG"
-                   [formControlName]="'timeoutBg'">
-          </mat-form-field>
-        </div>
-        <div class="w-30 p-1">
-          <mat-form-field>
-            <input matInput placeholder="Video check label"
-                   [formControlName]="'videoCheckName'">
-          </mat-form-field>
-        </div>
+      <!-- Timeout -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'timeoutName'" [nzSm]="8">Timeout Label</nz-form-label>
+          <nz-form-control [nzSm]="16">
+            <input nz-input placeholder="Timeout" [formControlName]="'timeoutName'"
+            [style.background]="formGroup.get('bg').value"
+            [style.color]="formGroup.get('fg').value"
+            />
+          </nz-form-control>
+        </nz-form-item>
       </div>
-    </mat-card-content>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'timeoutBg'" [nzSm]="12">Timeout BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker input-color"
+              [colorPicker]="formGroup.get('timeoutBg').value"
+              (colorPickerChange)="formGroup.get('timeoutBg').setValue($event)"
+              [style.background]="formGroup.get('timeoutBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+      </div>
+
+      <!-- Video Check -->
+      <div nz-col [nzSpan]="12">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzFor]="'videoCheckName'" [nzSm]="8">Video Check Label</nz-form-label>
+            <nz-form-control [nzSm]="16">
+              <input nz-input placeholder="Video Check" [formControlName]="'videoCheckName'"
+              [style.background]="formGroup.get('bg').value"
+              [style.color]="formGroup.get('fg').value"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzFor]="'videoCheckBg'" [nzSm]="12">VideoCheck BG</nz-form-label>
+            <nz-form-control [nzSm]="12">
+                <input nz-input class="colorPicker input-color"
+                [colorPicker]="formGroup.get('videoCheckBg').value"
+                (colorPickerChange)="formGroup.get('videoCheckBg').setValue($event)"
+                [style.background]="formGroup.get('videoCheckBg').value"
+                />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+        </div>
+
+      </div>
   </form>
 </div>
 <div class="modal-footer">
-  <button type="button"
-          mat-raised-button color="primary"
+  <button nz-button nzType="primary"
           (click)="dismissModal()">
     Cancel
   </button>
-  <button type="button" ngbAutofocus
-          mat-raised-button color="primary"
+  <button nz-button nzType="primary" ngbAutofocus
           (click)="updatePrefs()">
     Save
   </button>
