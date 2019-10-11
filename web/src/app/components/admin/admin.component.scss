@@ -1,6 +1,20 @@
 
-.scoreboard-panel {
+
+.layout {
+  height: 100vh;
+}
+
+nz-header {
+  width: 100%;
+}
+
+[nz-menu] {
+  line-height: 64px;
+}
+
+.inner-content {
   padding: 10px;
   background: #fbfbfb;
-
+  min-height: 380px;
 }
+

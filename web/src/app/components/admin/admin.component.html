@@ -1,91 +1,95 @@
-<nz-header class="button-bar">
-    <button type="button" nz-button nzType="primary" class="m-1"
-      [disabled]="disabled"
-      (click)="newMatch()">
-        New Match
-    </button>
-    <button type="button" nz-button nzType="primary" class="m-1"
-      [disabled]="disabled"
-      (click)="newSet()">
-      New Set
-    </button>
+<nz-layout class="layout">
+  <nz-header>
+    <div>
       <button type="button" nz-button nzType="primary" class="m-1"
-          [disabled]="disabled"
-          (click)="openSettings()">
-      <i class="fa fa-cog"></i>
-      Settings
-    </button>
-</nz-header>
+        [disabled]="disabled"
+        (click)="newMatch()">
+          New Match
+      </button>
+      <button type="button" nz-button nzType="primary" class="m-1"
+        [disabled]="disabled"
+        (click)="newSet()">
+        New Set
+      </button>
+        <button type="button" nz-button nzType="primary" class="m-1"
+            [disabled]="disabled"
+            (click)="openSettings()">
+        <i class="fa fa-cog"></i>
+        Settings
+      </button>
+    </div>
+  </nz-header>
 
-<div *ngIf="!loading" class="d-flex flex-column w-100 scoreboard-panel" style="height: calc(100% - 64px)">
-  <div class="d-flex text-center w-100 h-100" >
-    <div class="d-flex flex-column w-10">
-      <div class="h-20"></div>
-      <div class="h-50">
-        <app-up-down (up)="addHomePoint(1)"
-                     (down)="addHomePoint(-1)">
-        </app-up-down>
-      </div>
-      <div class="h-30">
-        <app-up-down (up)="addHomeSet(1)"
-                     (down)="addHomeSet(-1)">
-        </app-up-down>
-      </div>
-    </div>
-    <div class="w-80 h-100"
-         [style.background-color]="prefs.bg"
-         [style.color]="prefs.fg">
-      <app-scoreboard #scoreboard [showHeader]="false">
-      </app-scoreboard>
-    </div>
-    <div class="d-flex flex-column w-10">
-      <div class="h-20"></div>
-      <div class="h-50">
-        <app-up-down (up)="addAwayPoint(1)"
-                     (down)="addAwayPoint(-1)">
-        </app-up-down>
-      </div>
-      <div class="h-30">
-        <app-up-down (up)="addAwaySet(1)"
-                     (down)="addAwaySet(-1)">
-        </app-up-down>
-      </div>
-    </div>
-  </div>
-  <div class="d-flex">
-    <div class="w-10"></div>
-    <div class="d-flex w-80 p-1">
-      <div class="w-20"></div>
-      <div class="d-flex w-60">
-        <div class="d-flex justify-content-end w-30 px-3">
-          <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
-                  (click)="addHomeTimeout()">
-            <i class="fa fa-clock-o"></i>
-          </button>
-          <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
-                  (click)="addHomeVideoCheck()">
-            <i class="fa fa-video-camera"></i>
-          </button>
+    <div *ngIf="!loading" class="d-flex flex-column w-100 inner-content" style="height: calc(100% - 64px)">
+      <div class="d-flex text-center w-100 h-100" >
+        <div class="d-flex flex-column w-10">
+          <div class="h-20"></div>
+          <div class="h-50">
+            <app-up-down (up)="addHomePoint(1)"
+                        (down)="addHomePoint(-1)">
+            </app-up-down>
+          </div>
+          <div class="h-30">
+            <app-up-down (up)="addHomeSet(1)"
+                        (down)="addHomeSet(-1)">
+            </app-up-down>
+          </div>
         </div>
-        <div class="d-flex justify-content-center w-40">
-          <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
-                  (click)="switchBallOwner()">
-            <i class="fa fa-exchange"></i>
-          </button>
+        <div class="w-80 h-100"
+            [style.background-color]="prefs.bg"
+            [style.color]="prefs.fg">
+          <app-scoreboard #scoreboard [showHeader]="false">
+          </app-scoreboard>
         </div>
-        <div class="d-flex justify-content-start w-30 px-3">
-          <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
-                  (click)="addAwayVideoCheck()">
-            <i class="fa fa-video-camera"></i>
-          </button>
-          <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
-                  (click)="addAwayTimeout()">
-            <i class="fa fa-clock-o"></i>
-          </button>
+        <div class="d-flex flex-column w-10">
+          <div class="h-20"></div>
+          <div class="h-50">
+            <app-up-down (up)="addAwayPoint(1)"
+                        (down)="addAwayPoint(-1)">
+            </app-up-down>
+          </div>
+          <div class="h-30">
+            <app-up-down (up)="addAwaySet(1)"
+                        (down)="addAwaySet(-1)">
+            </app-up-down>
+          </div>
         </div>
       </div>
-      <div class="w-20"></div>
+      <div class="d-flex">
+        <div class="w-10"></div>
+        <div class="d-flex w-80 p-1">
+          <div class="w-20"></div>
+          <div class="d-flex w-60">
+            <div class="d-flex justify-content-end w-30 px-3">
+              <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
+                      (click)="addHomeTimeout()">
+                <i class="fa fa-clock-o"></i>
+              </button>
+              <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
+                      (click)="addHomeVideoCheck()">
+                <i class="fa fa-video-camera"></i>
+              </button>
+            </div>
+            <div class="d-flex justify-content-center w-40">
+              <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
+                      (click)="switchBallOwner()">
+                <i class="fa fa-exchange"></i>
+              </button>
+            </div>
+            <div class="d-flex justify-content-start w-30 px-3">
+              <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
+                      (click)="addAwayVideoCheck()">
+                <i class="fa fa-video-camera"></i>
+              </button>
+              <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
+                      (click)="addAwayTimeout()">
+                <i class="fa fa-clock-o"></i>
+              </button>
+            </div>
+          </div>
+          <div class="w-20"></div>
+        </div>
+        <div class="w-10"></div>
+      </div>
     </div>
-    <div class="w-10"></div>
-  </div>
-</div>
+</nz-layout>
