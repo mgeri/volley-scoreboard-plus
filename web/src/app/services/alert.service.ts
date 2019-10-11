@@ -31,4 +31,5 @@ export class AlertService {
 
     Swal.fire('Oops...', 'Something bad happened; please try again later.', 'error');
   }
+
 }

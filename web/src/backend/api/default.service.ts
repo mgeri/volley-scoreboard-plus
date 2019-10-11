@@ -115,6 +115,45 @@ export class DefaultService {
     }
 
     /**
+     * Reset scoreboard Prefs to defaults value.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public scoreboardPrefsDelete(observe?: 'body', reportProgress?: boolean): Observable<ScoreboardPrefs>;
+    public scoreboardPrefsDelete(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ScoreboardPrefs>>;
+    public scoreboardPrefsDelete(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ScoreboardPrefs>>;
+    public scoreboardPrefsDelete(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.delete<ScoreboardPrefs>(`${this.configuration.basePath}/scoreboard/prefs`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Return the scoreboard preferences (colors, team names).
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

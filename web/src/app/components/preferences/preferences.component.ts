@@ -6,6 +6,8 @@ import { ScoreboardPrefs } from '../../../backend';
 import { ScoreboardService } from '../../services/scoreboard.service';
 import { AlertService } from '../../services/alert.service';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-preferences',
   templateUrl: './preferences.component.html',
@@ -121,6 +123,34 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
         this.alertService.showError(error);
       }
     );
+  }
+
+  resetPrefs(): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
+
+    Swal.fire({
+      title: 'Are you sure you want to Reset current prefs to defauls?',
+      text: 'You won\'t be able to revert this!',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Reset It!'
+    }).then((result) => {
+      if (result.value) {
+        this.scoreboardService.resetPrefs().subscribe(
+          _ => {
+              this.disabled = false;
+              this.activeModal.close(0);
+          },
+          error => {
+            this.disabled = false;
+            this.alertService.showError(error);
+          }
+        );
+      }
+    })
   }
 
   dismissModal(): void {

@@ -194,6 +194,9 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut(status);
   }
 
+  resetPrefs(): Observable<ScoreboardPrefs> {
+    return this.defaultService.scoreboardPrefsDelete();
+  }
   updatePrefs(prefs: ScoreboardPrefs): Observable<ScoreboardPrefs> {
     return this.defaultService.scoreboardPrefsPut(prefs);
   }
