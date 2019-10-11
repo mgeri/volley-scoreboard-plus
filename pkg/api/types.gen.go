@@ -75,9 +75,6 @@ type Session struct {
 // TeamBallOwner defines model for TeamBallOwner.
 type TeamBallOwner string
 
-// scoreboardPrefsDeleteJSONBody defines parameters for ScoreboardPrefsDelete.
-type scoreboardPrefsDeleteJSONBody ScoreboardPrefs
-
 // scoreboardPrefsPutJSONBody defines parameters for ScoreboardPrefsPut.
 type scoreboardPrefsPutJSONBody ScoreboardPrefs
 
@@ -86,9 +83,6 @@ type scoreboardStatusPutJSONBody ScoreboardStatus
 
 // sessionPostJSONBody defines parameters for SessionPost.
 type sessionPostJSONBody Credentials
-
-// ScoreboardPrefsDeleteRequestBody defines body for ScoreboardPrefsDelete for application/json ContentType.
-type ScoreboardPrefsDeleteJSONRequestBody scoreboardPrefsDeleteJSONBody
 
 // ScoreboardPrefsPutRequestBody defines body for ScoreboardPrefsPut for application/json ContentType.
 type ScoreboardPrefsPutJSONRequestBody scoreboardPrefsPutJSONBody
