@@ -20,7 +20,10 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
   formGroup: FormGroup;
 
+  currentPrefs: ScoreboardPrefs;
+
   disabled = false;
+  previewed = false;
 
   constructor(public activeModal: NgbActiveModal,
               private formBuilder: FormBuilder,
@@ -31,6 +34,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
+      showHeader: new FormControl(null, Validators.required),
       bg: new FormControl(null, Validators.required),
       fg: new FormControl(null, Validators.required),
       setName: new FormControl(null, Validators.required),
@@ -51,6 +55,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
     });
 
     this.formGroup.valueChanges.subscribe((formValue: any) => {
+      this.formData.showHeader = formValue.showHeader;
       this.formData.bg = formValue.bg;
       this.formData.fg = formValue.fg;
       this.formData.setName = formValue.setName;
@@ -73,6 +78,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
   ngAfterViewInit(): void {
     this.formGroup.patchValue({
+      showHeader: this.formData.showHeader,
       bg: this.formData.bg,
       fg: this.formData.fg,
       setName: this.formData.setName,
@@ -91,6 +97,8 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
       awayBg: this.formData.awayBg,
       awayFg: this.formData.awayFg,
     });
+
+    this.currentPrefs = JSON.parse(JSON.stringify(this.formData));
   }
 
   ngAfterViewChecked() {
@@ -151,6 +159,38 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
         );
       }
     });
+  }
+
+  previewPrefs(): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
+    this.previewed = true;
+
+    this.scoreboardService.updatePrefs(this.formData).subscribe(
+      _ => {
+        this.disabled = false;
+      },
+      error => {
+        this.disabled = false;
+        this.alertService.showError(error);
+      }
+    );
+  }
+
+  cancelPrefs(): void {
+    if (this.previewed) {
+      this.scoreboardService.updatePrefs(this.currentPrefs).subscribe(
+        _ => {
+          this.dismissModal();
+        },
+        error => {
+          this.alertService.showError(error);
+          this.dismissModal();
+        }
+      );
+    } else {
+      this.dismissModal();
+    }
   }
 
   dismissModal(): void {
