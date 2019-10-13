@@ -32,6 +32,9 @@ import { VideoChecksComponent } from './components/video-checks/video-checks.com
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NgZorroAntdModule, NZ_I18N, en_US } from 'ng-zorro-antd';
 
+// hotkey hosrtcut
+import {HotkeyModule} from 'angular2-hotkeys';
+
 // config angular i18n
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
@@ -59,6 +62,7 @@ registerLocaleData(en);
     ColorPickerModule,
     FormsModule,
     HttpClientModule,
+    HotkeyModule.forRoot(),
     NgbModule,
     NgZorroAntdModule,
     ReactiveFormsModule,

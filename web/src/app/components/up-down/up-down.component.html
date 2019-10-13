@@ -1,10 +1,10 @@
 <div class="up-down-container w-100 h-100 d-flex flex-column justify-content-center align-items-center p-1">
   <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
           (click)="up.emit()">
-    <i class="fa fa-arrow-up"></i>
+    <i class="fa fa-arrow-up"></i><span *ngIf="upShortcut"> ( {{upShortcut}} )</span>
   </button>
   <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
           (click)="down.emit()">
-    <i class="fa fa-arrow-down"></i>
+    <i class="fa fa-arrow-down"></i><span *ngIf="downShortcut"> ( {{downShortcut}} )</span>
   </button>
 </div>

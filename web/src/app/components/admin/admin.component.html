@@ -4,12 +4,12 @@
       <button type="button" nz-button nzType="primary" class="m-1"
         [disabled]="disabled"
         (click)="newMatch()">
-          New Match
+          New Match <span *ngIf="keyboardShortcuts.newMatch != ''"> ( {{keyboardShortcuts.newMatch}} )</span>
       </button>
       <button type="button" nz-button nzType="primary" class="m-1"
         [disabled]="disabled"
         (click)="newSet()">
-        New Set
+        New Set <span *ngIf="keyboardShortcuts.newSet != ''"> ( {{keyboardShortcuts.newSet}} )</span>
       </button>
         <button type="button" nz-button nzType="primary" class="m-1"
             [disabled]="disabled"
@@ -26,12 +26,16 @@
           <div class="h-20"></div>
           <div class="h-50">
             <app-up-down (up)="addHomePoint(1)"
-                        (down)="addHomePoint(-1)">
+                        (down)="addHomePoint(-1)"
+                        [upShortcut]="keyboardShortcuts.homePointUp"
+                        [downShortcut]="keyboardShortcuts.homePointDown">
             </app-up-down>
           </div>
           <div class="h-30">
             <app-up-down (up)="addHomeSet(1)"
-                        (down)="addHomeSet(-1)">
+                        (down)="addHomeSet(-1)"
+                        [upShortcut]="keyboardShortcuts.homeSetUp"
+                        [downShortcut]="keyboardShortcuts.homeSetDown">
             </app-up-down>
           </div>
         </div>
@@ -45,12 +49,16 @@
           <div class="h-20"></div>
           <div class="h-50">
             <app-up-down (up)="addAwayPoint(1)"
-                        (down)="addAwayPoint(-1)">
+                        (down)="addAwayPoint(-1)"
+                        [upShortcut]="keyboardShortcuts.awayPointUp"
+                        [downShortcut]="keyboardShortcuts.awayPointDown">
             </app-up-down>
           </div>
           <div class="h-30">
             <app-up-down (up)="addAwaySet(1)"
-                        (down)="addAwaySet(-1)">
+                        (down)="addAwaySet(-1)"
+                        [upShortcut]="keyboardShortcuts.awaySetUp"
+                        [downShortcut]="keyboardShortcuts.awaySetDown">>
             </app-up-down>
           </div>
         </div>
@@ -63,27 +71,27 @@
             <div class="d-flex justify-content-end w-30 px-3">
               <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
                       (click)="addHomeTimeout()">
-                <i class="fa fa-clock-o"></i>
+                <i class="fa fa-clock-o"></i><span *ngIf="keyboardShortcuts.homeTimeout != ''"> ( {{keyboardShortcuts.homeTimeout}} )</span>
               </button>
               <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
                       (click)="addHomeVideoCheck()">
-                <i class="fa fa-video-camera"></i>
+                <i class="fa fa-video-camera"></i><span *ngIf="keyboardShortcuts.homeVideoCheck != ''"> ( {{keyboardShortcuts.homeVideoCheck}} )</span>
               </button>
             </div>
             <div class="d-flex justify-content-center w-40">
               <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
                       (click)="switchBallOwner()">
-                <i class="fa fa-exchange"></i>
+                <i class="fa fa-exchange"></i><span *ngIf="keyboardShortcuts.ballOwnerSwitch != ''"> ( {{keyboardShortcuts.ballOwnerSwitch}} )</span>
               </button>
             </div>
             <div class="d-flex justify-content-start w-30 px-3">
               <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
                       (click)="addAwayVideoCheck()">
-                <i class="fa fa-video-camera"></i>
+                <i class="fa fa-video-camera"></i><span *ngIf="keyboardShortcuts.awayVideoCheck != ''"> ( {{keyboardShortcuts.awayVideoCheck}} )</span>
               </button>
               <button type="button" nz-button nzType="primary" nzSize="large" class="m-1"
                       (click)="addAwayTimeout()">
-                <i class="fa fa-clock-o"></i>
+                <i class="fa fa-clock-o"></i><span *ngIf="keyboardShortcuts.awayTimeout != ''"> ( {{keyboardShortcuts.awayTimeout}} )</span>
               </button>
             </div>
           </div>

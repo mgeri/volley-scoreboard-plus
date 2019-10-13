@@ -1,3 +1,4 @@
+import { KeyboardShortcuts } from '../../models/keyboardShortcuts.model';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
@@ -8,6 +9,10 @@ import { AlertService } from '../../services/alert.service';
 import { ScoreboardService } from '../../services/scoreboard.service';
 import { PreferencesComponent } from '../preferences/preferences.component';
 import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { NzModalService } from 'ng-zorro-antd';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-admin',
@@ -25,9 +30,15 @@ export class AdminComponent implements OnInit, OnDestroy {
   loading = true;
   disabled = false;
 
+  keyboardShortcuts = new KeyboardShortcuts();
+
+
   constructor(private scoreboardService: ScoreboardService,
               private alertService: AlertService,
-              private modalService: NgbModal) {
+              private ngbModalService: NgbModal,
+              private hotkeysService: HotkeysService,
+              private modalService: NzModalService) {
+                this.registerKeyboardShortcuts();
   }
 
   ngOnInit() {
@@ -42,6 +53,52 @@ export class AdminComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  registerKeyboardShortcuts() {
+    this.hotkeysService.reset();
+    if (this.keyboardShortcuts.newMatch && this.keyboardShortcuts.newMatch !== '') {
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newMatch , (event: KeyboardEvent): boolean => {
+        this.newMatch();
+        return false; // Prevent bubbling
+      }));
+    }
+    if (this.keyboardShortcuts.newSet && this.keyboardShortcuts.newSet !== '') {
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newSet , (event: KeyboardEvent): boolean => {
+        this.newSet();
+        return false; // Prevent bubbling
+      }));
+    }
+    if (this.keyboardShortcuts.homeTimeout && this.keyboardShortcuts.homeTimeout !== '') {
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeTimeout , (event: KeyboardEvent): boolean => {
+        this.addHomeTimeout();
+        return false; // Prevent bubbling
+      }));
+    }
+    if (this.keyboardShortcuts.homeVideoCheck && this.keyboardShortcuts.homeVideoCheck !== '') {
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeVideoCheck , (event: KeyboardEvent): boolean => {
+        this.addHomeVideoCheck();
+        return false; // Prevent bubbling
+      }));
+    }
+    if (this.keyboardShortcuts.awayTimeout && this.keyboardShortcuts.awayTimeout !== '') {
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayTimeout , (event: KeyboardEvent): boolean => {
+        this.addAwayTimeout();
+        return false; // Prevent bubbling
+      }));
+    }
+    if (this.keyboardShortcuts.awayVideoCheck && this.keyboardShortcuts.awayVideoCheck !== '') {
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayVideoCheck , (event: KeyboardEvent): boolean => {
+        this.addAwayVideoCheck();
+        return false; // Prevent bubbling
+      }));
+    }
+    if (this.keyboardShortcuts.ballOwnerSwitch && this.keyboardShortcuts.ballOwnerSwitch !== '') {
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.ballOwnerSwitch , (event: KeyboardEvent): boolean => {
+        this.switchBallOwner();
+        return false; // Prevent bubbling
+      }));
+    }
   }
 
   addHomePoint(points: number): void {
@@ -125,7 +182,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.alertService.showError(error);
         this.disabled = false;
       }
-    )
+    );
   }
 
   addHomeVideoCheck() {
@@ -153,7 +210,7 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.alertService.showError(error);
         this.disabled = false;
       }
-    )
+    );
   }
 
   private setBallOwner(teamBallOwner: TeamBallOwner): void {
@@ -178,8 +235,9 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   newMatch(): void {
     if (this.disabled) { return; }
+
     this.disabled = true;
-    const ngbModalRef = this.modalService.open(PreferencesComponent, {
+    const ngbModalRef = this.ngbModalService.open(PreferencesComponent, {
       backdrop : 'static',
       centered: true,
       keyboard : true,
@@ -196,20 +254,32 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   newSet(): void {
     if (this.disabled) { return; }
-    this.disabled = true;
-    this.scoreboardService.newSet().subscribe(
-      ignored => {
-        this.disabled = false;
-      },
-      error => {
-        this.alertService.showError(error);
-        this.disabled = false;
+
+    Swal.fire({
+      title: 'Are you sure to start New Set?',
+      type: 'question',
+      showCancelButton: true,
+//      confirmButtonColor: '#3085d6',
+//      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Start New Set!'
+    }).then((result) => {
+      if (result.value) {
+        this.disabled = true;
+        this.scoreboardService.newSet().subscribe(
+          ignored => {
+            this.disabled = false;
+          },
+          error => {
+            this.alertService.showError(error);
+            this.disabled = false;
+          }
+        );
       }
-    );
+    });
   }
 
   openSettings(): void {
-    const ngbModalRef = this.modalService.open(PreferencesComponent, {
+    const ngbModalRef = this.ngbModalService.open(PreferencesComponent, {
       backdrop : 'static',
       centered: true,
       keyboard : true,
