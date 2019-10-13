@@ -13,7 +13,6 @@ import (
 
 // RegisterHandlers adds each server route to the EchoRouter using JWT middleware when required
 func (app *application) registerHandlersAPI(router runtime.EchoRouter) {
-
 	wrapper := api.ServerInterfaceWrapper{
 		Handler: app,
 	}
