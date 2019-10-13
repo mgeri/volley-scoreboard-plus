@@ -47,7 +47,6 @@ func noContentEchoErrorHandler(err error, ctx echo.Context) {
 
 // ListenAndServe run Volley Scoreboard server
 func ListenAndServe() {
-
 	e := echo.New()
 
 	// middleware

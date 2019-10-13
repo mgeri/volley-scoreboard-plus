@@ -21,6 +21,10 @@ export interface ScoreboardPrefs {
      */
     fg: string;
     /**
+     * Show scoreboard header with logo.
+     */
+    showHeader: boolean;
+    /**
      * Set label text.
      */
     setName: string;
@@ -40,6 +44,14 @@ export interface ScoreboardPrefs {
      * Timeouts background color.
      */
     timeoutBg: string;
+    /**
+     * Video checks label text.
+     */
+    videoCheckName: string;
+    /**
+     * Video checks background color.
+     */
+    videoCheckBg: string;
     /**
      * Points background color.
      */

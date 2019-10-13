@@ -13,7 +13,6 @@ import (
 
 // RegisterHandlers adds each server route to the EchoRouter using JWT middleware when required
 func (app *application) registerHandlersAPI(router runtime.EchoRouter) {
-
 	wrapper := api.ServerInterfaceWrapper{
 		Handler: app,
 	}
@@ -28,8 +27,10 @@ func (app *application) registerHandlersAPI(router runtime.EchoRouter) {
 
 	router.POST("/session", wrapper.SessionPost)
 	router.GET("/ping", wrapper.PingGet)
+	router.GET("/logo", wrapper.LogoGet)
 	router.GET("/scoreboard/prefs", wrapper.ScoreboardPrefsGet)
 	router.PUT("/scoreboard/prefs", wrapper.ScoreboardPrefsPut, jwtMiddleware)
+	router.DELETE("/scoreboard/prefs", wrapper.ScoreboardPrefsDelete, jwtMiddleware)
 	router.GET("/scoreboard/status", wrapper.ScoreboardStatusGet)
 	router.PUT("/scoreboard/status", wrapper.ScoreboardStatusPut, jwtMiddleware)
 }

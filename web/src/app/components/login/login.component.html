@@ -1,23 +1,32 @@
-<div class="login-main">
-    <mat-card >
-      <mat-card-header>
-        <mat-card-title>Login Page</mat-card-title>
-      </mat-card-header>
-        <form [formGroup]="form" (ngSubmit)="submit()">
-          <mat-card-content style="display: flex; flex-direction: column;">
-            <mat-form-field>
-              <input matInput placeholder="Username" formControlName="username">
-            </mat-form-field>
-            <mat-form-field>
-              <input type="password" matInput placeholder="Password" formControlName="password">
-            </mat-form-field>
-            <p *ngIf="error" class="error">
-              {{ error }}
-            </p>
-          </mat-card-content>
-          <mat-card-actions align="end">
-            <button [disabled]="loading" mat-raised-button color="primary">Login</button>
-          </mat-card-actions>
-        </form>
-      </mat-card>
+<div *ngIf="!loading" class="login-main">
+    <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submit()">
+      <nz-form-item>
+          <div nz-row nzType="flex" nzJustify="center" class="logo-panel" [style.background-color]="prefs.bg">
+              <div nz-col nzSpan="8">
+                <img height="100px" [src]="getLogoUrl()" onerror="this.style.display='none'">
+              </div>
+          </div>
+        <div>
+        </div>
+      </nz-form-item>
+      <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your username!">
+            <nz-input-group nzPrefixIcon="user">
+              <input type="text" nz-input formControlName="username" placeholder="Username" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control nzErrorTip="Please input your Password!">
+            <nz-input-group nzPrefixIcon="lock">
+              <input type="password" nz-input formControlName="password" placeholder="Password" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button [disabled]="waitingLoginRes" class="login-form-button" [nzType]="'primary'">Log in</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
 </div>

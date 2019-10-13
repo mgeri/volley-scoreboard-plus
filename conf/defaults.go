@@ -23,6 +23,7 @@ var (
 		viper.SetDefault("server.jwtSigningKey", randstr.String(1024))
 		viper.SetDefault("server.webAppDir", "./web/dist/volley-gui")
 		viper.SetDefault("server.storeDir", "./tmp")
+		viper.SetDefault("server.logoFile", "./logo.svg")
 		viper.SetDefault("server.debug", false)
 
 		return struct{}{}

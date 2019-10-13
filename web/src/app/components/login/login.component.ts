@@ -1,27 +1,35 @@
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { ScoreboardService } from './../../services/scoreboard.service';
 import { first } from 'rxjs/operators';
-import { ErrorResponse } from 'src/backend';
-import Swal from 'sweetalert2';
-import { AlertService } from 'src/app/services/alert.service';
+import { takeUntil } from 'rxjs/operators';
+
+import { AlertService } from '../../services/alert.service';
+import { ScoreboardService } from '../../services/scoreboard.service';
+import { ScoreboardPrefs } from 'src/backend';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   @Input() error: string | null;
 
-  form = new FormGroup({
+  form: FormGroup = new FormGroup({
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),
   });
-  loading = false;
-  submitted = false;
+
+  destroyed$ = new Subject();
+
+  prefs: ScoreboardPrefs;
+
+  loading = true;
+  waitingLoginRes = false;
+
 
   constructor( private router: Router,
                private scoreboardService: ScoreboardService,
@@ -30,6 +38,21 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.scoreboardService.prefs$.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((prefs: ScoreboardPrefs) => {
+      this.prefs = prefs;
+      this.loading = (prefs == null);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
+  getLogoUrl(): string {
+    return this.scoreboardService.getLogoUrl();
   }
 
   submit() {
@@ -40,11 +63,11 @@ export class LoginComponent implements OnInit {
         session => {
           console.log('success', session),
           this.router.navigate(['/admin']);
-          this.loading = false;
+          this.waitingLoginRes = false;
         },
         error => {
           this.alertService.showError(error);
-          this.loading = false;
+          this.waitingLoginRes = false;
         }
       );
     }

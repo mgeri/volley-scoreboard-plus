@@ -33,8 +33,14 @@ type Client struct {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+	// LogoGet request
+	LogoGet(ctx context.Context) (*http.Response, error)
+
 	// PingGet request
 	PingGet(ctx context.Context) (*http.Response, error)
+
+	// ScoreboardPrefsDelete request
+	ScoreboardPrefsDelete(ctx context.Context) (*http.Response, error)
 
 	// ScoreboardPrefsGet request
 	ScoreboardPrefsGet(ctx context.Context) (*http.Response, error)
@@ -58,8 +64,38 @@ type ClientInterface interface {
 	SessionPost(ctx context.Context, body SessionPostJSONRequestBody) (*http.Response, error)
 }
 
+func (c *Client) LogoGet(ctx context.Context) (*http.Response, error) {
+	req, err := NewLogoGetRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) PingGet(ctx context.Context) (*http.Response, error) {
 	req, err := NewPingGetRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ScoreboardPrefsDelete(ctx context.Context) (*http.Response, error) {
+	req, err := NewScoreboardPrefsDeleteRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -193,6 +229,20 @@ func (c *Client) SessionPost(ctx context.Context, body SessionPostJSONRequestBod
 	return c.Client.Do(req)
 }
 
+// NewLogoGetRequest generates requests for LogoGet
+func NewLogoGetRequest(server string) (*http.Request, error) {
+	var err error
+
+	queryUrl := fmt.Sprintf("%s/logo", server)
+
+	req, err := http.NewRequest("GET", queryUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewPingGetRequest generates requests for PingGet
 func NewPingGetRequest(server string) (*http.Request, error) {
 	var err error
@@ -200,6 +250,20 @@ func NewPingGetRequest(server string) (*http.Request, error) {
 	queryUrl := fmt.Sprintf("%s/ping", server)
 
 	req, err := http.NewRequest("GET", queryUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewScoreboardPrefsDeleteRequest generates requests for ScoreboardPrefsDelete
+func NewScoreboardPrefsDeleteRequest(server string) (*http.Request, error) {
+	var err error
+
+	queryUrl := fmt.Sprintf("%s/scoreboard/prefs", server)
+
+	req, err := http.NewRequest("DELETE", queryUrl, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -339,6 +403,27 @@ func NewClientWithResponsesAndRequestEditorFunc(server string, reqEditorFn Reque
 	}
 }
 
+type logoGetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// Status returns HTTPResponse.Status
+func (r logoGetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r logoGetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type pingGetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -354,6 +439,28 @@ func (r pingGetResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r pingGetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type scoreboardPrefsDeleteResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ScoreboardPrefs
+}
+
+// Status returns HTTPResponse.Status
+func (r scoreboardPrefsDeleteResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r scoreboardPrefsDeleteResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -473,6 +580,15 @@ func (r sessionPostResponse) StatusCode() int {
 	return 0
 }
 
+// LogoGetWithResponse request returning *LogoGetResponse
+func (c *ClientWithResponses) LogoGetWithResponse(ctx context.Context) (*logoGetResponse, error) {
+	rsp, err := c.LogoGet(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return ParselogoGetResponse(rsp)
+}
+
 // PingGetWithResponse request returning *PingGetResponse
 func (c *ClientWithResponses) PingGetWithResponse(ctx context.Context) (*pingGetResponse, error) {
 	rsp, err := c.PingGet(ctx)
@@ -480,6 +596,15 @@ func (c *ClientWithResponses) PingGetWithResponse(ctx context.Context) (*pingGet
 		return nil, err
 	}
 	return ParsepingGetResponse(rsp)
+}
+
+// ScoreboardPrefsDeleteWithResponse request returning *ScoreboardPrefsDeleteResponse
+func (c *ClientWithResponses) ScoreboardPrefsDeleteWithResponse(ctx context.Context) (*scoreboardPrefsDeleteResponse, error) {
+	rsp, err := c.ScoreboardPrefsDelete(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return ParsescoreboardPrefsDeleteResponse(rsp)
 }
 
 // ScoreboardPrefsGetWithResponse request returning *ScoreboardPrefsGetResponse
@@ -551,6 +676,27 @@ func (c *ClientWithResponses) SessionPostWithResponse(ctx context.Context, body 
 	return ParsesessionPostResponse(rsp)
 }
 
+// ParselogoGetResponse parses an HTTP response from a LogoGetWithResponse call
+func ParselogoGetResponse(rsp *http.Response) (*logoGetResponse, error) {
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &logoGetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 200:
+		// Content-type (image/*) unsupported
+	}
+
+	return response, nil
+}
+
 // ParsepingGetResponse parses an HTTP response from a PingGetWithResponse call
 func ParsepingGetResponse(rsp *http.Response) (*pingGetResponse, error) {
 	bodyBytes, err := ioutil.ReadAll(rsp.Body)
@@ -566,6 +712,32 @@ func ParsepingGetResponse(rsp *http.Response) (*pingGetResponse, error) {
 
 	switch {
 	case rsp.StatusCode == 204:
+		break // No content-type
+	}
+
+	return response, nil
+}
+
+// ParsescoreboardPrefsDeleteResponse parses an HTTP response from a ScoreboardPrefsDeleteWithResponse call
+func ParsescoreboardPrefsDeleteResponse(rsp *http.Response) (*scoreboardPrefsDeleteResponse, error) {
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &scoreboardPrefsDeleteResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		response.JSON200 = &ScoreboardPrefs{}
+		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
+			return nil, err
+		}
+	case rsp.StatusCode == 401:
 		break // No content-type
 	}
 

@@ -36,7 +36,6 @@ func (app *application) BroadcastPrefsUpdate() {
 }
 
 func (app *application) wsHandler(ctx echo.Context) error {
-
 	ws, err := upgrader.Upgrade(ctx.Response(), ctx.Request(), nil)
 	if err != nil {
 		ctx.Logger().Warnf("Error opening websocket: %v", err)
@@ -52,7 +51,6 @@ func (app *application) wsHandler(ctx echo.Context) error {
 
 func (app *application) wsService() {
 	for {
-
 		select {
 		case m := <-broadcast:
 			// broadcast to connectec scoreboard

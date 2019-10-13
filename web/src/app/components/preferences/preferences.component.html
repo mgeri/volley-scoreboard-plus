@@ -1,0 +1,277 @@
+<div class="modal-header">
+  <h4 class="modal-title">Settings</h4>
+</div>
+<div class="preferences-form">
+  <form nz-form [formGroup]="formGroup" name="preferences">
+    <div nz-row [nzGutter]="12">
+
+      <!-- show header with logo, bg and fg -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'showHeader'" [nzSm]="8">Show Header</nz-form-label>
+          <nz-form-control [nzSm]="16">
+              <nz-switch [formControlName]="'showHeader'"></nz-switch>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'background'" [nzSm]="12">Background</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker input-color"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('bg').value"
+              (colorPickerChange)="formGroup.get('bg').setValue($event)"
+              [style.background]="formGroup.get('bg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'foregroud'" [nzSm]="12">Foreground</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker input-color"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('fg').value"
+              (colorPickerChange)="formGroup.get('fg').setValue($event)"
+              [style.background]="formGroup.get('fg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Home -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'homeName'" [nzSm]="8">Home Name</nz-form-label>
+          <nz-form-control [nzSm]="16">
+            <input nz-input placeholder="Home" [formControlName]="'homeName'"
+            [style.background]="formGroup.get('homeBg').value"
+            [style.color]="formGroup.get('homeFg').value"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'homeBg'" [nzSm]="12">Home BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('homeBg').value"
+              (colorPickerChange)="formGroup.get('homeBg').setValue($event)"
+              [style.background]="formGroup.get('homeBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'homeFg'" [nzSm]="12">Home FG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('homeFg').value"
+              (colorPickerChange)="formGroup.get('homeFg').setValue($event)"
+              [style.background]="formGroup.get('homeFg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Away -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'awayName'" [nzSm]="8">Away Name</nz-form-label>
+          <nz-form-control [nzSm]="16">
+            <input nz-input placeholder="Away" [formControlName]="'awayName'"
+            [style.background]="formGroup.get('awayBg').value"
+            [style.color]="formGroup.get('awayFg').value"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'awayBg'" [nzSm]="12">Away BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('awayBg').value"
+              (colorPickerChange)="formGroup.get('awayBg').setValue($event)"
+              [style.background]="formGroup.get('awayBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'awayFg'" [nzSm]="12">Away FG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('awayFg').value"
+              (colorPickerChange)="formGroup.get('awayFg').setValue($event)"
+              [style.background]="formGroup.get('awayFg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Set -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'setName'" [nzSm]="8">Set Label</nz-form-label>
+          <nz-form-control [nzSm]="16">
+            <input nz-input placeholder="Set" [formControlName]="'setName'"
+            [style.background]="formGroup.get('setBg').value"
+            [style.color]="formGroup.get('setFg').value"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'setBg'" [nzSm]="12">Set BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('setBg').value"
+              (colorPickerChange)="formGroup.get('setBg').setValue($event)"
+              [style.background]="formGroup.get('setBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'setFg'" [nzSm]="12">Set FG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('setFg').value"
+              (colorPickerChange)="formGroup.get('setFg').setValue($event)"
+              [style.background]="formGroup.get('setFg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Point -->
+      <div nz-col [nzOffset]="12" [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'pointBg'" [nzSm]="12">Point BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker input-color"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('pointBg').value"
+              (colorPickerChange)="formGroup.get('pointBg').setValue($event)"
+              [style.background]="formGroup.get('pointBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'pointFg'" [nzSm]="12">Point FG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+            <input nz-input class="colorPicker input-color"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('pointFg').value"
+              (colorPickerChange)="formGroup.get('pointFg').setValue($event)"
+              [style.background]="formGroup.get('pointFg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Timeout -->
+      <div nz-col [nzSpan]="12">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'timeoutName'" [nzSm]="8">Timeout Label</nz-form-label>
+          <nz-form-control [nzSm]="16">
+            <input nz-input placeholder="Timeout" [formControlName]="'timeoutName'"
+            [style.background]="formGroup.get('bg').value"
+            [style.color]="formGroup.get('fg').value"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item nzFlex>
+          <nz-form-label [nzFor]="'timeoutBg'" [nzSm]="12">Timeout BG</nz-form-label>
+          <nz-form-control [nzSm]="12">
+              <input nz-input class="colorPicker input-color"
+              [cpCancelButton]="true"
+              [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+              [colorPicker]="formGroup.get('timeoutBg').value"
+              (colorPickerChange)="formGroup.get('timeoutBg').setValue($event)"
+              [style.background]="formGroup.get('timeoutBg').value"
+              />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+      </div>
+
+      <!-- Video Check -->
+      <div nz-col [nzSpan]="12">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzFor]="'videoCheckName'" [nzSm]="8">Video Check Label</nz-form-label>
+            <nz-form-control [nzSm]="16">
+              <input nz-input placeholder="Video Check" [formControlName]="'videoCheckName'"
+              [style.background]="formGroup.get('bg').value"
+              [style.color]="formGroup.get('fg').value"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item nzFlex>
+            <nz-form-label [nzFor]="'videoCheckBg'" [nzSm]="12">VideoCheck BG</nz-form-label>
+            <nz-form-control [nzSm]="12">
+                <input nz-input class="colorPicker input-color"
+                [cpCancelButton]="true"
+                [cpCancelButtonClass]= "'ant-btn ant-btn-primary ant-btn-sm'"
+                [colorPicker]="formGroup.get('videoCheckBg').value"
+                (colorPickerChange)="formGroup.get('videoCheckBg').setValue($event)"
+                [style.background]="formGroup.get('videoCheckBg').value"
+                />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+        </div>
+
+      </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button nz-button nzType="primary"
+          (click)="cancelPrefs()">
+    Cancel
+  </button>
+  <button nz-button nzType="primary" ngbAutofocus
+          (click)="updatePrefs()">
+    Save
+  </button>
+  <button nz-button nzType="primary" ngbAutofocus
+          (click)="previewPrefs()">
+    Preview
+  </button>
+  <button nz-button nzType="primary" ngbAutofocus
+          (click)="resetPrefs()">
+    Reset to Defaults
+  </button>
+</div>

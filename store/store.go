@@ -14,6 +14,7 @@ type ScoreboardStatusStore interface {
 type ScoreboardPrefsStore interface {
 	Update(prefs *api.ScoreboardPrefs) error
 	Get(prefs *api.ScoreboardPrefs) error
+	Reset() error
 }
 
 func NewScoreboardStatus() *api.ScoreboardStatus {
@@ -23,20 +24,23 @@ func NewScoreboardStatus() *api.ScoreboardStatus {
 
 func NewScoreboardPrefs() *api.ScoreboardPrefs {
 	return &api.ScoreboardPrefs{
-		Bg:          "#102030",
-		Fg:          "#FFFFFF",
-		SetName:     "Set",
-		SetBg:       "#0B3060",
-		SetFg:       "#FFFFFF",
-		TimeoutName: "Timeout",
-		TimeoutBg:   "#FF0000",
-		PointBg:     "#0B3060",
-		PointFg:     "#FFFFFF",
-		HomeName:    "HOME",
-		HomeBg:      "#10B090",
-		HomeFg:      "#FFFFFF",
-		AwayName:    "AWAY",
-		AwayBg:      "#20C0F0",
-		AwayFg:      "#EEFF88",
+		Bg:             "#102030",
+		Fg:             "#FFFFFF",
+		ShowHeader:     true,
+		SetName:        "Set",
+		SetBg:          "#0B3060",
+		SetFg:          "#FFFFFF",
+		TimeoutName:    "Timeout",
+		TimeoutBg:      "#FF0000",
+		VideoCheckName: "Video Check",
+		VideoCheckBg:   "#FF0000",
+		PointBg:        "#0B3060",
+		PointFg:        "#FFFFFF",
+		HomeName:       "HOME",
+		HomeBg:         "#10B090",
+		HomeFg:         "#FFFFFF",
+		AwayName:       "AWAY",
+		AwayBg:         "#20C0F0",
+		AwayFg:         "#EEFF88",
 	}
 }
