@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -30,7 +31,7 @@ func (app *application) SessionPost(ctx echo.Context) error {
 			Message: "Invalid username or password"}})
 	}
 
-	if (viper.GetString("server.username") != "" && c.Username != viper.GetString("server.username")) ||
+	if (viper.GetString("server.username") != "" && !strings.EqualFold(c.Username, viper.GetString("server.username"))) ||
 		c.Password != viper.GetString("server.password") {
 		ctx.Logger().Warnf("Invalid username or password [%s][%s]", c.Username, c.Password)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: SessionErrorCode, Subcode: 1,
