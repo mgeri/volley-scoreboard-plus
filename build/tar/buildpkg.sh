@@ -10,12 +10,17 @@ if [ ${#@} == 0 ]; then
     exit 1
 fi
 
+EXT=""
+if [ $1 = "windows" ]; then
+    EXT=".exe"
+fi
+
 # remove previous bin
 rm -rf bin/$1-$2/scoreboard-plus
 
 # create bin folder and bin binary
 mkdir -p bin/$1-$2/scoreboard-plus
-env GOOS=$1 GOARCH=$2 GOARM=7 go build -o bin/$1-$2/scoreboard-plus/scoreboard-plus
+env GOOS=$1 GOARCH=$2 GOARM=7 go build -o bin/$1-$2/scoreboard-plus/scoreboard-plus$EXT
 
 # data folder 
 mkdir -p bin/$1-$2/scoreboard-plus/data
