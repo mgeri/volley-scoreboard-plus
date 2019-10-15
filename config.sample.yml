@@ -1,10 +1,11 @@
 logger:
   level: "DEBUG"
-  file: "volley-srv.log"
+  file: "./log/volley-scoreboard.log"
 
 server:
-  address: ":4000"
+  address: ":80"
   user: "admin"
-  password: "*"
-  webAppDir: "./web/dist/volley-gui"
-  storeDir: "./tmp"
+  password: "admin"
+  webAppDir: "./web"
+  storeDir: "./data"
+  logoFile: "./data/logo.svg"

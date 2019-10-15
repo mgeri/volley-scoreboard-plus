@@ -1,0 +1,10 @@
+[Unit]
+Description=Scoreboard Plus Service
+After=multi-user.target
+
+[Service]
+WorkingDirectory=/opt/scoreboard-plus
+ExecStart=/opt/scoreboard-plus/scoreboard-plus start -c config/config.yml
+
+[Install]
+WantedBy=multi-user.target
