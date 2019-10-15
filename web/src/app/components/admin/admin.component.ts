@@ -278,7 +278,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     });
   }
 
-  openSettings(): void {
+  openPreferences(): void {
     const ngbModalRef = this.ngbModalService.open(PreferencesComponent, {
       backdrop : 'static',
       centered: true,

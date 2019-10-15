@@ -139,12 +139,12 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
     Swal.fire({
       title: 'Are you sure?',
-      text: 'You will Reset current settingsto defauls.\nYou won\'t be able to revert this!',
+      text: 'You will Reset current preferences defauls.\nYou won\'t be able to revert this!',
       type: 'warning',
       showCancelButton: true,
 //      confirmButtonColor: '#3085d6',
 //      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Reset Settings!'
+      confirmButtonText: 'Yes, Reset Preferences!'
     }).then((result) => {
       if (result.value) {
         this.scoreboardService.resetPrefs().subscribe(
