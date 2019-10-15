@@ -59,10 +59,10 @@ type ScoreboardStatus struct {
 
 // ScoreboardTeamStatus defines model for ScoreboardTeamStatus.
 type ScoreboardTeamStatus struct {
-	Points      int  `json:"points"`
-	Sets        int  `json:"sets"`
-	Timeouts    int  `json:"timeouts"`
-	VideoChecks *int `json:"videoChecks,omitempty"`
+	Points      int `json:"points"`
+	Sets        int `json:"sets"`
+	Timeouts    int `json:"timeouts"`
+	VideoChecks int `json:"videoChecks"`
 }
 
 // Session defines model for Session.
