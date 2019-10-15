@@ -68,26 +68,28 @@ func (m *jsonScoreboardStatusStore) save() error {
 }
 
 type jsonScoreboardPrefsStore struct {
-	ks       *jsonstore.JSONStore
-	filename string
-	logger   echo.Logger
+	ks          *jsonstore.JSONStore
+	filename    string
+	filenameDef string
+	logger      echo.Logger
 }
 
 // NewJsonScoreboardPrefsStore will create an object that represent the store.ScoreboardPrefsStore interface
 func NewJSONScoreboardPrefsStore(storeDir string, logger echo.Logger) store.ScoreboardPrefsStore {
 	var filename string
+	var filenameDef string
 	var ks *jsonstore.JSONStore
 
 	if storeDir != "" {
 		var err error
 
 		filename = filepath.Join(storeDir, "prefs.json")
+		filenameDef = filepath.Join(storeDir, "prefs.default.json")
 
 		ks, err = jsonstore.Open(filename)
 		if err != nil {
 			logger.Errorf("Error opening JSON Scoreboard Prefs: %s", err)
 		}
-
 	}
 	if ks == nil {
 		ks = new(jsonstore.JSONStore)
@@ -102,7 +104,7 @@ func NewJSONScoreboardPrefsStore(storeDir string, logger echo.Logger) store.Scor
 
 	logger.Infof("JSON Scoreboard Prefs init: %s", filename)
 
-	return &jsonScoreboardPrefsStore{ks, filename, logger}
+	return &jsonScoreboardPrefsStore{ks, filename, filenameDef, logger}
 }
 
 func (m *jsonScoreboardPrefsStore) Get(prefs *api.ScoreboardPrefs) error {
@@ -119,7 +121,21 @@ func (m *jsonScoreboardPrefsStore) Update(prefs *api.ScoreboardPrefs) error {
 
 func (m *jsonScoreboardPrefsStore) Reset() error {
 	prefs := store.NewScoreboardPrefs()
-	err := m.ks.Set(prefsKey, prefs)
+
+	var err error
+	var ks *jsonstore.JSONStore
+
+	// try lo load from file
+	ks, err = jsonstore.Open(m.filenameDef)
+	if err == nil && ks != nil {
+		err := ks.Get(prefsKey, prefs)
+		if err != nil {
+			// no default prefs file found
+		}
+	}
+
+	err = m.ks.Set(prefsKey, prefs)
+
 	if err != nil {
 		return err
 	}
