@@ -427,7 +427,7 @@ components:
         - points
         - sets
         - timeouts
-        - videoCheck
+        - videoChecks
     
     TeamBallOwner:
       type: string
