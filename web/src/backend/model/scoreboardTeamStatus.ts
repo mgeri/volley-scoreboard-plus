@@ -27,6 +27,6 @@ export interface ScoreboardTeamStatus {
     /**
      * Video checks.
      */
-    videoChecks?: number;
+    videoChecks: number;
 }
 
