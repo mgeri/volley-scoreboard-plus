@@ -50,6 +50,9 @@ type ClientInterface interface {
 
 	ScoreboardPrefsPut(ctx context.Context, body ScoreboardPrefsPutJSONRequestBody) (*http.Response, error)
 
+	// ScoreboardPrefsDefaultGet request
+	ScoreboardPrefsDefaultGet(ctx context.Context) (*http.Response, error)
+
 	// ScoreboardStatusGet request
 	ScoreboardStatusGet(ctx context.Context) (*http.Response, error)
 
@@ -141,6 +144,21 @@ func (c *Client) ScoreboardPrefsPutWithBody(ctx context.Context, contentType str
 
 func (c *Client) ScoreboardPrefsPut(ctx context.Context, body ScoreboardPrefsPutJSONRequestBody) (*http.Response, error) {
 	req, err := NewScoreboardPrefsPutRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ScoreboardPrefsDefaultGet(ctx context.Context) (*http.Response, error) {
+	req, err := NewScoreboardPrefsDefaultGetRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -308,6 +326,20 @@ func NewScoreboardPrefsPutRequestWithBody(server string, contentType string, bod
 	}
 
 	req.Header.Add("Content-Type", contentType)
+	return req, nil
+}
+
+// NewScoreboardPrefsDefaultGetRequest generates requests for ScoreboardPrefsDefaultGet
+func NewScoreboardPrefsDefaultGetRequest(server string) (*http.Request, error) {
+	var err error
+
+	queryUrl := fmt.Sprintf("%s/scoreboard/prefs/default", server)
+
+	req, err := http.NewRequest("GET", queryUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+
 	return req, nil
 }
 
@@ -512,6 +544,28 @@ func (r scoreboardPrefsPutResponse) StatusCode() int {
 	return 0
 }
 
+type scoreboardPrefsDefaultGetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ScoreboardPrefs
+}
+
+// Status returns HTTPResponse.Status
+func (r scoreboardPrefsDefaultGetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r scoreboardPrefsDefaultGetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type scoreboardStatusGetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -631,6 +685,15 @@ func (c *ClientWithResponses) ScoreboardPrefsPutWithResponse(ctx context.Context
 		return nil, err
 	}
 	return ParsescoreboardPrefsPutResponse(rsp)
+}
+
+// ScoreboardPrefsDefaultGetWithResponse request returning *ScoreboardPrefsDefaultGetResponse
+func (c *ClientWithResponses) ScoreboardPrefsDefaultGetWithResponse(ctx context.Context) (*scoreboardPrefsDefaultGetResponse, error) {
+	rsp, err := c.ScoreboardPrefsDefaultGet(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return ParsescoreboardPrefsDefaultGetResponse(rsp)
 }
 
 // ScoreboardStatusGetWithResponse request returning *ScoreboardStatusGetResponse
@@ -794,6 +857,30 @@ func ParsescoreboardPrefsPutResponse(rsp *http.Response) (*scoreboardPrefsPutRes
 		}
 	case rsp.StatusCode == 401:
 		break // No content-type
+	}
+
+	return response, nil
+}
+
+// ParsescoreboardPrefsDefaultGetResponse parses an HTTP response from a ScoreboardPrefsDefaultGetWithResponse call
+func ParsescoreboardPrefsDefaultGetResponse(rsp *http.Response) (*scoreboardPrefsDefaultGetResponse, error) {
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &scoreboardPrefsDefaultGetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		response.JSON200 = &ScoreboardPrefs{}
+		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
+			return nil, err
+		}
 	}
 
 	return response, nil

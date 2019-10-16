@@ -14,6 +14,7 @@ type ScoreboardStatusStore interface {
 type ScoreboardPrefsStore interface {
 	Update(prefs *api.ScoreboardPrefs) error
 	Get(prefs *api.ScoreboardPrefs) error
+	GetDefault(prefs *api.ScoreboardPrefs) error
 	Reset() error
 }
 

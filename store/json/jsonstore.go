@@ -111,6 +111,24 @@ func (m *jsonScoreboardPrefsStore) Get(prefs *api.ScoreboardPrefs) error {
 	return m.ks.Get(prefsKey, prefs)
 }
 
+func (m *jsonScoreboardPrefsStore) GetDefault(prefs *api.ScoreboardPrefs) error {
+	*prefs = *store.NewScoreboardPrefs()
+
+	var err error
+	var ks *jsonstore.JSONStore
+
+	// try lo load from file
+	ks, err = jsonstore.Open(m.filenameDef)
+	if err == nil && ks != nil {
+		err = ks.Get(prefsKey, prefs)
+		if err != nil {
+			// ignore error
+		}
+	}
+
+	return nil
+}
+
 func (m *jsonScoreboardPrefsStore) Update(prefs *api.ScoreboardPrefs) error {
 	err := m.ks.Set(prefsKey, prefs)
 	if err != nil {
@@ -120,18 +138,12 @@ func (m *jsonScoreboardPrefsStore) Update(prefs *api.ScoreboardPrefs) error {
 }
 
 func (m *jsonScoreboardPrefsStore) Reset() error {
-	prefs := store.NewScoreboardPrefs()
+	var prefs = new(api.ScoreboardPrefs)
 
-	var err error
-	var ks *jsonstore.JSONStore
+	err := m.GetDefault(prefs)
 
-	// try lo load from file
-	ks, err = jsonstore.Open(m.filenameDef)
-	if err == nil && ks != nil {
-		err := ks.Get(prefsKey, prefs)
-		if err != nil {
-			// no default prefs file found
-		}
+	if err != nil {
+		return err
 	}
 
 	err = m.ks.Set(prefsKey, prefs)
@@ -139,6 +151,7 @@ func (m *jsonScoreboardPrefsStore) Reset() error {
 	if err != nil {
 		return err
 	}
+
 	return m.save()
 }
 

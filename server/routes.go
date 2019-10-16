@@ -30,6 +30,7 @@ func (app *application) registerHandlersAPI(router runtime.EchoRouter) {
 	router.GET("/logo", wrapper.LogoGet)
 	router.GET("/scoreboard/prefs", wrapper.ScoreboardPrefsGet)
 	router.PUT("/scoreboard/prefs", wrapper.ScoreboardPrefsPut, jwtMiddleware)
+	router.GET("/scoreboard/prefs/default", wrapper.ScoreboardPrefsDefaultGet)
 	router.DELETE("/scoreboard/prefs", wrapper.ScoreboardPrefsDelete, jwtMiddleware)
 	router.GET("/scoreboard/status", wrapper.ScoreboardStatusGet)
 	router.PUT("/scoreboard/status", wrapper.ScoreboardStatusPut, jwtMiddleware)

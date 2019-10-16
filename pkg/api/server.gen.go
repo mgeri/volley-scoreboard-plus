@@ -20,6 +20,8 @@ type ServerInterface interface {
 	ScoreboardPrefsGet(ctx echo.Context) error
 	// Update scoreboard Prefs.// (PUT /scoreboard/prefs)
 	ScoreboardPrefsPut(ctx echo.Context) error
+	// Return the default scoreboard preferences (colors, team names).// (GET /scoreboard/prefs/default)
+	ScoreboardPrefsDefaultGet(ctx echo.Context) error
 	// Return the scoreboard status (points, set, timeouts).// (GET /scoreboard/status)
 	ScoreboardStatusGet(ctx echo.Context) error
 	// Update scoreboard status (points, set, timeouts).// (PUT /scoreboard/status)
@@ -78,6 +80,15 @@ func (w *ServerInterfaceWrapper) ScoreboardPrefsPut(ctx echo.Context) error {
 	return err
 }
 
+// ScoreboardPrefsDefaultGet converts echo context to params.
+func (w *ServerInterfaceWrapper) ScoreboardPrefsDefaultGet(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.ScoreboardPrefsDefaultGet(ctx)
+	return err
+}
+
 // ScoreboardStatusGet converts echo context to params.
 func (w *ServerInterfaceWrapper) ScoreboardStatusGet(ctx echo.Context) error {
 	var err error
@@ -117,6 +128,7 @@ func RegisterHandlers(router runtime.EchoRouter, si ServerInterface) {
 	router.DELETE("/scoreboard/prefs", wrapper.ScoreboardPrefsDelete)
 	router.GET("/scoreboard/prefs", wrapper.ScoreboardPrefsGet)
 	router.PUT("/scoreboard/prefs", wrapper.ScoreboardPrefsPut)
+	router.GET("/scoreboard/prefs/default", wrapper.ScoreboardPrefsDefaultGet)
 	router.GET("/scoreboard/status", wrapper.ScoreboardStatusGet)
 	router.PUT("/scoreboard/status", wrapper.ScoreboardStatusPut)
 	router.POST("/session", wrapper.SessionPost)

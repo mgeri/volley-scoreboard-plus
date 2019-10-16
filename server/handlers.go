@@ -108,10 +108,20 @@ func (app *application) ScoreboardStatusPut(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, status)
 }
 
-// Return the scoreboard Prefs (colors, team names).// (GET /scoreboard/Prefs)
+// Return the scoreboard Prefs (colors, team names).// (GET /scoreboard/prefs)
 func (app *application) ScoreboardPrefsGet(ctx echo.Context) error {
 	var prefs = new(api.ScoreboardPrefs)
 	err := app.prefsStore.Get(prefs)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, prefs)
+}
+
+// Return the scoreboard default Prefs (colors, team names).// (GET /scoreboard/prefs/default)
+func (app *application) ScoreboardPrefsDefaultGet(ctx echo.Context) error {
+	var prefs = new(api.ScoreboardPrefs)
+	err := app.prefsStore.GetDefault(prefs)
 	if err != nil {
 		return err
 	}
