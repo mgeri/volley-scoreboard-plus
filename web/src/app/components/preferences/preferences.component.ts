@@ -112,7 +112,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
       _ => {
         if (this.newMatch) {
           this.scoreboardService.newMatch().subscribe(
-            _ => {
+            ignored => {
               this.disabled = false;
               this.activeModal.close(0);
             },
@@ -125,6 +125,39 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
           this.disabled = false;
           this.activeModal.close(0);
         }
+      },
+      error => {
+        this.disabled = false;
+        this.alertService.showError(error);
+      }
+    );
+  }
+
+  loadDefaultPrefs(): void {
+    if (this.disabled) { return; }
+    this.disabled = true;
+
+    this.scoreboardService.loadDefaultPrefs().subscribe(
+      value => {
+        this.formGroup.patchValue({
+          showHeader: value.showHeader,
+          bg: value.bg,
+          fg: value.fg,
+          setName: value.setName,
+          setBg: value.setBg,
+          setFg: value.setFg,
+          timeoutName: value.timeoutName,
+          timeoutBg: value.timeoutBg,
+          videoCheckName: value.videoCheckName,
+          videoCheckBg: value.videoCheckBg,
+          pointBg: value.pointBg,
+          pointFg: value.pointFg,
+          homeBg: value.homeBg,
+          homeFg: value.homeFg,
+          awayBg: value.awayBg,
+          awayFg: value.awayFg,
+        });
+        this.disabled = false;
       },
       error => {
         this.disabled = false;

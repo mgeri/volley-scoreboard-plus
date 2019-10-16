@@ -115,6 +115,38 @@ export class DefaultService {
     }
 
     /**
+     * Return the default scoreboard preferences (colors, team names).
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public scoreboardPrefsDefaultGet(observe?: 'body', reportProgress?: boolean): Observable<ScoreboardPrefs>;
+    public scoreboardPrefsDefaultGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ScoreboardPrefs>>;
+    public scoreboardPrefsDefaultGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ScoreboardPrefs>>;
+    public scoreboardPrefsDefaultGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<ScoreboardPrefs>(`${this.configuration.basePath}/scoreboard/prefs/default`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Reset scoreboard Prefs to defaults value.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

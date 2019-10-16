@@ -271,19 +271,23 @@
 </div>
 <div class="modal-footer">
   <button nz-button nzType="primary"
-          (click)="cancelPrefs()">
+  [disabled]="disabled"
+  (click)="cancelPrefs()">
     Cancel
   </button>
   <button nz-button nzType="primary" ngbAutofocus
-          (click)="updatePrefs()">
+  [disabled]="disabled"
+  (click)="updatePrefs()">
     Save
   </button>
   <button nz-button nzType="primary" ngbAutofocus
-          (click)="previewPrefs()">
+  [disabled]="disabled"
+  (click)="previewPrefs()">
     Preview
   </button>
   <button nz-button nzType="primary" ngbAutofocus
-          (click)="resetPrefs()">
-    Reset to Defaults
+  [disabled]="disabled"
+  (click)="loadDefaultPrefs()">
+    Load Defaults
   </button>
 </div>
