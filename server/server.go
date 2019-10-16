@@ -1,6 +1,7 @@
 package server
 
 import (
+	"mime"
 	"net/http"
 	"os"
 	"strings"
@@ -48,6 +49,9 @@ func noContentEchoErrorHandler(err error, ctx echo.Context) {
 // ListenAndServe run Volley Scoreboard server
 func ListenAndServe() {
 	e := echo.New()
+
+	// mime patch for windows js (see https://github.com/golang/go/issues/32350)
+	mime.AddExtensionType(".js", "application/javascript")
 
 	// middleware
 	e.Use(middleware.Logger())
