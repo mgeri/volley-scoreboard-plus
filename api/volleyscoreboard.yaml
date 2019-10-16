@@ -327,6 +327,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Invalid session
+
     delete:
       operationId: scoreboardPrefsDelete
       summary: Reset scoreboard Prefs to defaults value.
@@ -339,6 +340,19 @@ paths:
                 $ref: '#/components/schemas/ScoreboardPrefs'
         '401':
           description: Invalid session
+
+  /scoreboard/prefs/default:
+    get:
+      operationId: scoreboardPrefsDefaultGet
+      summary: Return the default scoreboard preferences (colors, team names). 
+      security: []
+      responses:
+        '200':
+          description: The default scoreboard preferences.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreboardPrefs'
 
 components:
   # Security Scheme
