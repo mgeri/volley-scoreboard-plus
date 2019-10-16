@@ -44,10 +44,10 @@ cp -R ./dist/volley-gui/ ../bin/$1-$2/scoreboard-plus/web/
 
 # make tar gz
 cd ..
-cd bin
-rm -f scoreboard-plus-$1-$2.tar.gz
-tar -zcvf scoreboard-plus-$1-$2.tar.gz $1-$2/scoreboard-plus
-cd ..
+cd bin/$1-$2
+rm -f ../scoreboard-plus-$1-$2.tar.gz
+tar -zcvf ../scoreboard-plus-$1-$2.tar.gz scoreboard-plus
+cd ../..
 
 
 
