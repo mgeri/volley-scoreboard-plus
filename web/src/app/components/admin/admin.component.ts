@@ -30,6 +30,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   loading = true;
   disabled = false;
 
+  hideControls = false;
+
   keyboardShortcuts = new KeyboardShortcuts();
 
 
