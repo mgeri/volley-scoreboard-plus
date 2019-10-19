@@ -42,7 +42,21 @@
         <div class="w-80 h-100"
             [style.background-color]="prefs.bg"
             [style.color]="prefs.fg">
-          <app-scoreboard #scoreboard [showHeader]="false">
+          <app-scoreboard #scoreboard [showHeader]="false"
+          (homePointSwipeUp)="addHomePoint(1)"
+          (homePointSwipeDown)="addHomePoint(-1)"
+          (awayPointSwipeUp)="addAwayPoint(1)"
+          (awayPointSwipeDown)="addAwayPoint(-1)"
+          (currentSetTap)="switchBallOwner()"
+          (homeSetSwipeUp)="addHomeSet(1)"
+          (homeSetSwipeDown)="addHomeSet(-1)"
+          (awaySetSwipeUp)="addAwaySet(1)"
+          (awaySetSwipeDown)="addAwaySet(-1)"
+          (homeTimeoutTap)="addHomeTimeout()"
+          (awayTimeoutTap)="addAwayTimeout()"
+          (homeVideoCheckTap)="addHomeVideoCheck()"
+          (awayVideoCheckTap)="addAwayVideoCheck()"
+          >
           </app-scoreboard>
         </div>
         <div class="d-flex flex-column w-10">

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-timeouts',
@@ -6,6 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./timeouts.component.scss']
 })
 export class TimeoutsComponent implements OnInit {
+
+  @Output() homeTimeoutTap: EventEmitter<void> = new EventEmitter<void>();
+  @Output() awayTimeoutTap: EventEmitter<void> = new EventEmitter<void>();
 
   @Input() home = 0;
   @Input() away = 0;

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-video-checks',
@@ -6,6 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./video-checks.component.scss']
 })
 export class VideoChecksComponent implements OnInit {
+
+  @Output() homeVideoCheckTap: EventEmitter<void> = new EventEmitter<void>();
+  @Output() awayVideoCheckTap: EventEmitter<void> = new EventEmitter<void>();
 
   @Input() home = 0;
   @Input() away = 0;

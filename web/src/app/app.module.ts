@@ -6,6 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+// touch gesture
+import * as Hammer from 'hammerjs';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+
 // components
 import { AppComponent } from './app.component';
 import { NameComponent } from './components/name/name.component';
@@ -39,6 +43,13 @@ import {HotkeyModule} from 'angular2-hotkeys';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 registerLocaleData(en);
+
+export class HammerConfig extends HammerGestureConfig {
+  overrides = {
+    swipe: { direction: Hammer.DIRECTION_ALL }
+  } as any;
+}
+
 
 @NgModule({
   declarations: [
@@ -74,6 +85,10 @@ registerLocaleData(en);
   providers: [
     { provide: NZ_I18N, useValue: en_US },
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: HammerConfig
+    },
   ],
   bootstrap: [AppComponent]
 })

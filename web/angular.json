@@ -69,7 +69,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "volley-gui:build"
+            "browserTarget": "volley-gui:build",
+            "disableHostCheck": true
           },
           "configurations": {
             "production": {

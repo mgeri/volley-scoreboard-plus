@@ -1,5 +1,5 @@
 <div class="video-check-container d-flex w-100 h-100">
-  <div class="w-30 d-flex flex-row-reverse p-3">
+  <div class="w-30 d-flex flex-row-reverse p-3" (tap)="homeVideoCheckTap.emit()">
     <div class="timeout-flag h-100 w-30 mx-1"
          [class.off]="home < 1"
          [style.background-color]="bg">
@@ -12,7 +12,7 @@
   <div class="w-40 d-flex justify-content-center align-items-center">
     {{name}}
   </div>
-  <div class="w-30 d-flex flex-row p-3">
+  <div class="w-30 d-flex flex-row p-3" (tap)="awayVideoCheckTap.emit()">
     <div class="timeout-flag h-100 w-30 mx-1"
          [class.off]="away < 1"
          [style.background-color]="bg">

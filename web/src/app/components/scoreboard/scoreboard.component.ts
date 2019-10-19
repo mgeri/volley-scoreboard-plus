@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -13,6 +13,20 @@ import { ScoreboardService } from '../../services/scoreboard.service';
 
 export class ScoreboardComponent implements OnInit, OnDestroy {
   readonly TeamBallOwner = TeamBallOwner;
+
+  @Output() homePointSwipeUp: EventEmitter<void> = new EventEmitter<void>();
+  @Output() homePointSwipeDown: EventEmitter<void> = new EventEmitter<void>();
+  @Output() awayPointSwipeUp: EventEmitter<void> = new EventEmitter<void>();
+  @Output() awayPointSwipeDown: EventEmitter<void> = new EventEmitter<void>();
+  @Output() currentSetTap: EventEmitter<void> = new EventEmitter<void>();
+  @Output() homeSetSwipeUp: EventEmitter<void> = new EventEmitter<void>();
+  @Output() homeSetSwipeDown: EventEmitter<void> = new EventEmitter<void>();
+  @Output() awaySetSwipeUp: EventEmitter<void> = new EventEmitter<void>();
+  @Output() awaySetSwipeDown: EventEmitter<void> = new EventEmitter<void>();
+  @Output() homeTimeoutTap: EventEmitter<void> = new EventEmitter<void>();
+  @Output() homeVideoCheckTap: EventEmitter<void> = new EventEmitter<void>();
+  @Output() awayTimeoutTap: EventEmitter<void> = new EventEmitter<void>();
+  @Output() awayVideoCheckTap: EventEmitter<void> = new EventEmitter<void>();
 
   @Input() showHeader = true;
 
