@@ -2,9 +2,7 @@
     <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submit()">
       <nz-form-item>
           <div nz-row nzType="flex" nzJustify="center" class="logo-panel" [style.background-color]="prefs.bg">
-              <div nz-col nzSpan="8">
-                <img height="100px" [src]="getLogoUrl()" onerror="this.style.display='none'">
-              </div>
+                <img height="140px" [src]="getLogoUrl()" onerror="this.style.display='none'" style="float:left;object-fit:cover;">
           </div>
         <div>
         </div>

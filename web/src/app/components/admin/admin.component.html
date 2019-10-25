@@ -3,16 +3,16 @@
     <div>
       <button type="button" nz-button nzType="primary" class="m-1"
         (click)="newMatch()">
-          New Match <span *ngIf="keyboardShortcuts.newMatch != ''"> ( {{keyboardShortcuts.newMatch}} )</span>
+          NEW MATCH <span *ngIf="keyboardShortcuts.newMatch != ''"> ( {{keyboardShortcuts.newMatch}} )</span>
       </button>
       <button type="button" nz-button nzType="primary" class="m-1"
         (click)="newSet()">
-        New Set <span *ngIf="keyboardShortcuts.newSet != ''"> ( {{keyboardShortcuts.newSet}} )</span>
+        NEW SET <span *ngIf="keyboardShortcuts.newSet != ''"> ( {{keyboardShortcuts.newSet}} )</span>
       </button>
         <button type="button" nz-button nzType="primary" class="m-1"
             (click)="openPreferences()">
         <i class="fa fa-cog"></i>
-        Preferences
+        PREFERENCES
       </button>
       <span style="color: #ffffff">Hide Controls Buttons</span><nz-switch [(ngModel)]="hideControls"></nz-switch>
     </div>

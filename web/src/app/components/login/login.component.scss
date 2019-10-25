@@ -1,8 +1,14 @@
 .login-main {
-  display: flex;
+  //display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 10%;
+  //margin-top: 10%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .colorize-pink {
@@ -23,11 +29,13 @@
 }
 
 .login-form {
-  min-width: 25%;
+  //max-width: 800px;
+  min-width: 400px;
   padding: 24px;
   background: #fbfbfb;
   border: 1px solid #d9d9d9;
   border-radius: 6px;
+  width: 50%;
 }
 
 .login-form-button {

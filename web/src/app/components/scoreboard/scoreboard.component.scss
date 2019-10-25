@@ -25,11 +25,12 @@
 
   .ball-status {
     position: absolute;
-    width: 10%;
-    height: 10%;
-    top: 30%;
+    width: 8%;
+    //height: 10%;
+    top: 50%;
     font-size: 12vh;
     z-index: 3;
+    transform: translate(0%, -50%);
 
     &.ball-home {
       left: 35%;
