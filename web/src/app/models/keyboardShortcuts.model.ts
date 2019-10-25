@@ -20,19 +20,19 @@ export class KeyboardShortcuts {
     this.homePointDown = '2';
     this.homeSetUp = '3';
     this.homeSetDown = '4';
-    this.homeTimeout = 'q';
-    this.homeVideoCheck = 'w';
+    this.homeTimeout = 'Q';
+    this.homeVideoCheck = 'W';
 
     this.awayPointUp = '9';
     this.awayPointDown = '0';
     this.awaySetUp = '7';
     this.awaySetDown = '8';
-    this.awayTimeout = 'p';
-    this.awayVideoCheck = 'o';
+    this.awayTimeout = 'P';
+    this.awayVideoCheck = 'O';
 
-    this.ballOwnerSwitch = 'b';
-    this.newMatch = 'm';
-    this.newSet = 's';
+    this.ballOwnerSwitch = 'B';
+    this.newMatch = 'M';
+    this.newSet = 'S';
 
   }
 }

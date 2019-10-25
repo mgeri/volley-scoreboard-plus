@@ -25,9 +25,17 @@ export class UpDownComponent implements OnInit {
         this.up.emit();
         return false; // Prevent bubbling
       }));
+      this.hotkeysService.add(new Hotkey(this.upShortcut.toLowerCase(), (event: KeyboardEvent): boolean => {
+        this.up.emit();
+        return false; // Prevent bubbling
+      }));
     }
     if (this.downShortcut !== '') {
       this.hotkeysService.add(new Hotkey(this.downShortcut, (event: KeyboardEvent): boolean => {
+        this.down.emit();
+        return false; // Prevent bubbling
+      }));
+      this.hotkeysService.add(new Hotkey(this.downShortcut.toLowerCase(), (event: KeyboardEvent): boolean => {
         this.down.emit();
         return false; // Prevent bubbling
       }));

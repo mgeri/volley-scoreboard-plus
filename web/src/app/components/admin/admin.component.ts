@@ -64,9 +64,17 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.newMatch();
         return false; // Prevent bubbling
       }));
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newMatch.toLowerCase() , (event: KeyboardEvent): boolean => {
+        this.newMatch();
+        return false; // Prevent bubbling
+      }));
     }
     if (this.keyboardShortcuts.newSet && this.keyboardShortcuts.newSet !== '') {
       this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newSet , (event: KeyboardEvent): boolean => {
+        this.newSet();
+        return false; // Prevent bubbling
+      }));
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newSet.toLowerCase() , (event: KeyboardEvent): boolean => {
         this.newSet();
         return false; // Prevent bubbling
       }));
@@ -76,9 +84,17 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.addHomeTimeout();
         return false; // Prevent bubbling
       }));
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeTimeout.toLowerCase() , (event: KeyboardEvent): boolean => {
+        this.addHomeTimeout();
+        return false; // Prevent bubbling
+      }));
     }
     if (this.keyboardShortcuts.homeVideoCheck && this.keyboardShortcuts.homeVideoCheck !== '') {
       this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeVideoCheck , (event: KeyboardEvent): boolean => {
+        this.addHomeVideoCheck();
+        return false; // Prevent bubbling
+      }));
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeVideoCheck.toLowerCase() , (event: KeyboardEvent): boolean => {
         this.addHomeVideoCheck();
         return false; // Prevent bubbling
       }));
@@ -88,15 +104,27 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.addAwayTimeout();
         return false; // Prevent bubbling
       }));
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayTimeout.toLowerCase() , (event: KeyboardEvent): boolean => {
+        this.addAwayTimeout();
+        return false; // Prevent bubbling
+      }));
     }
     if (this.keyboardShortcuts.awayVideoCheck && this.keyboardShortcuts.awayVideoCheck !== '') {
       this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayVideoCheck , (event: KeyboardEvent): boolean => {
         this.addAwayVideoCheck();
         return false; // Prevent bubbling
       }));
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayVideoCheck.toLowerCase() , (event: KeyboardEvent): boolean => {
+        this.addAwayVideoCheck();
+        return false; // Prevent bubbling
+      }));
     }
     if (this.keyboardShortcuts.ballOwnerSwitch && this.keyboardShortcuts.ballOwnerSwitch !== '') {
       this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.ballOwnerSwitch , (event: KeyboardEvent): boolean => {
+        this.switchBallOwner();
+        return false; // Prevent bubbling
+      }));
+      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.ballOwnerSwitch.toLowerCase() , (event: KeyboardEvent): boolean => {
         this.switchBallOwner();
         return false; // Prevent bubbling
       }));
