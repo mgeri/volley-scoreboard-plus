@@ -17,6 +17,7 @@ export class PreferencesComponent implements AfterViewChecked, AfterViewInit, On
 
   @Input() formData: ScoreboardPrefs;
   @Input() newMatch = false;
+  @Input() title = 'Preferences';
 
   formGroup: FormGroup;
 

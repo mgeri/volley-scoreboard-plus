@@ -1,21 +1,21 @@
 <nz-layout class="layout">
   <nz-header>
-    <div>
-      <button type="button" nz-button nzType="primary" class="m-1"
-        (click)="newMatch()">
-          NEW MATCH <span *ngIf="keyboardShortcuts.newMatch != ''"> ( {{keyboardShortcuts.newMatch}} )</span>
-      </button>
-      <button type="button" nz-button nzType="primary" class="m-1"
-        (click)="newSet()">
-        NEW SET <span *ngIf="keyboardShortcuts.newSet != ''"> ( {{keyboardShortcuts.newSet}} )</span>
-      </button>
-        <button type="button" nz-button nzType="primary" class="m-1"
-            (click)="openPreferences()">
-        <i class="fa fa-cog"></i>
-        PREFERENCES
-      </button>
-      <span style="color: #ffffff">Hide Controls Buttons</span><nz-switch [(ngModel)]="hideControls"></nz-switch>
-    </div>
+      <nz-button-group>
+        <button type="button" nz-button nzType="primary"
+          (click)="newMatch()">
+            NEW MATCH {{ keyboardShortcuts.newMatch? ' ( '+ keyboardShortcuts.newMatch +' ) ' : ''}}
+        </button>
+        <button type="button" nz-button nzType="primary"
+          (click)="newSet()">
+          NEW SET {{ keyboardShortcuts.newSet? ' ( '+ keyboardShortcuts.newSet +' ) ' : ''}}
+        </button>
+          <button type="button" nz-button nzType="primary"
+              (click)="openPreferences()">
+          <i class="fa fa-cog"></i>
+          PREFERENCES
+        </button>
+      </nz-button-group>
+      <span style="color: #ffffff; padding: 0px 15px 0px 25px;">Hide Controls Buttons</span><nz-switch [(ngModel)]="hideControls" class="stica"></nz-switch>
   </nz-header>
   <nz-content>
     <div *ngIf="!loading" class="d-flex flex-column w-100 inner-content" style="height: calc(100% - 64px)">

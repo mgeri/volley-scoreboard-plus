@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Preferences</h4>
+  <h4 class="modal-title">{{title}}</h4>
 </div>
 <div class="preferences-form">
   <form nz-form [formGroup]="formGroup" name="preferences">
@@ -278,7 +278,7 @@
   <button nz-button nzType="primary" ngbAutofocus
   [disabled]="disabled"
   (click)="updatePrefs()">
-    Save
+    {{newMatch? 'New Match' : 'Save'}}
   </button>
   <button nz-button nzType="primary" ngbAutofocus
   [disabled]="disabled"
