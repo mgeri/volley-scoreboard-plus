@@ -9,7 +9,6 @@ import { AlertService } from '../../services/alert.service';
 import { ScoreboardService } from '../../services/scoreboard.service';
 import { PreferencesComponent } from '../preferences/preferences.component';
 import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { NzModalService } from 'ng-zorro-antd';
 import Swal from 'sweetalert2';
 
@@ -34,11 +33,9 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   keyboardShortcuts = new KeyboardShortcuts();
 
-
   constructor(private scoreboardService: ScoreboardService,
               private alertService: AlertService,
               private ngbModalService: NgbModal,
-              private hotkeysService: HotkeysService,
               private modalService: NzModalService) {
                 this.registerKeyboardShortcuts();
   }
@@ -58,77 +55,43 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   registerKeyboardShortcuts() {
-    this.hotkeysService.reset();
-    if (this.keyboardShortcuts.newMatch && this.keyboardShortcuts.newMatch !== '') {
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newMatch , (event: KeyboardEvent): boolean => {
-        this.newMatch();
-        return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newMatch.toLowerCase() , (event: KeyboardEvent): boolean => {
-        this.newMatch();
-        return false; // Prevent bubbling
-      }));
-    }
-    if (this.keyboardShortcuts.newSet && this.keyboardShortcuts.newSet !== '') {
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newSet , (event: KeyboardEvent): boolean => {
-        this.newSet();
-        return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.newSet.toLowerCase() , (event: KeyboardEvent): boolean => {
-        this.newSet();
-        return false; // Prevent bubbling
-      }));
-    }
-    if (this.keyboardShortcuts.homeTimeout && this.keyboardShortcuts.homeTimeout !== '') {
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeTimeout , (event: KeyboardEvent): boolean => {
-        this.addHomeTimeout();
-        return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeTimeout.toLowerCase() , (event: KeyboardEvent): boolean => {
-        this.addHomeTimeout();
-        return false; // Prevent bubbling
-      }));
-    }
-    if (this.keyboardShortcuts.homeVideoCheck && this.keyboardShortcuts.homeVideoCheck !== '') {
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeVideoCheck , (event: KeyboardEvent): boolean => {
-        this.addHomeVideoCheck();
-        return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.homeVideoCheck.toLowerCase() , (event: KeyboardEvent): boolean => {
-        this.addHomeVideoCheck();
-        return false; // Prevent bubbling
-      }));
-    }
-    if (this.keyboardShortcuts.awayTimeout && this.keyboardShortcuts.awayTimeout !== '') {
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayTimeout , (event: KeyboardEvent): boolean => {
-        this.addAwayTimeout();
-        return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayTimeout.toLowerCase() , (event: KeyboardEvent): boolean => {
-        this.addAwayTimeout();
-        return false; // Prevent bubbling
-      }));
-    }
-    if (this.keyboardShortcuts.awayVideoCheck && this.keyboardShortcuts.awayVideoCheck !== '') {
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayVideoCheck , (event: KeyboardEvent): boolean => {
-        this.addAwayVideoCheck();
-        return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.awayVideoCheck.toLowerCase() , (event: KeyboardEvent): boolean => {
-        this.addAwayVideoCheck();
-        return false; // Prevent bubbling
-      }));
-    }
-    if (this.keyboardShortcuts.ballOwnerSwitch && this.keyboardShortcuts.ballOwnerSwitch !== '') {
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.ballOwnerSwitch , (event: KeyboardEvent): boolean => {
-        this.switchBallOwner();
-        return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.keyboardShortcuts.ballOwnerSwitch.toLowerCase() , (event: KeyboardEvent): boolean => {
-        this.switchBallOwner();
-        return false; // Prevent bubbling
-      }));
-    }
+    this.scoreboardService.resetShortcuts();
+
+    this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.newMatch, (event: KeyboardEvent): boolean => {
+      this.newMatch();
+      return false; // Prevent bubbling
+    });
+
+    this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.newSet, (event: KeyboardEvent): boolean => {
+      this.newSet();
+      return false; // Prevent bubbling
+    });
+
+    this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.homeTimeout, (event: KeyboardEvent): boolean => {
+      this.addHomeTimeout();
+      return false; // Prevent bubbling
+    });
+
+    this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.homeVideoCheck, (event: KeyboardEvent): boolean => {
+      this.addHomeVideoCheck();
+      return false; // Prevent bubbling
+    });
+
+    this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.awayTimeout, (event: KeyboardEvent): boolean => {
+      this.addAwayTimeout();
+      return false; // Prevent bubbling
+    });
+
+    this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.awayVideoCheck, (event: KeyboardEvent): boolean => {
+      this.addAwayVideoCheck();
+      return false; // Prevent bubbling
+    });
+
+    this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.ballOwnerSwitch, (event: KeyboardEvent): boolean => {
+      this.switchBallOwner();
+      return false; // Prevent bubbling
+    });
+
   }
 
   addHomePoint(points: number): void {

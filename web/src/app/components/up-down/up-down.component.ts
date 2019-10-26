@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { ScoreboardService } from 'src/app/services/scoreboard.service';
 
 @Component({
   selector: 'app-up-down',
@@ -15,32 +15,20 @@ export class UpDownComponent implements OnInit {
   @Input() downShortcut = '';
 
   test = '';
-  constructor(private hotkeysService: HotkeysService) {
+  constructor(private scoreboardService: ScoreboardService) {
 
   }
 
   ngOnInit() {
-    if (this.upShortcut !== '') {
-      this.hotkeysService.add(new Hotkey(this.upShortcut, (event: KeyboardEvent): boolean => {
+    this.scoreboardService.addShortcutNoCase(this.upShortcut, (event: KeyboardEvent): boolean => {
         this.up.emit();
         return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.upShortcut.toLowerCase(), (event: KeyboardEvent): boolean => {
-        this.up.emit();
-        return false; // Prevent bubbling
-      }));
-    }
-    if (this.downShortcut !== '') {
-      this.hotkeysService.add(new Hotkey(this.downShortcut, (event: KeyboardEvent): boolean => {
-        this.down.emit();
-        return false; // Prevent bubbling
-      }));
-      this.hotkeysService.add(new Hotkey(this.downShortcut.toLowerCase(), (event: KeyboardEvent): boolean => {
-        this.down.emit();
-        return false; // Prevent bubbling
-      }));
-    }
-  }
+    });
 
+    this.scoreboardService.addShortcutNoCase(this.downShortcut, (event: KeyboardEvent): boolean => {
+      this.down.emit();
+      return false; // Prevent bubbling
+    });
+  }
 
 }

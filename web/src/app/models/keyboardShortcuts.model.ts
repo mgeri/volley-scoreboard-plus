@@ -1,3 +1,5 @@
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+
 export class KeyboardShortcuts {
   homePointUp: string;
   homePointDown: string;

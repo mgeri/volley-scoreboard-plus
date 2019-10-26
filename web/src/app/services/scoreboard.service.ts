@@ -9,6 +9,7 @@ import { SessionService, ScoreboardStatus, ScoreboardMessage } from 'src/backend
 import { WebSocketService } from './websocket.service';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Injectable({ providedIn: 'root' })
 export class ScoreboardService {
@@ -42,7 +43,8 @@ export class ScoreboardService {
 
   constructor(private webSocketService: WebSocketService,
               private defaultService: DefaultService,
-              private sessionService: SessionService) {
+              private sessionService: SessionService,
+              private hotkeysService: HotkeysService) {
 
     let basePath = environment.API_BASE_PATH;
     if (!basePath) {
@@ -206,4 +208,15 @@ export class ScoreboardService {
     return this.defaultService.scoreboardPrefsPut(prefs);
   }
 
+  resetShortcuts(): void {
+    this.hotkeysService.reset();
+  }
+
+  addShortcutNoCase(key: string,
+                    callback: (event: KeyboardEvent, combo: string) => ExtendedKeyboardEvent | boolean): void {
+    if (key && key !== '') {
+      this.hotkeysService.add(new Hotkey(key , callback));
+      this.hotkeysService.add(new Hotkey(key.toLowerCase() , callback));
+    }
+  }
 }
