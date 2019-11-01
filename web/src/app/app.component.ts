@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { version } from '../../package.json';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  title = 'volley-gui';
+  public title = 'Volley Scoreboard Plus';
+  public version: string = version;
 
   constructor() {
   }

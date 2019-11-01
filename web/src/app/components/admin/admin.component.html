@@ -18,7 +18,7 @@
       <span style="color: #ffffff; padding: 0px 15px 0px 25px;">Hide Controls Buttons</span><nz-switch [(ngModel)]="hideControls" class="stica"></nz-switch>
   </nz-header>
   <nz-content>
-    <div *ngIf="!loading" class="inner-content">
+    <div *ngIf="!loading" class="inner-content" [style.padding-top]="!hideControls ? '10px' : null">
       <div class="d-flex text-center w-100" [class.h-90]="!hideControls" [class.h-100]="hideControls">
         <div *ngIf="!hideControls" class="d-flex flex-column w-10">
           <div class="h-20"></div>

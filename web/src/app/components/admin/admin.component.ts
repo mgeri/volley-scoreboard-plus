@@ -281,4 +281,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     ngbModalRef.componentInstance.formData = JSON.parse(JSON.stringify(this.prefs));
   }
 
+  getLogoUrl(): string {
+    return this.scoreboardService.getLogoUrl();
+  }
+
 }

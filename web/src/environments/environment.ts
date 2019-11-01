@@ -1,9 +1,12 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { version } from '../../package.json';
 
 export const environment = {
   production: false,
+  TITLE: 'Volley Scoreboard Plus',
+  VERSION: version,
   API_BASE_PATH: 'http://192.168.1.151:4000/api/v1'
 };
 

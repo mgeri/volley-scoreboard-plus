@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -8,6 +9,7 @@ import { AlertService } from '../../services/alert.service';
 import { ScoreboardService } from '../../services/scoreboard.service';
 import { ScoreboardPrefs } from 'src/backend';
 import { Subject } from 'rxjs';
+
 
 @Component({
   selector: 'app-login',
@@ -53,6 +55,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   getLogoUrl(): string {
     return this.scoreboardService.getLogoUrl();
+  }
+
+  getVertion(): string {
+    return environment.VERSION;
   }
 
   submit() {
