@@ -5,10 +5,12 @@
     z-index: 2;
     .set-name {
       font-size: 12vh;
+      font-size: calc(var(--vh, 1vh) * 12);
       font-variant: small-caps;
     }
     .set-value {
-      font-size: 20vh;
+      font-size: 19vh;
+      font-size: calc(var(--vh, 1vh) * 19);
     }
   }
 
@@ -28,7 +30,8 @@
     width: 8%;
     //height: 10%;
     top: 50%;
-    font-size: 11vh;
+    font-size: 10vh;
+    font-size: calc(var(--vh, 1vh) * 10);
     z-index: 3;
     transform: translate(0%, -50%);
 

@@ -1,5 +1,6 @@
 .video-check-container {
   font-size: 5vh;
+  font-size: calc(var(--vh, 1vh) * 5);
   font-variant: small-caps;
   .timeout-flag {
     border-width: medium;

@@ -3,4 +3,5 @@
   border-style: solid;
   border-radius: 10px;
   font-size: 32vh;
+  font-size: calc(var(--vh, 1vh) * 32);
 }

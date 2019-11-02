@@ -1,5 +1,5 @@
 import { KeyboardShortcuts } from '../../models/keyboardShortcuts.model';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -22,6 +22,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   @ViewChild('scoreboard', {static: false}) scoreboard: ScoreboardComponent;
 
+  // Declare height and width variables
+  scrHeight: any;
+  scrWidth: any;
+
   destroyed$ = new Subject();
 
   prefs: ScoreboardPrefs;
@@ -38,6 +42,14 @@ export class AdminComponent implements OnInit, OnDestroy {
               private ngbModalService: NgbModal,
               private modalService: NzModalService) {
                 this.registerKeyboardShortcuts();
+                this.getScreenSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize(event?) {
+        this.scrHeight = window.innerHeight;
+        this.scrWidth = window.innerWidth;
+        console.log(this.scrHeight, this.scrWidth);
   }
 
   ngOnInit() {
