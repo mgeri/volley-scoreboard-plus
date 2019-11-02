@@ -42,6 +42,7 @@ import {HotkeyModule} from 'angular2-hotkeys';
 // config angular i18n
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
+import { ServiceWorkerModule } from '@angular/service-worker';
 registerLocaleData(en);
 
 export class HammerConfig extends HammerGestureConfig {
@@ -77,7 +78,8 @@ export class HammerConfig extends HammerGestureConfig {
     NgbModule,
     NgZorroAntdModule,
     ReactiveFormsModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
     PreferencesComponent
