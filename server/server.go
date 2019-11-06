@@ -117,12 +117,17 @@ func ListenAndServe() {
 		Addr: viper.GetString("server.address"),
 	}
 
-	// static web ui
-	e.Static("/", viper.GetString("server.webAppDir"))
+	// admin redirect to angular application admin panel
+	e.GET("/admin", func(c echo.Context) error {
+		return c.Redirect(http.StatusTemporaryRedirect, "/#/admin")
+	})
 
 	// Register handlers
 	app.registerHandlersAPI(e.Group("/api/v1"))
 	app.registerHandlersWS(e.Group("/ws/v1"))
+
+	// static web ui
+	e.Static("/", viper.GetString("server.webAppDir"))
 
 	// start
 	e.Logger.Fatal(e.StartServer(s))
