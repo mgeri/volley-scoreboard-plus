@@ -52,9 +52,10 @@ type ScoreboardPrefs struct {
 
 // ScoreboardStatus defines model for ScoreboardStatus.
 type ScoreboardStatus struct {
-	Away      ScoreboardTeamStatus `json:"away"`
-	BallOwner TeamBallOwner        `json:"ballOwner"`
-	Home      ScoreboardTeamStatus `json:"home"`
+	Away       ScoreboardTeamStatus `json:"away"`
+	BallOwner  TeamBallOwner        `json:"ballOwner"`
+	Home       ScoreboardTeamStatus `json:"home"`
+	ShowWinner bool                 `json:"showWinner"`
 }
 
 // ScoreboardTeamStatus defines model for ScoreboardTeamStatus.

@@ -4,7 +4,6 @@
 package api
 
 import (
-	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/labstack/echo/v4"
 )
 
@@ -57,6 +56,8 @@ func (w *ServerInterfaceWrapper) PingGet(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) ScoreboardPrefsDelete(ctx echo.Context) error {
 	var err error
 
+	ctx.Set("bearerAuth.Scopes", []string{""})
+
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.ScoreboardPrefsDelete(ctx)
 	return err
@@ -74,6 +75,8 @@ func (w *ServerInterfaceWrapper) ScoreboardPrefsGet(ctx echo.Context) error {
 // ScoreboardPrefsPut converts echo context to params.
 func (w *ServerInterfaceWrapper) ScoreboardPrefsPut(ctx echo.Context) error {
 	var err error
+
+	ctx.Set("bearerAuth.Scopes", []string{""})
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.ScoreboardPrefsPut(ctx)
@@ -102,6 +105,8 @@ func (w *ServerInterfaceWrapper) ScoreboardStatusGet(ctx echo.Context) error {
 func (w *ServerInterfaceWrapper) ScoreboardStatusPut(ctx echo.Context) error {
 	var err error
 
+	ctx.Set("bearerAuth.Scopes", []string{""})
+
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.ScoreboardStatusPut(ctx)
 	return err
@@ -117,7 +122,17 @@ func (w *ServerInterfaceWrapper) SessionPost(ctx echo.Context) error {
 }
 
 // RegisterHandlers adds each server route to the EchoRouter.
-func RegisterHandlers(router runtime.EchoRouter, si ServerInterface) {
+func RegisterHandlers(router interface {
+	CONNECT(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+	DELETE(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+	GET(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+	HEAD(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+	OPTIONS(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+	PATCH(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+	POST(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+	PUT(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+	TRACE(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) *echo.Route
+}, si ServerInterface) {
 
 	wrapper := ServerInterfaceWrapper{
 		Handler: si,

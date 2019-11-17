@@ -11,7 +11,10 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"path"
 	"strings"
+	"time"
 )
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
@@ -24,12 +27,27 @@ type Client struct {
 	Server string
 
 	// HTTP client with any customized settings, such as certificate chains.
-	Client http.Client
+	Client *http.Client
 
 	// A callback for modifying requests which are generated before sending over
 	// the network.
 	RequestEditor RequestEditorFn
+
+	// userAgent to use
+	userAgent string
+
+	// timeout of single request
+	requestTimeout time.Duration
+
+	// timeout of idle http connections
+	idleTimeout time.Duration
+
+	// maxium idle connections of the underlying http-client.
+	maxIdleConns int
 }
+
+// ClientOption allows setting custom parameters during construction
+type ClientOption func(*Client) error
 
 // The interface specification for the client above.
 type ClientInterface interface {
@@ -251,9 +269,13 @@ func (c *Client) SessionPost(ctx context.Context, body SessionPostJSONRequestBod
 func NewLogoGetRequest(server string) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/logo", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/logo"))
 
-	req, err := http.NewRequest("GET", queryUrl, nil)
+	req, err := http.NewRequest("GET", queryUrl.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -265,9 +287,13 @@ func NewLogoGetRequest(server string) (*http.Request, error) {
 func NewPingGetRequest(server string) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/ping", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/ping"))
 
-	req, err := http.NewRequest("GET", queryUrl, nil)
+	req, err := http.NewRequest("GET", queryUrl.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -279,9 +305,13 @@ func NewPingGetRequest(server string) (*http.Request, error) {
 func NewScoreboardPrefsDeleteRequest(server string) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/scoreboard/prefs", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/scoreboard/prefs"))
 
-	req, err := http.NewRequest("DELETE", queryUrl, nil)
+	req, err := http.NewRequest("DELETE", queryUrl.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -293,9 +323,13 @@ func NewScoreboardPrefsDeleteRequest(server string) (*http.Request, error) {
 func NewScoreboardPrefsGetRequest(server string) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/scoreboard/prefs", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/scoreboard/prefs"))
 
-	req, err := http.NewRequest("GET", queryUrl, nil)
+	req, err := http.NewRequest("GET", queryUrl.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -318,9 +352,13 @@ func NewScoreboardPrefsPutRequest(server string, body ScoreboardPrefsPutJSONRequ
 func NewScoreboardPrefsPutRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/scoreboard/prefs", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/scoreboard/prefs"))
 
-	req, err := http.NewRequest("PUT", queryUrl, body)
+	req, err := http.NewRequest("PUT", queryUrl.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -333,9 +371,13 @@ func NewScoreboardPrefsPutRequestWithBody(server string, contentType string, bod
 func NewScoreboardPrefsDefaultGetRequest(server string) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/scoreboard/prefs/default", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/scoreboard/prefs/default"))
 
-	req, err := http.NewRequest("GET", queryUrl, nil)
+	req, err := http.NewRequest("GET", queryUrl.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -347,9 +389,13 @@ func NewScoreboardPrefsDefaultGetRequest(server string) (*http.Request, error) {
 func NewScoreboardStatusGetRequest(server string) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/scoreboard/status", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/scoreboard/status"))
 
-	req, err := http.NewRequest("GET", queryUrl, nil)
+	req, err := http.NewRequest("GET", queryUrl.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -372,9 +418,13 @@ func NewScoreboardStatusPutRequest(server string, body ScoreboardStatusPutJSONRe
 func NewScoreboardStatusPutRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/scoreboard/status", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/scoreboard/status"))
 
-	req, err := http.NewRequest("PUT", queryUrl, body)
+	req, err := http.NewRequest("PUT", queryUrl.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -398,9 +448,13 @@ func NewSessionPostRequest(server string, body SessionPostJSONRequestBody) (*htt
 func NewSessionPostRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
-	queryUrl := fmt.Sprintf("%s/session", server)
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/session"))
 
-	req, err := http.NewRequest("POST", queryUrl, body)
+	req, err := http.NewRequest("POST", queryUrl.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -414,11 +468,116 @@ type ClientWithResponses struct {
 	ClientInterface
 }
 
+// NewClient creates a new Client.
+func NewClient(ctx context.Context, opts ...ClientOption) (*ClientWithResponses, error) {
+	// create a client with sane default values
+	client := Client{
+		// must have a slash in order to resolve relative paths correctly.
+		Server:         "",
+		userAgent:      "oapi-codegen",
+		maxIdleConns:   10,
+		requestTimeout: 5 * time.Second,
+		idleTimeout:    30 * time.Second,
+	}
+	// mutate defaultClient and add all optional params
+	for _, o := range opts {
+		if err := o(&client); err != nil {
+			return nil, err
+		}
+	}
+
+	// create httpClient, if not already present
+	if client.Client == nil {
+		client.Client = client.newHTTPClient()
+	}
+
+	return &ClientWithResponses{
+		ClientInterface: &client,
+	}, nil
+}
+
+// WithBaseURL overrides the baseURL.
+func WithBaseURL(baseURL string) ClientOption {
+	return func(c *Client) error {
+		if !strings.HasSuffix(baseURL, "/") {
+			baseURL += "/"
+		}
+		newBaseURL, err := url.Parse(baseURL)
+		if err != nil {
+			return err
+		}
+		c.Server = newBaseURL.String()
+		return nil
+	}
+}
+
+// WithUserAgent allows setting the userAgent
+func WithUserAgent(userAgent string) ClientOption {
+	return func(c *Client) error {
+		c.userAgent = userAgent
+		return nil
+	}
+}
+
+// WithIdleTimeout overrides the timeout of idle connections.
+func WithIdleTimeout(timeout time.Duration) ClientOption {
+	return func(c *Client) error {
+		c.idleTimeout = timeout
+		return nil
+	}
+}
+
+// WithRequestTimeout overrides the timeout of individual requests.
+func WithRequestTimeout(timeout time.Duration) ClientOption {
+	return func(c *Client) error {
+		c.requestTimeout = timeout
+		return nil
+	}
+}
+
+// WithMaxIdleConnections overrides the amount of idle connections of the
+// underlying http-client.
+func WithMaxIdleConnections(maxIdleConns uint) ClientOption {
+	return func(c *Client) error {
+		c.maxIdleConns = int(maxIdleConns)
+		return nil
+	}
+}
+
+// WithHTTPClient allows overriding the default httpClient, which is
+// automatically created. This is useful for tests.
+func WithHTTPClient(httpClient *http.Client) ClientOption {
+	return func(c *Client) error {
+		c.Client = httpClient
+		return nil
+	}
+}
+
+// WithRequestEditorFn allows setting up a callback function, which will be
+// called right before sending the request. This can be used to mutate the request.
+func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
+	return func(c *Client) error {
+		c.RequestEditor = fn
+		return nil
+	}
+}
+
+// newHTTPClient creates a httpClient for the current connection options.
+func (c *Client) newHTTPClient() *http.Client {
+	return &http.Client{
+		Timeout: c.requestTimeout,
+		Transport: &http.Transport{
+			MaxIdleConns:    c.maxIdleConns,
+			IdleConnTimeout: c.idleTimeout,
+		},
+	}
+}
+
 // NewClientWithResponses returns a ClientWithResponses with a default Client:
 func NewClientWithResponses(server string) *ClientWithResponses {
 	return &ClientWithResponses{
 		ClientInterface: &Client{
-			Client: http.Client{},
+			Client: &http.Client{},
 			Server: server,
 		},
 	}
@@ -428,7 +587,7 @@ func NewClientWithResponses(server string) *ClientWithResponses {
 func NewClientWithResponsesAndRequestEditorFunc(server string, reqEditorFn RequestEditorFn) *ClientWithResponses {
 	return &ClientWithResponses{
 		ClientInterface: &Client{
-			Client:        http.Client{},
+			Client:        &http.Client{},
 			Server:        server,
 			RequestEditor: reqEditorFn,
 		},
@@ -753,8 +912,6 @@ func ParselogoGetResponse(rsp *http.Response) (*logoGetResponse, error) {
 	}
 
 	switch {
-	case rsp.StatusCode == 200:
-		// Content-type (image/*) unsupported
 	}
 
 	return response, nil
@@ -774,8 +931,6 @@ func ParsepingGetResponse(rsp *http.Response) (*pingGetResponse, error) {
 	}
 
 	switch {
-	case rsp.StatusCode == 204:
-		break // No content-type
 	}
 
 	return response, nil
@@ -800,8 +955,7 @@ func ParsescoreboardPrefsDeleteResponse(rsp *http.Response) (*scoreboardPrefsDel
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
-	case rsp.StatusCode == 401:
-		break // No content-type
+
 	}
 
 	return response, nil
@@ -826,6 +980,7 @@ func ParsescoreboardPrefsGetResponse(rsp *http.Response) (*scoreboardPrefsGetRes
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
+
 	}
 
 	return response, nil
@@ -850,13 +1005,13 @@ func ParsescoreboardPrefsPutResponse(rsp *http.Response) (*scoreboardPrefsPutRes
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
 		response.JSON400 = &ErrorResponse{}
 		if err := json.Unmarshal(bodyBytes, response.JSON400); err != nil {
 			return nil, err
 		}
-	case rsp.StatusCode == 401:
-		break // No content-type
+
 	}
 
 	return response, nil
@@ -881,6 +1036,7 @@ func ParsescoreboardPrefsDefaultGetResponse(rsp *http.Response) (*scoreboardPref
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
+
 	}
 
 	return response, nil
@@ -905,6 +1061,7 @@ func ParsescoreboardStatusGetResponse(rsp *http.Response) (*scoreboardStatusGetR
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
+
 	}
 
 	return response, nil
@@ -929,13 +1086,13 @@ func ParsescoreboardStatusPutResponse(rsp *http.Response) (*scoreboardStatusPutR
 		if err := json.Unmarshal(bodyBytes, response.JSON200); err != nil {
 			return nil, err
 		}
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
 		response.JSON400 = &ErrorResponse{}
 		if err := json.Unmarshal(bodyBytes, response.JSON400); err != nil {
 			return nil, err
 		}
-	case rsp.StatusCode == 401:
-		break // No content-type
+
 	}
 
 	return response, nil
@@ -960,11 +1117,13 @@ func ParsesessionPostResponse(rsp *http.Response) (*sessionPostResponse, error) 
 		if err := json.Unmarshal(bodyBytes, response.JSON201); err != nil {
 			return nil, err
 		}
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
 		response.JSON400 = &ErrorResponse{}
 		if err := json.Unmarshal(bodyBytes, response.JSON400); err != nil {
 			return nil, err
 		}
+
 	}
 
 	return response, nil

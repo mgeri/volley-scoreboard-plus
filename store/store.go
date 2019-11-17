@@ -20,7 +20,10 @@ type ScoreboardPrefsStore interface {
 
 func NewScoreboardStatus() *api.ScoreboardStatus {
 	// default init to 0
-	return &api.ScoreboardStatus{BallOwner: "none"}
+	return &api.ScoreboardStatus{
+		BallOwner:  "none",
+		ShowWinner: false,
+	}
 }
 
 func NewScoreboardPrefs() *api.ScoreboardPrefs {
