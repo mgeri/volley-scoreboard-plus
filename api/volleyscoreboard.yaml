@@ -461,10 +461,15 @@ components:
           $ref: '#/components/schemas/ScoreboardTeamStatus'
         ballOwner:
           $ref: '#/components/schemas/TeamBallOwner'
+        showWinner:
+          type: boolean
+          description: Show match winner 
+          default: false
       required:
         - home
         - away
         - ballOwner
+        - showWinner
 
     ScoreboardPrefs:
       type: object
