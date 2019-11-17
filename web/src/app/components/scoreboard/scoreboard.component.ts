@@ -37,7 +37,6 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
 
   loading = true;
 
-
   constructor(private scoreboardService: ScoreboardService) { }
 
   ngOnInit(): void {

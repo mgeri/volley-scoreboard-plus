@@ -17,7 +17,8 @@ export class ScoreboardService {
   private readonly status = new BehaviorSubject<ScoreboardStatus>({
     home: { points: 0, sets: 0, timeouts: 0, videoChecks: 0 },
     away: { points: 0, sets: 0, timeouts: 0, videoChecks: 0 },
-    ballOwner: TeamBallOwner.None
+    ballOwner: TeamBallOwner.None,
+    showWinner: false,
   });
 
   private readonly prefs = new BehaviorSubject<ScoreboardPrefs>(null);
@@ -103,11 +104,12 @@ export class ScoreboardService {
     return this.defaultService.scoreboardStatusPut({
       home: { points: 0, sets: 0, timeouts: 0, videoChecks: 0 },
       away: { points: 0, sets: 0, timeouts: 0, videoChecks: 0 },
-      ballOwner: TeamBallOwner.None
+      ballOwner: TeamBallOwner.None,
+      showWinner: false,
     });
   }
 
-  newSet(): Observable<ScoreboardStatus> {
+  newSet(showWinner: boolean = false): Observable<ScoreboardStatus> {
     const status = this.getStatus();
 
     if (status.home.points > status.away.points) {
@@ -122,6 +124,7 @@ export class ScoreboardService {
     status.home.videoChecks = 0;
     status.away.videoChecks = 0;
     status.ballOwner = TeamBallOwner.None;
+    status.showWinner = showWinner;
 
     return this.defaultService.scoreboardStatusPut(status);
   }

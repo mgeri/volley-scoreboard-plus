@@ -43,6 +43,7 @@ import {HotkeyModule} from 'angular2-hotkeys';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { WinnerComponent } from './components/winner/winner.component';
 registerLocaleData(en);
 
 export class HammerConfig extends HammerGestureConfig {
@@ -64,7 +65,8 @@ export class HammerConfig extends HammerGestureConfig {
     SetsComponent,
     TimeoutsComponent,
     UpDownComponent,
-    VideoChecksComponent
+    VideoChecksComponent,
+    WinnerComponent
   ],
   imports: [
     ApiModule,

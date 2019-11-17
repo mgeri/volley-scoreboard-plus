@@ -9,13 +9,17 @@
           (click)="newSet()">
           NEW SET {{ keyboardShortcuts.newSet? ' ( '+ keyboardShortcuts.newSet +' ) ' : ''}}
         </button>
-          <button type="button" nz-button nzType="primary"
+        <button type="button" nz-button nzType="primary"
+          (click)="endMatch()">
+          END MATCH {{ keyboardShortcuts.newSet? ' ( '+ keyboardShortcuts.newSet +' ) ' : ''}}
+        </button>
+        <button type="button" nz-button nzType="primary"
               (click)="openPreferences()">
           <i class="fa fa-cog"></i>
           PREFERENCES
         </button>
       </nz-button-group>
-      <span style="color: #ffffff; padding: 0px 15px 0px 25px;">Hide Controls Buttons</span><nz-switch [(ngModel)]="hideControls"></nz-switch>
+      <span style="color: #ffffff; padding: 0px 15px 0px 25px;">Hide Buttons</span><nz-switch [(ngModel)]="hideControls"></nz-switch>
   </nz-header>
   <nz-content>
     <div *ngIf="!loading" class="inner-content" [style.padding-top]="!hideControls ? '10px' : null">

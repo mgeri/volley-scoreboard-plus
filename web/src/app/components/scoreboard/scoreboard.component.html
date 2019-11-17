@@ -3,7 +3,12 @@
     loading ...
 </div>
 -->
-<div *ngIf="!loading" class="w-100 h-100 text-center"
+<div *ngIf="!loading && status && status.showWinner" class="w-100 h-100 text-center"
+  [style.background-color]="prefs.bg"
+  [style.color]="prefs.fg">
+  <app-winner></app-winner>
+</div>
+<div *ngIf="!loading && (!status || !status.showWinner)" class="w-100 h-100 text-center"
      [style.background-color]="prefs.bg"
      [style.color]="prefs.fg">
 

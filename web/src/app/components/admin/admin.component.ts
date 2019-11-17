@@ -283,6 +283,32 @@ export class AdminComponent implements OnInit, OnDestroy {
     });
   }
 
+  endMatch(): void {
+    if (this.disabled) { return; }
+
+    Swal.fire({
+      title: 'Are you sure to End Match?',
+      type: 'question',
+      showCancelButton: true,
+//      confirmButtonColor: '#3085d6',
+//      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes and show the winner!'
+    }).then((result) => {
+      if (result.value) {
+        this.disabled = true;
+        this.scoreboardService.newSet(true).subscribe(
+          ignored => {
+            this.disabled = false;
+          },
+          error => {
+            this.alertService.showError(error);
+            this.disabled = false;
+          }
+        );
+      }
+    });
+  }
+
   openPreferences(): void {
     const ngbModalRef = this.ngbModalService.open(PreferencesComponent, {
       backdrop : 'static',

@@ -20,5 +20,9 @@ export interface ScoreboardStatus {
     home: ScoreboardTeamStatus;
     away: ScoreboardTeamStatus;
     ballOwner: TeamBallOwner;
+    /**
+     * Show match winner
+     */
+    showWinner: boolean;
 }
 

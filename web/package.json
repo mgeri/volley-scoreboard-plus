@@ -28,6 +28,7 @@
     "@sweetalert2/ngx-sweetalert2": "^6.0.1",
     "angular2-hotkeys": "^2.1.5",
     "bootstrap": "^4.3.1",
+    "fireworks-canvas": "^2.3.2",
     "font-awesome": "^4.7.0",
     "hammerjs": "^2.0.8",
     "ng-zorro-antd": "^8.5.0",
