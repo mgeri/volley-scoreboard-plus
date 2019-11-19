@@ -115,7 +115,8 @@
             ],
             "exclude": [
               "**/node_modules/**",
-              "./src/backend/**"
+              "./src/backend/**",
+              "./src/fireworks/**"
             ]
           }
         },

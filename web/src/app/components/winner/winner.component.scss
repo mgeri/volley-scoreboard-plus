@@ -1,0 +1,52 @@
+#winner-container {
+  display: block;
+  position: relative;
+}
+
+#winner-container #winner-inner {
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+  top: 25%;
+  left: 0;
+  position: absolute;
+  padding: 0;
+  color: #fff;
+}
+
+.winner-text {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  color: #fff;
+  font-style: normal;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+  letter-spacing: 4.5px;
+}
+
+.winner-team {
+  font-weight: bold;
+  margin-bottom: 0;
+  font-size: 13vh;
+  font-size: calc(var(--vh, 1vh) * 13);
+}
+
+.winner-win  {
+  margin-bottom: 0;
+  font-style: normal;
+  font-size: 8vh;
+  font-size: calc(var(--vh, 1vh) * 8);
+}
+
+.winner-win span {
+  color: #F44336;
+}
+
+.winner-score {
+  margin-bottom: 0;
+  font-style: normal;
+  font-size: 10vh;
+  font-size: calc(var(--vh, 1vh) * 10);
+}
+

@@ -1,2 +1,13 @@
-<div id="winner-fireworks-container" class="w-100 h-100 text-center">
+<div id="winner-container" class="w-100 h-100 text-center" (window:resize)="onResize($event)">
+    <div *ngIf="!loading && winnerSets != loserSets" id="winner-inner" class="winner-text">
+      <p class="winner-team">{{ winnerTeam }}</p>
+      <p class="winner-win"><span>W</span>in</p>
+      <p class="winner-score">{{ winnerSets }} - {{ loserSets }}</p>
+    </div>
+    <div *ngIf="!loading && winnerSets == loserSets" id="winner-inner" class="winner-text" style="top: 15%;">
+      <p class="winner-team">{{ winnerTeam }}</p>
+      <p class="winner-win"><span>vs</span></p>
+      <p class="winner-team">{{ loserTeam }}</p>
+      <p class="winner-score">{{ winnerSets }} - {{ loserSets }}</p>
+    </div>
 </div>

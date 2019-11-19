@@ -15,3 +15,4 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 
   // vh mobile fix (see https://github.com/Hiswe/vh-check)
 vhCheck( {redefineVh: true });
+
