@@ -1,4 +1,9 @@
-<div id="winner-container" class="w-100 h-100 text-center" (window:resize)="onResize($event)">
+<div id="winner-container" class="w-100 h-100 text-center stars-sky" (window:resize)="onResize($event)">
+
+    <div class="stars small"></div>
+    <div class="stars medium"></div>
+    <div class="stars large"></div>
+
     <div *ngIf="!loading && winnerSets != loserSets" id="winner-inner" class="winner-text">
       <p class="winner-team">{{ winnerTeam }}</p>
       <p class="winner-win"><span>W</span>in</p>
