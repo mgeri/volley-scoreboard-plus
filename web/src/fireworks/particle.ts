@@ -114,9 +114,17 @@ export default class Particle {
    * @param {Particle} particle rocket to check
    * @returns {boolean} whether or not the rocket shoudl explode
    */
-  shouldExplode (maxHeight: number, minHeight: number, chance: number): boolean {
+  shouldExplode (maxHeight: number, minHeight: number, chance: number, cw: number, ch: number): boolean {
 
     if (!this.isRocket) { return false }
+
+    if (this.position.x >= cw || this.position.x <= 0) {
+      return true
+    }
+
+    if (this.position.y >= ch || this.position.y <= 0) {
+      return true
+    }
 
     // make sure things explode once they hit explosionMaxHeight (90% default) of height
     if (this.position.y <= maxHeight) {

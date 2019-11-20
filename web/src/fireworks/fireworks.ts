@@ -108,7 +108,7 @@ export default class Fireworks {
 
       if (particle.shouldRemove(this.cw, this.ch)) {
         this.things.delete(particle)
-      } else if (particle.shouldExplode(this.max_h, this.min_h, this.chance)) {
+      } else if (particle.shouldExplode(this.max_h, this.min_h, this.chance, this.cw, this.ch)) {
         this.things.explode(particle)
       }
     }
