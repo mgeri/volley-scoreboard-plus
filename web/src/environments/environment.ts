@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   TITLE: 'Volley Scoreboard Plus',
   VERSION: version,
-  API_BASE_PATH: 'http://192.168.1.151:4000/api/v1'
+  API_BASE_PATH: 'http://localhost:4000/api/v1'
 };
 
 /*
