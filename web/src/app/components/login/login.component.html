@@ -1,5 +1,8 @@
-<div class="h-100 w-100">
-  <div *ngIf="!loading" class="login-main">
+<div *ngIf="loading" class="w-100 h-100">
+    <app-waiting></app-waiting>
+</div>
+<div *ngIf="!loading" class="h-100 w-100">
+  <div class="login-main">
       <form nz-form [formGroup]="form" class="login-form" (ngSubmit)="submit()">
         <nz-form-item>
             <div nz-row nzType="flex" nzJustify="center" class="logo-panel" [style.background-color]="prefs.bg">

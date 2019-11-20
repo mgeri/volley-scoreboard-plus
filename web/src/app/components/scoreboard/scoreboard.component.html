@@ -1,8 +1,7 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<!--<div *ngIf="loading">
-    loading ...
+<div *ngIf="loading" class="w-100 h-100">
+    <app-waiting></app-waiting>
 </div>
--->
 <div *ngIf="!loading && status && status.showWinner" class="w-100 h-100 text-center"
   [style.background-color]="prefs.bg"
   [style.color]="prefs.fg">

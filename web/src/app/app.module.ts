@@ -44,6 +44,7 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { WinnerComponent } from './components/winner/winner.component';
+import { WaitingComponent } from './components/waiting/waiting.component';
 registerLocaleData(en);
 
 export class HammerConfig extends HammerGestureConfig {
@@ -66,7 +67,8 @@ export class HammerConfig extends HammerGestureConfig {
     TimeoutsComponent,
     UpDownComponent,
     VideoChecksComponent,
-    WinnerComponent
+    WinnerComponent,
+    WaitingComponent
   ],
   imports: [
     ApiModule,
