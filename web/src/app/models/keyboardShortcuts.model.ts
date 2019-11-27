@@ -16,6 +16,7 @@ export class KeyboardShortcuts {
   ballOwnerSwitch: string;
   newMatch: string;
   newSet: string;
+  endMatch: string;
 
   constructor() {
     this.homePointUp = '1';
@@ -35,6 +36,7 @@ export class KeyboardShortcuts {
     this.ballOwnerSwitch = 'B';
     this.newMatch = 'M';
     this.newSet = 'S';
+    this.endMatch = 'E';
 
   }
 }

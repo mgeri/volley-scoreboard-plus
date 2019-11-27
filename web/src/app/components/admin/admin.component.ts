@@ -79,6 +79,11 @@ export class AdminComponent implements OnInit, OnDestroy {
       return false; // Prevent bubbling
     });
 
+    this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.endMatch, (event: KeyboardEvent): boolean => {
+      this.endMatch();
+      return false; // Prevent bubbling
+    });
+
     this.scoreboardService.addShortcutNoCase(this.keyboardShortcuts.homeTimeout, (event: KeyboardEvent): boolean => {
       this.addHomeTimeout();
       return false; // Prevent bubbling
