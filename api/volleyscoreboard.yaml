@@ -354,6 +354,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/ScoreboardPrefs'
 
+
+  /scoreboard/command:
+    post:
+      operationId: scoreboardCommandPost
+      summary: Send string command throught websocket to all connected scorebaord (es. show video or animation).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreboardCommand'
+        required: true
+      responses:
+        '200':
+          description: The scorebaord command.
+        '400':
+          description: |
+            Invalid request.
+            Error code is 50. Sub codes are:
+            * 1 - Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Invalid session
+
 components:
   # Security Scheme
   securitySchemes:
@@ -578,6 +604,31 @@ components:
         - awayFg
         - awayBg
 
+    ScoreboardCommand:
+      type: object
+      description: Scoreboard team points, sents, timeouts video check.
+      properties:
+        name:
+          type: string
+          enum: 
+            - anim-start
+            - anim-stop
+            - video-start
+            - visto-stop
+          description: >
+            The command parameter:
+             * `anim-start`  - Start an animation. Params contains the animation name.
+             * `anim-stop`   - Stop current animation if not already finished.
+             * `video-start` - Show a video. Params contains the name of the video file.
+             * `video-stop`  - Stop current video if not already finished.
+        params:
+          description: The command parameters (depending on command name)
+          type: array
+          items:
+            type: string
+      required:
+        - name
+
     ScoreboardMessage:
       type: object
       description: Scoreboard websocket message
@@ -586,6 +637,8 @@ components:
           $ref: '#/components/schemas/ScoreboardStatus'
         prefs:
           $ref: '#/components/schemas/ScoreboardPrefs'
+        command:
+          $ref: '#/components/schemas/ScoreboardCommand'
 
 
 # Apply the security globally to all operations       
