@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angu
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ScoreboardPrefs, ScoreboardStatus, TeamBallOwner } from '../../../backend';
+import { ScoreboardCommand, ScoreboardPrefs, ScoreboardStatus, TeamBallOwner} from '../../../backend';
 import { ScoreboardService } from '../../services/scoreboard.service';
 
 @Component({
@@ -37,6 +37,8 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
 
   loading = true;
 
+  animSpider = false;
+
   constructor(private scoreboardService: ScoreboardService) { }
 
   ngOnInit(): void {
@@ -51,6 +53,12 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     ).subscribe((prefs: ScoreboardPrefs) => {
       this.prefs = prefs;
       this.loading = (prefs == null);
+    });
+
+    this.scoreboardService.command$.pipe(
+      takeUntil(this.destroyed$)
+    ).subscribe((cmd: ScoreboardCommand) => {
+      this.manageCommand(cmd);
     });
   }
 
@@ -72,4 +80,15 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
     return this.status.ballOwner;
   }
 
+  manageCommand(cmd: ScoreboardCommand) {
+    // Spider Easter egg anim
+    if (cmd.params && cmd.params.length > 0 && cmd.params[0] === this.scoreboardService.ANIM_SPIDER) {
+      this.animSpider  = (cmd.name === ScoreboardCommand.NameEnum.AnimStart);
+    }
+
+    // stop any anims
+    if (cmd.name === ScoreboardCommand.NameEnum.AnimStop) {
+      this.animSpider = false;
+    }
+  }
 }

@@ -9,17 +9,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ScoreboardCommand } from './scoreboardCommand';
-import { ScoreboardPrefs } from './scoreboardPrefs';
-import { ScoreboardStatus } from './scoreboardStatus';
 
 
 /**
- * Scoreboard websocket message
+ * Scoreboard team points, sents, timeouts video check.
  */
-export interface ScoreboardMessage { 
-    status?: ScoreboardStatus;
-    prefs?: ScoreboardPrefs;
-    command?: ScoreboardCommand;
+export interface ScoreboardCommand { 
+    /**
+     * The command parameter:  * `anim-start`  - Start an animation. Params contains the animation name.  * `anim-stop`   - Stop current animation if not already finished.  * `video-start` - Show a video. Params contains the name of the video file.  * `video-stop`  - Stop current video if not already finished. 
+     */
+    name: ScoreboardCommand.NameEnum;
+    /**
+     * The command parameters (depending on command name)
+     */
+    params?: Array<string>;
 }
+export namespace ScoreboardCommand {
+    export type NameEnum = 'anim-start' | 'anim-stop' | 'video-start' | 'visto-stop';
+    export const NameEnum = {
+        AnimStart: 'anim-start' as NameEnum,
+        AnimStop: 'anim-stop' as NameEnum,
+        VideoStart: 'video-start' as NameEnum,
+        VistoStop: 'visto-stop' as NameEnum
+    };
+}
+
 

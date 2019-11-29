@@ -1,6 +1,7 @@
 export * from './credentials';
 export * from './errorResponse';
 export * from './error';
+export * from './scoreboardCommand';
 export * from './scoreboardMessage';
 export * from './scoreboardPrefs';
 export * from './scoreboardStatus';

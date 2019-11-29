@@ -67,7 +67,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
         session => {
-          console.log('success', session),
           this.router.navigate(['/admin']);
           this.waitingLoginRes = false;
         },

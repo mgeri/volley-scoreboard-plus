@@ -1,34 +1,65 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div *ngIf="loading" class="w-100 h-100">
-    <app-waiting></app-waiting>
+  <app-waiting></app-waiting>
 </div>
-<div *ngIf="!loading && status && status.showWinner" class="w-100 h-100 text-center"
-  [style.background-color]="prefs.bg"
+<div *ngIf="!loading && status && status.showWinner" class="w-100 h-100 text-center" [style.background-color]="prefs.bg"
   [style.color]="prefs.fg">
   <app-winner></app-winner>
 </div>
 <div *ngIf="!loading && (!status || !status.showWinner)" class="w-100 h-100 text-center"
-     [style.background-color]="prefs.bg"
-     [style.color]="prefs.fg">
+  [style.background-color]="prefs.bg" [style.color]="prefs.fg">
+
+  <div *ngIf="animSpider" id="other">
+    <div id="spider1" (animationend)="animSpider=false">
+      <div id="eye">
+        <p id="pupil"></p>
+      </div>
+
+      <div id="leg">
+        <p></p>
+        <p></p>
+      </div>
+
+      <div id="leg2">
+        <p></p>
+        <p></p>
+      </div>
+
+      <div id="leg3">
+        <p></p>
+        <p></p>
+      </div>
+
+      <div id="leg4">
+        <p></p>
+        <p></p>
+      </div>
+
+      <div id="leg5">
+        <p></p>
+        <p></p>
+
+      </div>
+      <div id="leg6">
+        <p></p>
+        <p></p>
+      </div>
+      <div id="string"></div>
+    </div>
+  </div>
 
   <div *ngIf="isHeaderVisible()" class="h-20">
     <img height="100%" [src]="getLogoUrl()" onerror="this.style.display='none'">
   </div>
-  <div class="w-100 d-flex flex-column"
-       [class.h-100]="!isHeaderVisible()"
-       [class.h-80]="isHeaderVisible()">
+  <div class="w-100 d-flex flex-column" [class.h-100]="!isHeaderVisible()" [class.h-80]="isHeaderVisible()">
 
     <div class="names-zone d-flex w-100 h-20">
       <div class="w-50 p-1">
-        <app-name [name]="prefs.homeName"
-                  [bg]="prefs.homeBg"
-                  [fg]="prefs.homeFg">
+        <app-name [name]="prefs.homeName" [bg]="prefs.homeBg" [fg]="prefs.homeFg">
         </app-name>
       </div>
       <div class="w-50 p-1">
-        <app-name [name]="prefs.awayName"
-                  [bg]="prefs.awayBg"
-                  [fg]="prefs.awayFg">
+        <app-name [name]="prefs.awayName" [bg]="prefs.awayBg" [fg]="prefs.awayFg">
         </app-name>
       </div>
     </div>
@@ -36,18 +67,12 @@
     <div class="points-zone d-flex w-100 h-50">
       <div class="d-flex w-100 m-1">
         <div class="w-40">
-          <app-points [points]="status.home.points"
-                      [bg]="prefs.pointBg"
-                      [fg]="prefs.pointFg"
-                      (tap)="homePointSwipeUp.emit()"
-                      (swipeup)="homePointSwipeUp.emit()"
-                      (swipedown)="homePointSwipeDown.emit()">
+          <app-points [points]="status.home.points" [bg]="prefs.pointBg" [fg]="prefs.pointFg"
+            (tap)="homePointSwipeUp.emit()" (swipeup)="homePointSwipeUp.emit()" (swipedown)="homePointSwipeDown.emit()">
           </app-points>
         </div>
-        <div class="set-container w-20 mx-2"
-            [style.background-color]="prefs.pointFg"
-            [style.color]="prefs.pointBg"
-            (tap)="currentSetTap.emit()">
+        <div class="set-container w-20 mx-2" [style.background-color]="prefs.pointFg" [style.color]="prefs.pointBg"
+          (tap)="currentSetTap.emit()">
           <div class="set-name h-30">
             {{prefs.setName}}
           </div>
@@ -56,25 +81,17 @@
           </div>
         </div>
         <div class="w-40">
-          <app-points [points]="status.away.points"
-                      [bg]="prefs.pointBg"
-                      [fg]="prefs.pointFg"
-                      (tap)="awayPointSwipeUp.emit()"
-                      (swipeup)="awayPointSwipeUp.emit()"
-                      (swipedown)="awayPointSwipeDown.emit()">
+          <app-points [points]="status.away.points" [bg]="prefs.pointBg" [fg]="prefs.pointFg"
+            (tap)="awayPointSwipeUp.emit()" (swipeup)="awayPointSwipeUp.emit()" (swipedown)="awayPointSwipeDown.emit()">
           </app-points>
         </div>
       </div>
 
       <div class="ball-container"></div>
-      <div *ngIf="status.ballOwner === TeamBallOwner.Home"
-           class="ball-status ball-home"
-           [style.color]="prefs.pointBg">
+      <div *ngIf="status.ballOwner === TeamBallOwner.Home" class="ball-status ball-home" [style.color]="prefs.pointBg">
         <i class="fa fa-chevron-circle-left"></i>
       </div>
-      <div *ngIf="status.ballOwner === TeamBallOwner.Away"
-           class="ball-status ball-away"
-           [style.color]="prefs.pointBg">
+      <div *ngIf="status.ballOwner === TeamBallOwner.Away" class="ball-status ball-away" [style.color]="prefs.pointBg">
         <i class="fa fa-chevron-circle-right"></i>
       </div>
     </div>
@@ -82,44 +99,26 @@
     <div class="sets-zone d-flex w-100 h-30">
       <div class="d-flex w-100 m-1">
         <div class="d-flex w-20">
-          <app-sets class="w-100 h-100"
-                    [sets]="status.home.sets"
-                    [bg]="prefs.setBg"
-                    [fg]="prefs.setFg"
-                    (tap)="homeSetSwipeUp.emit()"
-                    (swipeup)="homeSetSwipeUp.emit()"
-                    (swipedown)="homeSetSwipeDown.emit()">
-        </app-sets>
+          <app-sets class="w-100 h-100" [sets]="status.home.sets" [bg]="prefs.setBg" [fg]="prefs.setFg"
+            (tap)="homeSetSwipeUp.emit()" (swipeup)="homeSetSwipeUp.emit()" (swipedown)="homeSetSwipeDown.emit()">
+          </app-sets>
         </div>
         <div class="d-flex flex-column w-60">
           <div class="h-50">
-            <app-timeouts [home]="status.home.timeouts"
-                          [away]="status.away.timeouts"
-                          [name]="prefs.timeoutName"
-                          [bg]="prefs.timeoutBg"
-                          (homeTimeoutTap)="homeTimeoutTap.emit()"
-                          (awayTimeoutTap)="awayTimeoutTap.emit()"
-                          >
-                        </app-timeouts>
+            <app-timeouts [home]="status.home.timeouts" [away]="status.away.timeouts" [name]="prefs.timeoutName"
+              [bg]="prefs.timeoutBg" (homeTimeoutTap)="homeTimeoutTap.emit()" (awayTimeoutTap)="awayTimeoutTap.emit()">
+            </app-timeouts>
           </div>
           <div class="h-50">
-            <app-video-checks [home]="status.home.videoChecks"
-                              [away]="status.away.videoChecks"
-                              [name]="prefs.videoCheckName"
-                              [bg]="prefs.videoCheckBg"
-                              (homeVideoCheckTap)="homeVideoCheckTap.emit()"
-                              (awayVideoCheckTap)="awayVideoCheckTap.emit()">
+            <app-video-checks [home]="status.home.videoChecks" [away]="status.away.videoChecks"
+              [name]="prefs.videoCheckName" [bg]="prefs.videoCheckBg" (homeVideoCheckTap)="homeVideoCheckTap.emit()"
+              (awayVideoCheckTap)="awayVideoCheckTap.emit()">
             </app-video-checks>
           </div>
         </div>
         <div class="d-flex w-20">
-          <app-sets class="w-100 h-100"
-                    [sets]="status.away.sets"
-                    [bg]="prefs.setBg"
-                    [fg]="prefs.setFg"
-                    (tap)="awaySetSwipeUp.emit()"
-                    (swipeup)="awaySetSwipeUp.emit()"
-                    (swipedown)="awaySetSwipeDown.emit()">
+          <app-sets class="w-100 h-100" [sets]="status.away.sets" [bg]="prefs.setBg" [fg]="prefs.setFg"
+            (tap)="awaySetSwipeUp.emit()" (swipeup)="awaySetSwipeUp.emit()" (swipedown)="awaySetSwipeDown.emit()">
           </app-sets>
         </div>
       </div>

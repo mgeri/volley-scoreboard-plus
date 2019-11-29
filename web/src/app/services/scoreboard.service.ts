@@ -4,8 +4,8 @@ import { Credentials } from './../../backend/model/credentials';
 import { ScoreboardPrefs } from './../../backend/model/scoreboardPrefs';
 import { DefaultService } from './../../backend/api/default.service';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { SessionService, ScoreboardStatus, ScoreboardMessage } from 'src/backend';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { SessionService, ScoreboardStatus, ScoreboardMessage, ScoreboardCommand } from 'src/backend';
 import { WebSocketService } from './websocket.service';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -13,6 +13,8 @@ import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Injectable({ providedIn: 'root' })
 export class ScoreboardService {
+
+  public readonly ANIM_SPIDER = '#SPIDER#';
 
   private readonly status = new BehaviorSubject<ScoreboardStatus>({
     home: { points: 0, sets: 0, timeouts: 0, videoChecks: 0 },
@@ -25,10 +27,13 @@ export class ScoreboardService {
 
   private readonly session = new BehaviorSubject<Session>(null);
 
+  private readonly command = new Subject<ScoreboardCommand>();
+
   // Expose the observable$ part
   readonly status$ = this.status.asObservable();
   readonly prefs$ = this.prefs.asObservable();
   readonly session$ = this.session.asObservable();
+  readonly command$ = this.command.asObservable();
 
   getStatus(): ScoreboardStatus {
     return JSON.parse(JSON.stringify(this.status.getValue()));
@@ -63,6 +68,9 @@ export class ScoreboardService {
         }
         if (message.prefs) {
           this.prefs.next(message.prefs);
+        }
+        if (message.command) {
+          this.command.next(message.command);
         }
       },
       error: (err: any) => {
@@ -211,6 +219,10 @@ export class ScoreboardService {
     return this.defaultService.scoreboardPrefsPut(prefs);
   }
 
+  sendCommand(cmd: ScoreboardCommand): Observable<ScoreboardCommand> {
+    return this.defaultService.scoreboardCommandPost(cmd);
+  }
+
   resetShortcuts(): void {
     this.hotkeysService.reset();
   }
@@ -218,8 +230,16 @@ export class ScoreboardService {
   addShortcutNoCase(key: string,
                     callback: (event: KeyboardEvent, combo: string) => ExtendedKeyboardEvent | boolean): void {
     if (key && key !== '') {
-      this.hotkeysService.add(new Hotkey(key , callback));
+      this.hotkeysService.add(new Hotkey(key.toUpperCase() , callback));
       this.hotkeysService.add(new Hotkey(key.toLowerCase() , callback));
     }
   }
+
+  addShortcut(key: string,
+              callback: (event: KeyboardEvent, combo: string) => ExtendedKeyboardEvent | boolean): void {
+    if (key && key !== '') {
+      this.hotkeysService.add(new Hotkey(key , callback));
+    }
+  }
+
 }

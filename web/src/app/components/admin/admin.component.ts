@@ -1,3 +1,4 @@
+import { ScoreboardCommand } from './../../../backend/model/scoreboardCommand';
 import { KeyboardShortcuts } from '../../models/keyboardShortcuts.model';
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,6 +12,7 @@ import { PreferencesComponent } from '../preferences/preferences.component';
 import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
 import { NzModalService } from 'ng-zorro-antd';
 import Swal from 'sweetalert2';
+import { CdkMonitorFocus } from '@angular/cdk/a11y';
 
 
 @Component({
@@ -49,7 +51,6 @@ export class AdminComponent implements OnInit, OnDestroy {
   getScreenSize(event?) {
         this.scrHeight = window.innerHeight;
         this.scrWidth = window.innerWidth;
-        console.log(this.scrHeight, this.scrWidth);
   }
 
   ngOnInit() {
@@ -109,6 +110,23 @@ export class AdminComponent implements OnInit, OnDestroy {
       return false; // Prevent bubbling
     });
 
+    // Spider Easter egg
+    this.scoreboardService.addShortcut('?', (event: KeyboardEvent): boolean => {
+      const cmd = {
+        name: ScoreboardCommand.NameEnum.AnimStart,
+        params: [this.scoreboardService.ANIM_SPIDER],
+      } as ScoreboardCommand;
+      this.sendCommand(cmd);
+      return false; // Prevent bubbling
+    });
+    // Stop animation
+    this.scoreboardService.addShortcut('/', (event: KeyboardEvent): boolean => {
+      const cmd = {
+        name: ScoreboardCommand.NameEnum.AnimStop,
+      } as ScoreboardCommand;
+      this.sendCommand(cmd);
+      return false; // Prevent bubbling
+    });
   }
 
   addHomePoint(points: number): void {
@@ -312,6 +330,15 @@ export class AdminComponent implements OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  sendCommand(cmd: ScoreboardCommand) {
+    this.scoreboardService.sendCommand(cmd).subscribe(
+      ignored => {
+      },
+      error => {
+      }
+    );
   }
 
   openPreferences(): void {
