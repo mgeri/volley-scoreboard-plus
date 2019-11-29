@@ -13,6 +13,8 @@ type ServerInterface interface {
 	LogoGet(ctx echo.Context) error
 	// Server heartbeat operation// (GET /ping)
 	PingGet(ctx echo.Context) error
+	// Send string command throught websocket to all connected scorebaord (es. show video or animation).// (POST /scoreboard/command)
+	ScoreboardCommandPost(ctx echo.Context) error
 	// Reset scoreboard Prefs to defaults value.// (DELETE /scoreboard/prefs)
 	ScoreboardPrefsDelete(ctx echo.Context) error
 	// Return the scoreboard preferences (colors, team names).// (GET /scoreboard/prefs)
@@ -49,6 +51,17 @@ func (w *ServerInterfaceWrapper) PingGet(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.PingGet(ctx)
+	return err
+}
+
+// ScoreboardCommandPost converts echo context to params.
+func (w *ServerInterfaceWrapper) ScoreboardCommandPost(ctx echo.Context) error {
+	var err error
+
+	ctx.Set("bearerAuth.Scopes", []string{""})
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.ScoreboardCommandPost(ctx)
 	return err
 }
 
@@ -140,6 +153,7 @@ func RegisterHandlers(router interface {
 
 	router.GET("/logo", wrapper.LogoGet)
 	router.GET("/ping", wrapper.PingGet)
+	router.POST("/scoreboard/command", wrapper.ScoreboardCommandPost)
 	router.DELETE("/scoreboard/prefs", wrapper.ScoreboardPrefsDelete)
 	router.GET("/scoreboard/prefs", wrapper.ScoreboardPrefsGet)
 	router.PUT("/scoreboard/prefs", wrapper.ScoreboardPrefsPut)

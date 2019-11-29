@@ -20,9 +20,11 @@ func ValidateScoreboardStatus(m *api.ScoreboardStatus) error {
 	if err := ValidateScoreboardTeamStatus(&m.Home); err != nil {
 		return err
 	}
+
 	if err := ValidateScoreboardTeamStatus(&m.Away); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -43,5 +45,11 @@ func ValidateScoreboardPrefs(m *api.ScoreboardPrefs) error {
 		validation.Field(&m.AwayName, validation.Required),
 		validation.Field(&m.AwayBg, validation.Required, is.HexColor),
 		validation.Field(&m.AwayFg, validation.Required, is.HexColor),
+	)
+}
+
+func ValidateScoreboardCommand(c *api.ScoreboardCommand) error {
+	return validation.ValidateStruct(c,
+		validation.Field(&c.Name, validation.Required),
 	)
 }

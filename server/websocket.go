@@ -25,6 +25,7 @@ var (
 	clients   = make(map[*websocket.Conn]bool)
 	broadcast = make(chan string)
 	unicast   = make(chan *websocket.Conn)
+	command   = make(chan *api.ScoreboardCommand)
 )
 
 func (app *application) BroadcastStatusUpdate() {
@@ -33,6 +34,10 @@ func (app *application) BroadcastStatusUpdate() {
 
 func (app *application) BroadcastPrefsUpdate() {
 	broadcast <- BroadcastPrefs
+}
+
+func (app *application) BroadcastCommand(cmd *api.ScoreboardCommand) {
+	command <- cmd
 }
 
 func (app *application) wsHandler(ctx echo.Context) error {
@@ -53,7 +58,7 @@ func (app *application) wsService() {
 	for {
 		select {
 		case m := <-broadcast:
-			// broadcast to connectec scoreboard
+			// broadcast to connected scoreboard
 			scoreboardMessage := new(api.ScoreboardMessage)
 
 			switch m {
@@ -86,6 +91,27 @@ func (app *application) wsService() {
 					delete(clients, c)
 				}
 			}
+		case c := <-command:
+			// broadcast command to connected scoreboard
+			scoreboardMessage := new(api.ScoreboardMessage)
+
+			scoreboardMessage.Command = c
+
+			b, err := json.Marshal(scoreboardMessage)
+			if err != nil {
+				app.logger.Warnf("Websocket JSON marshal error: %v", err)
+				continue
+			}
+
+			// send to every client that is currently connected
+			for c := range clients {
+				err := c.WriteMessage(websocket.TextMessage, b)
+				if err != nil {
+					app.logger.Warnf("Websocket error (closing): %v", err)
+					c.Close()
+					delete(clients, c)
+				}
+			}
 		case c := <-unicast:
 			// send status and prefs to new conntected scoreboard
 			clients[c] = true
@@ -97,6 +123,7 @@ func (app *application) wsService() {
 				app.logger.Warnf("Unicast Websocket JSON get status from store error: %v", err)
 				continue
 			}
+
 			scoreboardMessage.Prefs = new(api.ScoreboardPrefs)
 			if err := app.prefsStore.Get(scoreboardMessage.Prefs); err != nil {
 				app.logger.Warnf("Unicast Websocket JSON get prefs from store error: %v", err)
@@ -121,5 +148,6 @@ func (app *application) wsService() {
 
 func (app *application) registerHandlersWS(router runtime.EchoRouter) {
 	router.GET("", app.wsHandler)
+
 	go app.wsService()
 }

@@ -15,6 +15,7 @@ import (
 const SessionErrorCode = 10
 const ScoreboardStatusErrorCode = 20
 const ScoreboardPrefsErrorCode = 30
+const ScoreboardCommandErrorCode = 50
 
 // jwtCustomClaims are custom claims extending default ones.
 type jwtCustomClaims struct {
@@ -75,9 +76,11 @@ func (app *application) LogoGet(ctx echo.Context) error {
 func (app *application) ScoreboardStatusGet(ctx echo.Context) error {
 	var status = new(api.ScoreboardStatus)
 	err := app.statusStore.Get(status)
+
 	if err != nil {
 		return err
 	}
+
 	return ctx.JSON(http.StatusOK, status)
 }
 
@@ -112,9 +115,11 @@ func (app *application) ScoreboardStatusPut(ctx echo.Context) error {
 func (app *application) ScoreboardPrefsGet(ctx echo.Context) error {
 	var prefs = new(api.ScoreboardPrefs)
 	err := app.prefsStore.Get(prefs)
+
 	if err != nil {
 		return err
 	}
+
 	return ctx.JSON(http.StatusOK, prefs)
 }
 
@@ -122,15 +127,18 @@ func (app *application) ScoreboardPrefsGet(ctx echo.Context) error {
 func (app *application) ScoreboardPrefsDefaultGet(ctx echo.Context) error {
 	var prefs = new(api.ScoreboardPrefs)
 	err := app.prefsStore.GetDefault(prefs)
+
 	if err != nil {
 		return err
 	}
+
 	return ctx.JSON(http.StatusOK, prefs)
 }
 
 // Update scoreboard Prefs.// (PUT /scoreboard/Prefs)
 func (app *application) ScoreboardPrefsPut(ctx echo.Context) error {
 	prefs := new(api.ScoreboardPrefs)
+
 	if err := ctx.Bind(prefs); err != nil {
 		ctx.Logger().Warnf("Error binding ScoreboardPrefs: %v", err)
 		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardPrefsErrorCode, Subcode: 1,
@@ -167,4 +175,27 @@ func (app *application) ScoreboardPrefsDelete(ctx echo.Context) error {
 	app.BroadcastPrefsUpdate()
 
 	return app.ScoreboardPrefsGet(ctx)
+}
+
+// Send string command through websocket to all connected scoreboard
+// (es. show video or animation).// (POST /scoreboard/command)
+func (app *application) ScoreboardCommandPost(ctx echo.Context) error {
+	cmd := new(api.ScoreboardCommand)
+
+	if err := ctx.Bind(cmd); err != nil {
+		ctx.Logger().Warnf("Error binding ScoreboardCommand: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardCommandErrorCode, Subcode: 1,
+			Message: "Invalid command"}})
+	}
+
+	if err := ValidateScoreboardCommand(cmd); err != nil {
+		ctx.Logger().Warnf("Error validating ScoreboardCommand: %v", err)
+		return ctx.JSON(http.StatusBadRequest, api.ErrorResponse{Error: api.Error{Code: ScoreboardCommandErrorCode, Subcode: 1,
+			Message: err.Error()}})
+	}
+
+	// websocket broadcast
+	app.BroadcastCommand(cmd)
+
+	return ctx.NoContent(http.StatusOK)
 }

@@ -14,11 +14,17 @@ import (
 	"net/url"
 	"path"
 	"strings"
-	"time"
 )
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(req *http.Request, ctx context.Context) error
+
+// Doer performs HTTP requests.
+//
+// The standard http.Client implements this interface.
+type HttpRequestDoer interface {
+	Do(req *http.Request) (*http.Response, error)
+}
 
 // Client which conforms to the OpenAPI3 specification for this service.
 type Client struct {
@@ -26,28 +32,54 @@ type Client struct {
 	// https://api.deepmap.com for example.
 	Server string
 
-	// HTTP client with any customized settings, such as certificate chains.
-	Client *http.Client
+	// Doer for performing requests, typically a *http.Client with any
+	// customized settings, such as certificate chains.
+	Client HttpRequestDoer
 
 	// A callback for modifying requests which are generated before sending over
 	// the network.
 	RequestEditor RequestEditorFn
-
-	// userAgent to use
-	userAgent string
-
-	// timeout of single request
-	requestTimeout time.Duration
-
-	// timeout of idle http connections
-	idleTimeout time.Duration
-
-	// maxium idle connections of the underlying http-client.
-	maxIdleConns int
 }
 
 // ClientOption allows setting custom parameters during construction
 type ClientOption func(*Client) error
+
+// Creates a new Client, with reasonable defaults
+func NewClient(server string, opts ...ClientOption) (*Client, error) {
+	// create a client with sane default values
+	client := Client{
+		Server: server,
+	}
+	// mutate client and add all optional params
+	for _, o := range opts {
+		if err := o(&client); err != nil {
+			return nil, err
+		}
+	}
+	// create httpClient, if not already present
+	if client.Client == nil {
+		client.Client = http.DefaultClient
+	}
+	return &client, nil
+}
+
+// WithHTTPClient allows overriding the default Doer, which is
+// automatically created using http.Client. This is useful for tests.
+func WithHTTPClient(doer HttpRequestDoer) ClientOption {
+	return func(c *Client) error {
+		c.Client = doer
+		return nil
+	}
+}
+
+// WithRequestEditorFn allows setting up a callback function, which will be
+// called right before sending the request. This can be used to mutate the request.
+func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
+	return func(c *Client) error {
+		c.RequestEditor = fn
+		return nil
+	}
+}
 
 // The interface specification for the client above.
 type ClientInterface interface {
@@ -56,6 +88,11 @@ type ClientInterface interface {
 
 	// PingGet request
 	PingGet(ctx context.Context) (*http.Response, error)
+
+	// ScoreboardCommandPost request  with any body
+	ScoreboardCommandPostWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error)
+
+	ScoreboardCommandPost(ctx context.Context, body ScoreboardCommandPostJSONRequestBody) (*http.Response, error)
 
 	// ScoreboardPrefsDelete request
 	ScoreboardPrefsDelete(ctx context.Context) (*http.Response, error)
@@ -102,6 +139,36 @@ func (c *Client) LogoGet(ctx context.Context) (*http.Response, error) {
 
 func (c *Client) PingGet(ctx context.Context) (*http.Response, error) {
 	req, err := NewPingGetRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ScoreboardCommandPostWithBody(ctx context.Context, contentType string, body io.Reader) (*http.Response, error) {
+	req, err := NewScoreboardCommandPostRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if c.RequestEditor != nil {
+		err = c.RequestEditor(req, ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ScoreboardCommandPost(ctx context.Context, body ScoreboardCommandPostJSONRequestBody) (*http.Response, error) {
+	req, err := NewScoreboardCommandPostRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -301,6 +368,36 @@ func NewPingGetRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
+// NewScoreboardCommandPostRequest calls the generic ScoreboardCommandPost builder with application/json body
+func NewScoreboardCommandPostRequest(server string, body ScoreboardCommandPostJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewScoreboardCommandPostRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewScoreboardCommandPostRequestWithBody generates requests for ScoreboardCommandPost with any type of body
+func NewScoreboardCommandPostRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	queryUrl, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+	queryUrl.Path = path.Join(queryUrl.Path, fmt.Sprintf("/scoreboard/command"))
+
+	req, err := http.NewRequest("POST", queryUrl.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+	return req, nil
+}
+
 // NewScoreboardPrefsDeleteRequest generates requests for ScoreboardPrefsDelete
 func NewScoreboardPrefsDeleteRequest(server string) (*http.Request, error) {
 	var err error
@@ -468,32 +565,14 @@ type ClientWithResponses struct {
 	ClientInterface
 }
 
-// NewClient creates a new Client.
-func NewClient(ctx context.Context, opts ...ClientOption) (*ClientWithResponses, error) {
-	// create a client with sane default values
-	client := Client{
-		// must have a slash in order to resolve relative paths correctly.
-		Server:         "",
-		userAgent:      "oapi-codegen",
-		maxIdleConns:   10,
-		requestTimeout: 5 * time.Second,
-		idleTimeout:    30 * time.Second,
+// NewClientWithResponses creates a new ClientWithResponses, which wraps
+// Client with return type handling
+func NewClientWithResponses(server string, opts ...ClientOption) (*ClientWithResponses, error) {
+	client, err := NewClient(server, opts...)
+	if err != nil {
+		return nil, err
 	}
-	// mutate defaultClient and add all optional params
-	for _, o := range opts {
-		if err := o(&client); err != nil {
-			return nil, err
-		}
-	}
-
-	// create httpClient, if not already present
-	if client.Client == nil {
-		client.Client = client.newHTTPClient()
-	}
-
-	return &ClientWithResponses{
-		ClientInterface: &client,
-	}, nil
+	return &ClientWithResponses{client}, nil
 }
 
 // WithBaseURL overrides the baseURL.
@@ -508,89 +587,6 @@ func WithBaseURL(baseURL string) ClientOption {
 		}
 		c.Server = newBaseURL.String()
 		return nil
-	}
-}
-
-// WithUserAgent allows setting the userAgent
-func WithUserAgent(userAgent string) ClientOption {
-	return func(c *Client) error {
-		c.userAgent = userAgent
-		return nil
-	}
-}
-
-// WithIdleTimeout overrides the timeout of idle connections.
-func WithIdleTimeout(timeout time.Duration) ClientOption {
-	return func(c *Client) error {
-		c.idleTimeout = timeout
-		return nil
-	}
-}
-
-// WithRequestTimeout overrides the timeout of individual requests.
-func WithRequestTimeout(timeout time.Duration) ClientOption {
-	return func(c *Client) error {
-		c.requestTimeout = timeout
-		return nil
-	}
-}
-
-// WithMaxIdleConnections overrides the amount of idle connections of the
-// underlying http-client.
-func WithMaxIdleConnections(maxIdleConns uint) ClientOption {
-	return func(c *Client) error {
-		c.maxIdleConns = int(maxIdleConns)
-		return nil
-	}
-}
-
-// WithHTTPClient allows overriding the default httpClient, which is
-// automatically created. This is useful for tests.
-func WithHTTPClient(httpClient *http.Client) ClientOption {
-	return func(c *Client) error {
-		c.Client = httpClient
-		return nil
-	}
-}
-
-// WithRequestEditorFn allows setting up a callback function, which will be
-// called right before sending the request. This can be used to mutate the request.
-func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
-	return func(c *Client) error {
-		c.RequestEditor = fn
-		return nil
-	}
-}
-
-// newHTTPClient creates a httpClient for the current connection options.
-func (c *Client) newHTTPClient() *http.Client {
-	return &http.Client{
-		Timeout: c.requestTimeout,
-		Transport: &http.Transport{
-			MaxIdleConns:    c.maxIdleConns,
-			IdleConnTimeout: c.idleTimeout,
-		},
-	}
-}
-
-// NewClientWithResponses returns a ClientWithResponses with a default Client:
-func NewClientWithResponses(server string) *ClientWithResponses {
-	return &ClientWithResponses{
-		ClientInterface: &Client{
-			Client: &http.Client{},
-			Server: server,
-		},
-	}
-}
-
-// NewClientWithResponsesAndRequestEditorFunc takes in a RequestEditorFn callback function and returns a ClientWithResponses with a default Client:
-func NewClientWithResponsesAndRequestEditorFunc(server string, reqEditorFn RequestEditorFn) *ClientWithResponses {
-	return &ClientWithResponses{
-		ClientInterface: &Client{
-			Client:        &http.Client{},
-			Server:        server,
-			RequestEditor: reqEditorFn,
-		},
 	}
 }
 
@@ -630,6 +626,28 @@ func (r pingGetResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r pingGetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type scoreboardCommandPostResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON400      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r scoreboardCommandPostResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r scoreboardCommandPostResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -811,6 +829,23 @@ func (c *ClientWithResponses) PingGetWithResponse(ctx context.Context) (*pingGet
 	return ParsepingGetResponse(rsp)
 }
 
+// ScoreboardCommandPostWithBodyWithResponse request with arbitrary body returning *ScoreboardCommandPostResponse
+func (c *ClientWithResponses) ScoreboardCommandPostWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader) (*scoreboardCommandPostResponse, error) {
+	rsp, err := c.ScoreboardCommandPostWithBody(ctx, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	return ParsescoreboardCommandPostResponse(rsp)
+}
+
+func (c *ClientWithResponses) ScoreboardCommandPostWithResponse(ctx context.Context, body ScoreboardCommandPostJSONRequestBody) (*scoreboardCommandPostResponse, error) {
+	rsp, err := c.ScoreboardCommandPost(ctx, body)
+	if err != nil {
+		return nil, err
+	}
+	return ParsescoreboardCommandPostResponse(rsp)
+}
+
 // ScoreboardPrefsDeleteWithResponse request returning *ScoreboardPrefsDeleteResponse
 func (c *ClientWithResponses) ScoreboardPrefsDeleteWithResponse(ctx context.Context) (*scoreboardPrefsDeleteResponse, error) {
 	rsp, err := c.ScoreboardPrefsDelete(ctx)
@@ -931,6 +966,31 @@ func ParsepingGetResponse(rsp *http.Response) (*pingGetResponse, error) {
 	}
 
 	switch {
+	}
+
+	return response, nil
+}
+
+// ParsescoreboardCommandPostResponse parses an HTTP response from a ScoreboardCommandPostWithResponse call
+func ParsescoreboardCommandPostResponse(rsp *http.Response) (*scoreboardCommandPostResponse, error) {
+	bodyBytes, err := ioutil.ReadAll(rsp.Body)
+	defer rsp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &scoreboardCommandPostResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		response.JSON400 = &ErrorResponse{}
+		if err := json.Unmarshal(bodyBytes, response.JSON400); err != nil {
+			return nil, err
+		}
+
 	}
 
 	return response, nil

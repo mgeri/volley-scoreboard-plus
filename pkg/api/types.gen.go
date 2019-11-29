@@ -22,10 +22,17 @@ type ErrorResponse struct {
 	Error Error `json:"error"`
 }
 
+// ScoreboardCommand defines model for ScoreboardCommand.
+type ScoreboardCommand struct {
+	Name   string    `json:"name"`
+	Params *[]string `json:"params,omitempty"`
+}
+
 // ScoreboardMessage defines model for ScoreboardMessage.
 type ScoreboardMessage struct {
-	Prefs  *ScoreboardPrefs  `json:"prefs,omitempty"`
-	Status *ScoreboardStatus `json:"status,omitempty"`
+	Command *ScoreboardCommand `json:"command,omitempty"`
+	Prefs   *ScoreboardPrefs   `json:"prefs,omitempty"`
+	Status  *ScoreboardStatus  `json:"status,omitempty"`
 }
 
 // ScoreboardPrefs defines model for ScoreboardPrefs.
@@ -76,6 +83,9 @@ type Session struct {
 // TeamBallOwner defines model for TeamBallOwner.
 type TeamBallOwner string
 
+// scoreboardCommandPostJSONBody defines parameters for ScoreboardCommandPost.
+type scoreboardCommandPostJSONBody ScoreboardCommand
+
 // scoreboardPrefsPutJSONBody defines parameters for ScoreboardPrefsPut.
 type scoreboardPrefsPutJSONBody ScoreboardPrefs
 
@@ -84,6 +94,9 @@ type scoreboardStatusPutJSONBody ScoreboardStatus
 
 // sessionPostJSONBody defines parameters for SessionPost.
 type sessionPostJSONBody Credentials
+
+// ScoreboardCommandPostRequestBody defines body for ScoreboardCommandPost for application/json ContentType.
+type ScoreboardCommandPostJSONRequestBody scoreboardCommandPostJSONBody
 
 // ScoreboardPrefsPutRequestBody defines body for ScoreboardPrefsPut for application/json ContentType.
 type ScoreboardPrefsPutJSONRequestBody scoreboardPrefsPutJSONBody
