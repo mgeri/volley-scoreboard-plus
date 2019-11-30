@@ -103,7 +103,7 @@ export class WinnerComponent implements OnInit, OnDestroy {
     const container = document.getElementById('winner-container');
     if (container) {
       const options = {
-        maxRockets: 15,          // max # of rockets to spawn
+        maxRockets: 10,          // max # of rockets to spawn
         rocketSpawnInterval: 150,   // millisends to check if new rockets should spawn
         numParticles: 100,          // number of particles to spawn when rocket explodes (+0-10)
         explosionMinHeight: 0.4,    // percentage. min height at which rockets can explode

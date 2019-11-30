@@ -55,7 +55,7 @@
 
     <div class="names-zone d-flex w-100 h-20">
       <div class="w-50 p-1">
-        <app-name [name]="prefs.homeName" [bg]="prefs.homeBg" [fg]="prefs.homeFg">
+        <app-name [name]="prefs.homeName" (swipeleft)="homeNameSwipeLeft.emit()" (swiperight)="homeNameSwipeRight.emit()" [bg]="prefs.homeBg" [fg]="prefs.homeFg">
         </app-name>
       </div>
       <div class="w-50 p-1">

@@ -28,6 +28,9 @@ export class ScoreboardComponent implements OnInit, OnDestroy {
   @Output() awayTimeoutTap: EventEmitter<void> = new EventEmitter<void>();
   @Output() awayVideoCheckTap: EventEmitter<void> = new EventEmitter<void>();
 
+  @Output() homeNameSwipeLeft: EventEmitter<void> = new EventEmitter<void>();
+  @Output() homeNameSwipeRight: EventEmitter<void> = new EventEmitter<void>();
+
   @Input() showHeader = true;
 
   destroyed$ = new Subject();

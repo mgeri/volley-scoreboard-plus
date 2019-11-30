@@ -112,19 +112,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 
     // Spider Easter egg
     this.scoreboardService.addShortcut('?', (event: KeyboardEvent): boolean => {
-      const cmd = {
-        name: ScoreboardCommand.NameEnum.AnimStart,
-        params: [this.scoreboardService.ANIM_SPIDER],
-      } as ScoreboardCommand;
-      this.sendCommand(cmd);
+      this.funnyAnim();
       return false; // Prevent bubbling
     });
     // Stop animation
     this.scoreboardService.addShortcut('/', (event: KeyboardEvent): boolean => {
-      const cmd = {
-        name: ScoreboardCommand.NameEnum.AnimStop,
-      } as ScoreboardCommand;
-      this.sendCommand(cmd);
+      this.funnyAnim(false);
       return false; // Prevent bubbling
     });
   }
@@ -339,6 +332,21 @@ export class AdminComponent implements OnInit, OnDestroy {
       error => {
       }
     );
+  }
+
+  funnyAnim(start: boolean = true): void {
+    if (start) {
+      const cmd = {
+        name: ScoreboardCommand.NameEnum.AnimStart,
+        params: [this.scoreboardService.ANIM_SPIDER],
+      } as ScoreboardCommand;
+      this.sendCommand(cmd);
+    } else {
+      const cmd = {
+        name: ScoreboardCommand.NameEnum.AnimStop,
+      } as ScoreboardCommand;
+      this.sendCommand(cmd);
+    }
   }
 
   openPreferences(): void {

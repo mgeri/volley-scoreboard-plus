@@ -57,9 +57,29 @@
   left: 409px;
   z-index: 98;
 
+  -webkit-animation: down 15s linear infinite;
+  -webkit-animation-delay: 2000ms;
+  -webkit-animation-iteration-count: 1;
   animation: down 15s linear infinite;
   animation-delay: 2000ms;
   animation-iteration-count: 1;
+}
+@-webkit-keyframes down {
+  0% {
+    top: -350px;
+  }
+  20% {
+    top: 200px;
+  }
+  40% {
+    top: 400px;
+  }
+  60% {
+    top: 400px;
+  }
+  100% {
+    top: -700px;
+  }
 }
 @keyframes down {
   0% {
@@ -112,8 +132,26 @@
   left: 22px;
   box-shadow: 40px 1px 0px 0px black;
   z-index: 999;
+  -webkit-animation: move 2s linear infinite;
   animation: move 2s linear infinite;
 
+}
+@-webkit-keyframes move {
+  0% {
+    left: 20px;
+  }
+  25% {
+    left: 26px;
+  }
+  50% {
+    left: 10px;
+  }
+  75% {
+    left: 15px;
+  }
+  100% {
+    left: 20px;
+  }
 }
 @keyframes move {
   0% {
@@ -134,6 +172,7 @@
 }
 /*LEGS!!*/
 #leg {
+  -webkit-transform: rotate(-50deg);
   transform: rotate(-50deg);
   position: absolute;
   top: -2px;
@@ -153,12 +192,14 @@
   border-bottom: 2px solid transparent;
   border-left: 60px solid black;
   border-right: transparent;
+  -webkit-transform: rotate(86deg);
   transform: rotate(86deg);
   position: absolute;
   top: 30px;
   left: 13px;
 }
 #leg2 {
+  -webkit-transform: rotate(-8deg);
   transform: rotate(-8deg);
   position: absolute;
   top: 29px;
@@ -177,12 +218,14 @@
   border-bottom: 2px solid transparent;
   border-left: 60px solid black;
   border-right: transparent;
+  -webkit-transform: rotate(86deg);
   transform: rotate(86deg);
   position: absolute;
   top: 30px;
   left: 13px;
 }
 #leg3 {
+  -webkit-transform: rotate(13deg);
   transform: rotate(13deg);
   position: absolute;
   top: 57px;
@@ -201,6 +244,7 @@
   border-bottom: 2px solid transparent;
   border-left: 60px solid black;
   border-right: transparent;
+  -webkit-transform: rotate(86deg);
   transform: rotate(86deg);
   position: absolute;
   top: 30px;
@@ -208,6 +252,7 @@
 }
 
 #leg4 {
+  -webkit-transform: rotatey(180deg) rotatez(-50deg);
   transform: rotatey(180deg) rotatez(-50deg);
   position: absolute;
   top: -2px;
@@ -229,6 +274,7 @@
   border-bottom: 2px solid transparent;
   border-left: 60px solid black;
   border-right: transparent;
+  -webkit-transform: rotate(86deg);
   transform: rotate(86deg);
   position: absolute;
   top: 30px;
@@ -236,6 +282,7 @@
 }
 
 #leg5 {
+  -webkit-transform: rotatey(180deg) rotatez(-20deg);
   transform: rotatey(180deg) rotatez(-20deg);
   position: absolute;
   top: 25px;
@@ -255,6 +302,7 @@
   border-bottom: 2px solid transparent;
   border-left: 60px solid black;
   border-right: transparent;
+  -webkit-transform: rotate(86deg);
   transform: rotate(86deg);
   position: absolute;
   top: 30px;
@@ -262,6 +310,7 @@
 }
 
 #leg6 {
+  -webkit-transform: rotatey(180deg) rotatez(15deg);
   transform: rotatey(180deg) rotatez(15deg);
   position: absolute;
   top: 54px;
@@ -280,6 +329,7 @@
   border-bottom: 2px solid transparent;
   border-left: 60px solid black;
   border-right: transparent;
+  -webkit-transform: rotate(86deg);
   transform: rotate(86deg);
   position: absolute;
   top: 30px;
@@ -293,6 +343,8 @@
   position: absolute;
   top: -432px;
   left: 47px;
+  -webkit-animation: down2 15s linear infinite;
+  -webkit-animation-delay: 2000ms;
   animation: down2 15s linear infinite;
   animation-delay: 2000ms;
   position: absolute;
