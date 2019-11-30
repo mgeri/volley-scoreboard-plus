@@ -4,5 +4,5 @@ var (
 	// Executable name
 	Executable = "Volley Scoreboard Plus"
 	// Version value
-	Version = "0.9.2"
+	Version = "0.9.5"
 )
