@@ -54,6 +54,9 @@ func ListenAndServe() {
 	mime.AddExtensionType(".js", "application/javascript")
 
 	// middleware
+	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+		Level: 5,
+	}))
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
