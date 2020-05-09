@@ -35,7 +35,7 @@ Web UI:
 
 ## Usage
 Run the main executable to see the supported command line.
-You can configure Go service using a `config.yml` file (see thee [config. sample.yaml](config.sample.yaml) file for configuration options).
+You can configure Go service using a `config.yml` file (see thee `config.sample.yaml`) file for configuration options).
 
 
 ### Main Scoreboard Panel
@@ -58,13 +58,13 @@ After log in in you can see the control panel and start managing the scorebaord 
 
 Use buttons, mouse or touch (if you device supports it) to manage the scoreboard:
 
-  • Click or touch the Team Score: increase the score
-  • Swipe down: decrease the score
-  • Click or touch the current `Set` area: change ball owner
-  • Click or touch the number of won sets: increase won sets
-  • Swipe down the number of won set: decrease won sets
-  • Click or touch timeout led: increase Timeout (after the second, return to 0)
-  • Click or touch video check led: increase the Video Check (after the second, return to 0)
+* Click or touch the Team Score: increase the score
+* Swipe down: decrease the score
+* Click or touch the current `Set` area: change ball owner
+* Click or touch the number of won sets: increase won sets
+* Swipe down the number of won set: decrease won sets
+* Click or touch timeout led: increase Timeout (after the second, return to 0)
+* Click or touch video check led: increase the Video Check (after the second, return to 0)
 
 If you use touch screen, you can `Hide Buttons`.
 
